@@ -1,2 +1,2 @@
-# clr
-clr
+# pay
+pay

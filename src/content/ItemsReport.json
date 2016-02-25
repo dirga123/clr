@@ -1,0 +1,1786 @@
+{
+  "version": "1.0.0",
+  "landscape": {
+    "id": "partner_40",
+    "zabbix": "http://mo-5064b8256.dmzmo.sap.corp:1080/zabbix/api_jsonrpc.php",
+    "domain": "consultare.net",
+    "items": [
+      [
+        "Number of processes : proc.num[]",
+        18
+      ],
+      [
+        "Processor load (1 min average per core) : system.cpu.load[percpu,avg1]",
+        8
+      ],
+      [
+        "Number of running processes : proc.num[,,run]",
+        8
+      ],
+      [
+        "Free swap space : system.swap.size[,free]",
+        18
+      ],
+      [
+        "Number of logged in users : system.users.num",
+        8
+      ],
+      [
+        "Checksum of $1 : vfs.file.cksum[/etc/passwd]",
+        8
+      ],
+      [
+        "Agent ping : agent.ping",
+        19
+      ],
+      [
+        "System uptime : system.uptime",
+        18
+      ],
+      [
+        "Total memory : vm.memory.size[total]",
+        18
+      ],
+      [
+        "Total swap space : system.swap.size[,total]",
+        18
+      ],
+      [
+        "Maximum number of processes : kernel.maxproc",
+        8
+      ],
+      [
+        "Maximum number of opened files : kernel.maxfiles",
+        8
+      ],
+      [
+        "Host name : system.hostname",
+        8
+      ],
+      [
+        "System information : system.uname",
+        18
+      ],
+      [
+        "Version of zabbix-agent(d) running : agent.version",
+        19
+      ],
+      [
+        "Host boot time : system.boottime",
+        8
+      ],
+      [
+        "Free swap space in % : system.swap.size[,pfree]",
+        8
+      ],
+      [
+        "Host local time : system.localtime",
+        8
+      ],
+      [
+        "CPU $2 time : system.cpu.util[,idle]",
+        8
+      ],
+      [
+        "CPU $2 time : system.cpu.util[,user]",
+        8
+      ],
+      [
+        "CPU $2 time : system.cpu.util[,nice]",
+        8
+      ],
+      [
+        "CPU $2 time : system.cpu.util[,system]",
+        8
+      ],
+      [
+        "CPU $2 time : system.cpu.util[,iowait]",
+        8
+      ],
+      [
+        "Available memory : vm.memory.size[available]",
+        8
+      ],
+      [
+        "Zabbix $2 write cache, % free : zabbix[wcache,history,pfree]",
+        3
+      ],
+      [
+        "Zabbix $2 write cache, % free : zabbix[wcache,trend,pfree]",
+        2
+      ],
+      [
+        "Values processed by Zabbix server per second : zabbix[wcache,values]",
+        2
+      ],
+      [
+        "Zabbix configuration cache, % free : zabbix[rcache,buffer,pfree]",
+        3
+      ],
+      [
+        "Zabbix value cache, % free : zabbix[vcache,buffer,pfree]",
+        2
+      ],
+      [
+        "Zabbix value cache hits : zabbix[vcache,cache,hits]",
+        2
+      ],
+      [
+        "Zabbix value cache misses : zabbix[vcache,cache,misses]",
+        2
+      ],
+      [
+        "Zabbix queue over $2 : zabbix[queue,10m]",
+        3
+      ],
+      [
+        "Zabbix $2 write cache, % free : zabbix[wcache,text,pfree]",
+        3
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,poller,avg,busy]",
+        3
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,unreachable poller,avg,busy]",
+        3
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,vmware collector,avg,busy]",
+        2
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,http poller,avg,busy]",
+        3
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,trapper,avg,busy]",
+        3
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,history syncer,avg,busy]",
+        3
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,housekeeper,avg,busy]",
+        3
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,db watchdog,avg,busy]",
+        2
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,configuration syncer,avg,busy]",
+        3
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,self-monitoring,avg,busy]",
+        3
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,ipmi poller,avg,busy]",
+        3
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,icmp pinger,avg,busy]",
+        3
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,proxy poller,avg,busy]",
+        2
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,escalator,avg,busy]",
+        2
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,alerter,avg,busy]",
+        2
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,timer,avg,busy]",
+        2
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,node watcher,avg,busy]",
+        2
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,discoverer,avg,busy]",
+        3
+      ],
+      [
+        "CPU $2 time : system.cpu.util[,steal]",
+        8
+      ],
+      [
+        "CPU $2 time : system.cpu.util[,softirq]",
+        8
+      ],
+      [
+        "CPU $2 time : system.cpu.util[,interrupt]",
+        8
+      ],
+      [
+        "Processor load (5 min average per core) : system.cpu.load[percpu,avg5]",
+        8
+      ],
+      [
+        "Processor load (15 min average per core) : system.cpu.load[percpu,avg15]",
+        8
+      ],
+      [
+        "Context switches per second : system.cpu.switches",
+        8
+      ],
+      [
+        "Interrupts per second : system.cpu.intr",
+        8
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,java poller,avg,busy]",
+        3
+      ],
+      [
+        "Average disk read queue length : perf_counter[\234(_Total)\1402]",
+        10
+      ],
+      [
+        "Average disk write queue length : perf_counter[\234(_Total)\1404]",
+        10
+      ],
+      [
+        "File read bytes per second : perf_counter[\2\16]",
+        10
+      ],
+      [
+        "File write bytes per second : perf_counter[\2\18]",
+        10
+      ],
+      [
+        "Number of threads : perf_counter[\2\250]",
+        10
+      ],
+      [
+        "Processor load (1 min average) : system.cpu.load[percpu,avg1]",
+        10
+      ],
+      [
+        "Processor load (15 min average) : system.cpu.load[percpu,avg15]",
+        10
+      ],
+      [
+        "Processor load (5 min average) : system.cpu.load[percpu,avg5]",
+        10
+      ],
+      [
+        "Free memory : vm.memory.size[free]",
+        10
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,snmp trapper,avg,busy]",
+        3
+      ],
+      [
+        "comp Accumulated time spent in compilation : jmx[\"java.lang:type=Compilation\",TotalCompilationTime]",
+        1
+      ],
+      [
+        "cl Loaded Class Count : jmx[\"java.lang:type=ClassLoading\",LoadedClassCount]",
+        1
+      ],
+      [
+        "cl Total Loaded Class Count : jmx[\"java.lang:type=ClassLoading\",TotalLoadedClassCount]",
+        1
+      ],
+      [
+        "cl Unloaded Class Count : jmx[\"java.lang:type=ClassLoading\",UnloadedClassCount]",
+        1
+      ],
+      [
+        "gc ConcurrentMarkSweep accumulated time spent in collection : jmx[\"java.lang:type=GarbageCollector,name=ConcurrentMarkSweep\",CollectionTime]",
+        1
+      ],
+      [
+        "gc ConcurrentMarkSweep number of collections per second : jmx[\"java.lang:type=GarbageCollector,name=ConcurrentMarkSweep\",CollectionCount]",
+        1
+      ],
+      [
+        "gc Copy accumulated time spent in collection : jmx[\"java.lang:type=GarbageCollector,name=Copy\",CollectionTime]",
+        1
+      ],
+      [
+        "gc Copy number of collections per second : jmx[\"java.lang:type=GarbageCollector,name=Copy\",CollectionCount]",
+        1
+      ],
+      [
+        "gc MarkSweepCompact accumulated time spent in collection : jmx[\"java.lang:type=GarbageCollector,name=MarkSweepCompact\",CollectionTime]",
+        1
+      ],
+      [
+        "gc MarkSweepCompact number of collections per second : jmx[\"java.lang:type=GarbageCollector,name=MarkSweepCompact\",CollectionCount]",
+        1
+      ],
+      [
+        "gc ParNew accumulated time spent in collection : jmx[\"java.lang:type=GarbageCollector,name=ParNew\",CollectionTime]",
+        1
+      ],
+      [
+        "gc ParNew number of collections per second : jmx[\"java.lang:type=GarbageCollector,name=ParNew\",CollectionCount]",
+        1
+      ],
+      [
+        "gc PS MarkSweep accumulated time spent in collection : jmx[\"java.lang:type=GarbageCollector,name=PS MarkSweep\",CollectionTime]",
+        1
+      ],
+      [
+        "gc PS Scavenge accumulated time spent in collection : jmx[\"java.lang:type=GarbageCollector,name=PS Scavenge\",CollectionTime]",
+        1
+      ],
+      [
+        "gc PS Scavenge number of collections per second : jmx[\"java.lang:type=GarbageCollector,name=PS Scavenge\",CollectionCount]",
+        1
+      ],
+      [
+        "gc PS MarkSweep number of collections per second : jmx[\"java.lang:type=GarbageCollector,name=PS MarkSweep\",CollectionCount]",
+        1
+      ],
+      [
+        "jvm Uptime : jmx[\"java.lang:type=Runtime\",Uptime]",
+        1
+      ],
+      [
+        "jvm Version : jmx[\"java.lang:type=Runtime\",VmVersion]",
+        1
+      ],
+      [
+        "mem Object Pending Finalization Count : jmx[\"java.lang:type=Memory\",ObjectPendingFinalizationCount]",
+        1
+      ],
+      [
+        "mp CMS Old Gen committed : jmx[\"java.lang:type=MemoryPool,name=CMS Old Gen\",Usage.committed]",
+        1
+      ],
+      [
+        "mp CMS Old Gen max : jmx[\"java.lang:type=MemoryPool,name=CMS Old Gen\",Usage.max]",
+        1
+      ],
+      [
+        "mp CMS Old Gen used : jmx[\"java.lang:type=MemoryPool,name=CMS Old Gen\",Usage.used]",
+        1
+      ],
+      [
+        "mp CMS Perm Gen committed : jmx[\"java.lang:type=MemoryPool,name=CMS Perm Gen\",Usage.committed]",
+        1
+      ],
+      [
+        "mp CMS Perm Gen max : jmx[\"java.lang:type=MemoryPool,name=CMS Perm Gen\",Usage.max]",
+        1
+      ],
+      [
+        "mp CMS Perm Gen used : jmx[\"java.lang:type=MemoryPool,name=CMS Perm Gen\",Usage.used]",
+        1
+      ],
+      [
+        "mp Code Cache committed : jmx[\"java.lang:type=MemoryPool,name=Code Cache\",Usage.committed]",
+        1
+      ],
+      [
+        "mp Code Cache max : jmx[\"java.lang:type=MemoryPool,name=Code Cache\",Usage.max]",
+        1
+      ],
+      [
+        "mp Code Cache used : jmx[\"java.lang:type=MemoryPool,name=Code Cache\",Usage.used]",
+        1
+      ],
+      [
+        "mp Perm Gen committed : jmx[\"java.lang:type=MemoryPool,name=Perm Gen\",Usage.committed]",
+        1
+      ],
+      [
+        "mp Perm Gen max : jmx[\"java.lang:type=MemoryPool,name=Perm Gen\",Usage.max]",
+        1
+      ],
+      [
+        "mp Perm Gen used : jmx[\"java.lang:type=MemoryPool,name=Perm Gen\",Usage.used]",
+        1
+      ],
+      [
+        "mp PS Old Gen committed : jmx[\"java.lang:type=MemoryPool,name=PS Old Gen\",Usage.committed]",
+        1
+      ],
+      [
+        "mp PS Old Gen max : jmx[\"java.lang:type=MemoryPool,name=PS Old Gen\",Usage.max]",
+        1
+      ],
+      [
+        "mp PS Old Gen used : jmx[\"java.lang:type=MemoryPool,name=PS Old Gen\",Usage.used]",
+        1
+      ],
+      [
+        "mp PS Perm Gen committed : jmx[\"java.lang:type=MemoryPool,name=PS Perm Gen\",Usage.committed]",
+        1
+      ],
+      [
+        "mp PS Perm Gen max : jmx[\"java.lang:type=MemoryPool,name=PS Perm Gen\",Usage.max]",
+        1
+      ],
+      [
+        "mp PS Perm Gen used : jmx[\"java.lang:type=MemoryPool,name=PS Perm Gen\",Usage.used]",
+        1
+      ],
+      [
+        "mp Tenured Gen committed : jmx[\"java.lang:type=MemoryPool,name=Tenured Gen\",Usage.committed]",
+        1
+      ],
+      [
+        "mp Tenured Gen max : jmx[\"java.lang:type=MemoryPool,name=Tenured Gen\",Usage.max]",
+        1
+      ],
+      [
+        "mp Tenured Gen used : jmx[\"java.lang:type=MemoryPool,name=Tenured Gen\",Usage.used]",
+        1
+      ],
+      [
+        "comp Name of the current JIT compiler : jmx[\"java.lang:type=Compilation\",Name]",
+        1
+      ],
+      [
+        "os Max File Descriptor Count : jmx[\"java.lang:type=OperatingSystem\",MaxFileDescriptorCount]",
+        1
+      ],
+      [
+        "os Open File Descriptor Count : jmx[\"java.lang:type=OperatingSystem\",OpenFileDescriptorCount]",
+        1
+      ],
+      [
+        "th Daemon Thread Count : jmx[\"java.lang:type=Threading\",DaemonThreadCount]",
+        1
+      ],
+      [
+        "th Peak Thread Count : jmx[\"java.lang:type=Threading\",PeakThreadCount]",
+        1
+      ],
+      [
+        "th Thread Count : jmx[\"java.lang:type=Threading\",ThreadCount]",
+        1
+      ],
+      [
+        "th Total Started Thread Count : jmx[\"java.lang:type=Threading\",TotalStartedThreadCount]",
+        1
+      ],
+      [
+        "http-8080 bytes received per second : jmx[\"Catalina:type=GlobalRequestProcessor,name=http-8080\",bytesReceived]",
+        1
+      ],
+      [
+        "http-8080 bytes sent per second : jmx[\"Catalina:type=GlobalRequestProcessor,name=http-8080\",bytesSent]",
+        1
+      ],
+      [
+        "http-8080 errors per second : jmx[\"Catalina:type=GlobalRequestProcessor,name=http-8080\",errorCount]",
+        1
+      ],
+      [
+        "http-8080 gzip compression : jmx[\"Catalina:type=ProtocolHandler,port=8080\",compression]",
+        1
+      ],
+      [
+        "http-8080 request processing time : jmx[\"Catalina:type=GlobalRequestProcessor,name=http-8080\",processingTime]",
+        1
+      ],
+      [
+        "http-8080 requests per second : jmx[\"Catalina:type=GlobalRequestProcessor,name=http-8080\",requestCount]",
+        1
+      ],
+      [
+        "http-8080 threads allocated : jmx[\"Catalina:type=ThreadPool,name=http-8080\",currentThreadCount]",
+        1
+      ],
+      [
+        "http-8080 threads busy : jmx[\"Catalina:type=ThreadPool,name=http-8080\",currentThreadsBusy]",
+        1
+      ],
+      [
+        "http-8080 threads max : jmx[\"Catalina:type=ThreadPool,name=http-8080\",maxThreads]",
+        1
+      ],
+      [
+        "http-8443 bytes received per second : jmx[\"Catalina:type=GlobalRequestProcessor,name=http-8443\",bytesReceived]",
+        1
+      ],
+      [
+        "http-8443 bytes sent per second : jmx[\"Catalina:type=GlobalRequestProcessor,name=http-8443\", bytesSent]",
+        1
+      ],
+      [
+        "http-8443 errors per second : jmx[\"Catalina:type=GlobalRequestProcessor,name=http-8443\",errorCount]",
+        1
+      ],
+      [
+        "http-8443 gzip compression : jmx[\"Catalina:type=ProtocolHandler,port=8443\",compression]",
+        1
+      ],
+      [
+        "http-8443 request processing time : jmx[\"Catalina:type=GlobalRequestProcessor,name=http-8443\",processingTime]",
+        1
+      ],
+      [
+        "http-8443 requests per second : jmx[\"Catalina:type=GlobalRequestProcessor,name=http-8443\",requestCount]",
+        1
+      ],
+      [
+        "http-8443 threads allocated : jmx[\"Catalina:type=ThreadPool,name=http-8443\",currentThreadCount]",
+        1
+      ],
+      [
+        "http-8443 threads busy : jmx[\"Catalina:type=ThreadPool,name=http-8443\",currentThreadsBusy]",
+        1
+      ],
+      [
+        "http-8443 threads max : jmx[\"Catalina:type=ThreadPool,name=http-8443\",maxThreads]",
+        1
+      ],
+      [
+        "jk-8009 bytes received per second : jmx[\"Catalina:type=GlobalRequestProcessor,name=jk-8009\", bytesReceived]",
+        1
+      ],
+      [
+        "jk-8009 bytes sent per second : jmx[\"Catalina:type=GlobalRequestProcessor,name=jk-8009\",bytesSent]",
+        1
+      ],
+      [
+        "jk-8009 errors per second : jmx[\"Catalina:type=GlobalRequestProcessor,name=jk-8009\",errorCount]",
+        1
+      ],
+      [
+        "jk-8009 request processing time : jmx[\"Catalina:type=GlobalRequestProcessor,name=jk-8009\",processingTime]",
+        1
+      ],
+      [
+        "jk-8009 requests per second : jmx[\"Catalina:type=GlobalRequestProcessor,name=jk-8009\",requestCount]",
+        1
+      ],
+      [
+        "jk-8009 threads allocated : jmx[\"Catalina:type=ThreadPool,name=jk-8009\",currentThreadCount]",
+        1
+      ],
+      [
+        "jk-8009 threads busy : jmx[\"Catalina:type=ThreadPool,name=jk-8009\",currentThreadsBusy]",
+        1
+      ],
+      [
+        "jk-8009 threads max : jmx[\"Catalina:type=ThreadPool,name=jk-8009\",maxThreads]",
+        1
+      ],
+      [
+        "Maximum number of active sessions so far : jmx[\"Catalina:type=Manager,path=/,host=localhost\",maxActive]",
+        1
+      ],
+      [
+        "Number of active sessions at this moment : jmx[\"Catalina:type=Manager,path=/,host=localhost\",activeSessions]",
+        1
+      ],
+      [
+        "Number of sessions created by this manager per second : jmx[\"Catalina:type=Manager,path=/,host=localhost\",sessionCounter]",
+        1
+      ],
+      [
+        "Number of sessions we rejected due to maxActive being reached : jmx[\"Catalina:type=Manager,path=/,host=localhost\",rejectedSessions]",
+        1
+      ],
+      [
+        "The maximum number of active Sessions allowed, or -1 for no limit : jmx[\"Catalina:type=Manager,path=/,host=localhost\",maxActiveSessions]",
+        1
+      ],
+      [
+        "Tomcat version : jmx[\"Catalina:type=Server\",serverInfo]",
+        1
+      ],
+      [
+        "Zabbix queue : zabbix[queue]",
+        3
+      ],
+      [
+        "Values processed by Zabbix proxy per second : zabbix[wcache,values]",
+        1
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,heartbeat sender,avg,busy]",
+        1
+      ],
+      [
+        "Zabbix $4 $2 processes, in % : zabbix[process,data sender,avg,busy]",
+        1
+      ],
+      [
+        "Ballooned memory : vmware.vm.memory.size.ballooned[{$URL},{HOST.HOST}]",
+        1
+      ],
+      [
+        "Compressed memory : vmware.vm.memory.size.compressed[{$URL},{HOST.HOST}]",
+        1
+      ],
+      [
+        "Memory size : vmware.vm.memory.size[{$URL},{HOST.HOST}]",
+        1
+      ],
+      [
+        "Swapped memory : vmware.vm.memory.size.swapped[{$URL},{HOST.HOST}]",
+        1
+      ],
+      [
+        "Committed storage space : vmware.vm.storage.committed[{$URL},{HOST.HOST}]",
+        1
+      ],
+      [
+        "Uncommitted storage space : vmware.vm.storage.uncommitted[{$URL},{HOST.HOST}]",
+        1
+      ],
+      [
+        "Unshared storage space : vmware.vm.storage.unshared[{$URL},{HOST.HOST}]",
+        1
+      ],
+      [
+        "CPU usage : vmware.vm.cpu.usage[{$URL},{HOST.HOST}]",
+        1
+      ],
+      [
+        "Number of virtual CPUs : vmware.vm.cpu.num[{$URL},{HOST.HOST}]",
+        1
+      ],
+      [
+        "Power state : vmware.vm.powerstate[{$URL},{HOST.HOST}]",
+        1
+      ],
+      [
+        "Uptime : vmware.vm.uptime[{$URL},{HOST.HOST}]",
+        1
+      ],
+      [
+        "Hypervisor name : vmware.vm.hv.name[{$URL},{HOST.HOST}]",
+        1
+      ],
+      [
+        "Guest memory usage : vmware.vm.memory.size.usage.guest[{$URL},{HOST.HOST}]",
+        1
+      ],
+      [
+        "Host memory usage : vmware.vm.memory.size.usage.host[{$URL},{HOST.HOST}]",
+        1
+      ],
+      [
+        "Private memory : vmware.vm.memory.size.private[{$URL},{HOST.HOST}]",
+        1
+      ],
+      [
+        "Shared memory : vmware.vm.memory.size.shared[{$URL},{HOST.HOST}]",
+        1
+      ],
+      [
+        "Event log : vmware.eventlog[{$URL}]",
+        1
+      ],
+      [
+        "Cluster name : vmware.vm.cluster.name[{$URL},{HOST.HOST}]",
+        1
+      ],
+      [
+        "Zabbix vmware cache, % free : zabbix[vmware,buffer,pfree]",
+        2
+      ],
+      [
+        "jvm Name : jmx[\"java.lang:type=Runtime\",VmName]",
+        1
+      ],
+      [
+        "os Process CPU Load : jmx[\"java.lang:type=OperatingSystem\",ProcessCpuLoad]",
+        1
+      ],
+      [
+        "mem Heap Memory used : jmx[\"java.lang:type=Memory\",HeapMemoryUsage.used]",
+        1
+      ],
+      [
+        "mem Heap Memory committed : jmx[\"java.lang:type=Memory\",HeapMemoryUsage.committed]",
+        1
+      ],
+      [
+        "mem Heap Memory max : jmx[\"java.lang:type=Memory\",HeapMemoryUsage.max]",
+        1
+      ],
+      [
+        "mem Non-Heap Memory committed : jmx[\"java.lang:type=Memory\",NonHeapMemoryUsage.committed]",
+        1
+      ],
+      [
+        "mem Non-Heap Memory used : jmx[\"java.lang:type=Memory\",NonHeapMemoryUsage.used]",
+        1
+      ],
+      [
+        "mem Non-Heap Memory max : jmx[\"java.lang:type=Memory\",NonHeapMemoryUsage.max]",
+        1
+      ],
+      [
+        "FTP service is running : net.tcp.service[ftp]",
+        1
+      ],
+      [
+        "HTTP service is running : net.tcp.service[http]",
+        1
+      ],
+      [
+        "HTTPS service is running : net.tcp.service[https]",
+        2
+      ],
+      [
+        "LDAP service is running : net.tcp.service[ldap]",
+        1
+      ],
+      [
+        "NTP service is running : net.tcp.service[ntp]",
+        1
+      ],
+      [
+        "SMTP service is running : net.tcp.service[smtp]",
+        1
+      ],
+      [
+        "SSH service is running : net.tcp.service[ssh]",
+        8
+      ],
+      [
+        "Telnet service is running : net.tcp.service[telnet]",
+        1
+      ],
+      [
+        "ICMP ping : icmpping",
+        8
+      ],
+      [
+        "ICMP response time : icmppingsec",
+        8
+      ],
+      [
+        "ICMP loss : icmppingloss",
+        8
+      ],
+      [
+        "Full name : vmware.fullname[{$URL}]",
+        1
+      ],
+      [
+        "Version : vmware.version[{$URL}]",
+        1
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[eth0]",
+        7
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[eth0]",
+        7
+      ],
+      [
+        "Free inodes on $1 (percentage) : vfs.fs.inode[/,pfree]",
+        7
+      ],
+      [
+        "Free inodes on $1 (percentage) : vfs.fs.inode[/boot,pfree]",
+        7
+      ],
+      [
+        "Free inodes on $1 (percentage) : vfs.fs.inode[/home,pfree]",
+        7
+      ],
+      [
+        "Free inodes on $1 (percentage) : vfs.fs.inode[/opt,pfree]",
+        7
+      ],
+      [
+        "Free inodes on $1 (percentage) : vfs.fs.inode[/tmp,pfree]",
+        7
+      ],
+      [
+        "Free inodes on $1 (percentage) : vfs.fs.inode[/var,pfree]",
+        7
+      ],
+      [
+        "Free inodes on $1 (percentage) : vfs.fs.inode[/bckHana,pfree]",
+        1
+      ],
+      [
+        "Free disk space on $1 : vfs.fs.size[/,free]",
+        7
+      ],
+      [
+        "Free disk space on $1 : vfs.fs.size[/boot,free]",
+        7
+      ],
+      [
+        "Free disk space on $1 : vfs.fs.size[/home,free]",
+        7
+      ],
+      [
+        "Free disk space on $1 : vfs.fs.size[/opt,free]",
+        7
+      ],
+      [
+        "Free disk space on $1 : vfs.fs.size[/tmp,free]",
+        7
+      ],
+      [
+        "Free disk space on $1 : vfs.fs.size[/var,free]",
+        7
+      ],
+      [
+        "Free disk space on $1 : vfs.fs.size[/bckHana,free]",
+        1
+      ],
+      [
+        "Free disk space on $1 (percentage) : vfs.fs.size[/,pfree]",
+        7
+      ],
+      [
+        "Free disk space on $1 (percentage) : vfs.fs.size[/boot,pfree]",
+        7
+      ],
+      [
+        "Free disk space on $1 (percentage) : vfs.fs.size[/home,pfree]",
+        7
+      ],
+      [
+        "Free disk space on $1 (percentage) : vfs.fs.size[/opt,pfree]",
+        7
+      ],
+      [
+        "Free disk space on $1 (percentage) : vfs.fs.size[/tmp,pfree]",
+        7
+      ],
+      [
+        "Free disk space on $1 (percentage) : vfs.fs.size[/var,pfree]",
+        7
+      ],
+      [
+        "Free disk space on $1 (percentage) : vfs.fs.size[/bckHana,pfree]",
+        1
+      ],
+      [
+        "Total disk space on $1 : vfs.fs.size[/,total]",
+        7
+      ],
+      [
+        "Total disk space on $1 : vfs.fs.size[/boot,total]",
+        7
+      ],
+      [
+        "Total disk space on $1 : vfs.fs.size[/home,total]",
+        7
+      ],
+      [
+        "Total disk space on $1 : vfs.fs.size[/opt,total]",
+        7
+      ],
+      [
+        "Total disk space on $1 : vfs.fs.size[/tmp,total]",
+        7
+      ],
+      [
+        "Total disk space on $1 : vfs.fs.size[/var,total]",
+        7
+      ],
+      [
+        "Total disk space on $1 : vfs.fs.size[/bckHana,total]",
+        1
+      ],
+      [
+        "Used disk space on $1 : vfs.fs.size[/,used]",
+        7
+      ],
+      [
+        "Used disk space on $1 : vfs.fs.size[/boot,used]",
+        7
+      ],
+      [
+        "Used disk space on $1 : vfs.fs.size[/home,used]",
+        7
+      ],
+      [
+        "Used disk space on $1 : vfs.fs.size[/opt,used]",
+        7
+      ],
+      [
+        "Used disk space on $1 : vfs.fs.size[/tmp,used]",
+        7
+      ],
+      [
+        "Used disk space on $1 : vfs.fs.size[/var,used]",
+        7
+      ],
+      [
+        "Used disk space on $1 : vfs.fs.size[/bckHana,used]",
+        1
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[WAN Miniport (IP)]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[WAN Miniport (IPv6)]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[WAN Miniport (Network Monitor)]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[Microsoft Kernel Debug Network Adapter]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[WAN Miniport (IP)-WFP Native MAC Layer LightWeight Filter-0000]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[WAN Miniport (IP)-QoS Packet Scheduler-0000]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[WAN Miniport (IPv6)-WFP Native MAC Layer LightWeight Filter-0000]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[WAN Miniport (IPv6)-QoS Packet Scheduler-0000]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[vmxnet3 Ethernet Adapter-WFP Native MAC Layer LightWeight Filter-0000]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[vmxnet3 Ethernet Adapter-QoS Packet Scheduler-0000]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[vmxnet3 Ethernet Adapter]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[vmxnet3 Ethernet Adapter-WFP 802.3 MAC Layer LightWeight Filter-0000]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[WAN Miniport (Network Monitor)-WFP Native MAC Layer LightWeight Filter-0000]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[WAN Miniport (Network Monitor)-QoS Packet Scheduler-0000]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[WAN Miniport (PPPOE)]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[RAS Async Adapter]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[WAN Miniport (L2TP)]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[WAN Miniport (SSTP)]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[WAN Miniport (IKEv2)]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[WAN Miniport (PPTP)]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[Microsoft ISATAP Adapter]",
+        9
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[Teredo Tunneling Pseudo-Interface]",
+        4
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[Microsoft ISATAP Adapter #2]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[WAN Miniport (IP)]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[WAN Miniport (IPv6)]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[WAN Miniport (Network Monitor)]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[Microsoft Kernel Debug Network Adapter]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[WAN Miniport (IP)-WFP Native MAC Layer LightWeight Filter-0000]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[WAN Miniport (IP)-QoS Packet Scheduler-0000]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[WAN Miniport (IPv6)-WFP Native MAC Layer LightWeight Filter-0000]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[WAN Miniport (IPv6)-QoS Packet Scheduler-0000]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[vmxnet3 Ethernet Adapter-WFP Native MAC Layer LightWeight Filter-0000]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[vmxnet3 Ethernet Adapter-QoS Packet Scheduler-0000]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[vmxnet3 Ethernet Adapter]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[vmxnet3 Ethernet Adapter-WFP 802.3 MAC Layer LightWeight Filter-0000]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[WAN Miniport (Network Monitor)-WFP Native MAC Layer LightWeight Filter-0000]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[WAN Miniport (Network Monitor)-QoS Packet Scheduler-0000]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[WAN Miniport (PPPOE)]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[RAS Async Adapter]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[WAN Miniport (L2TP)]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[WAN Miniport (SSTP)]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[WAN Miniport (IKEv2)]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[WAN Miniport (PPTP)]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[Microsoft ISATAP Adapter]",
+        9
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[Teredo Tunneling Pseudo-Interface]",
+        4
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[Microsoft ISATAP Adapter #2]",
+        9
+      ],
+      [
+        "Free disk space on $1 : vfs.fs.size[C:,free]",
+        9
+      ],
+      [
+        "Free disk space on $1 : vfs.fs.size[E:,free]",
+        2
+      ],
+      [
+        "Free disk space on $1 (percentage) : vfs.fs.size[C:,pfree]",
+        9
+      ],
+      [
+        "Free disk space on $1 (percentage) : vfs.fs.size[E:,pfree]",
+        2
+      ],
+      [
+        "Total disk space on $1 : vfs.fs.size[C:,total]",
+        9
+      ],
+      [
+        "Total disk space on $1 : vfs.fs.size[E:,total]",
+        2
+      ],
+      [
+        "Used disk space on $1 : vfs.fs.size[C:,used]",
+        9
+      ],
+      [
+        "Used disk space on $1 : vfs.fs.size[E:,used]",
+        2
+      ],
+      [
+        "System boot time : system.boottime",
+        10
+      ],
+      [
+        "Incoming network traffic on $1 : net.if.in[Microsoft Teredo Tunneling Adapter]",
+        5
+      ],
+      [
+        "Outgoing network traffic on $1 : net.if.out[Microsoft Teredo Tunneling Adapter]",
+        5
+      ],
+      [
+        "Free disk space on $1 : vfs.fs.size[F:,free]",
+        1
+      ],
+      [
+        "Free disk space on $1 (percentage) : vfs.fs.size[F:,pfree]",
+        1
+      ],
+      [
+        "Total disk space on $1 : vfs.fs.size[F:,total]",
+        1
+      ],
+      [
+        "Used disk space on $1 : vfs.fs.size[F:,used]",
+        1
+      ],
+      [
+        "Host name of zabbix-agentd running : agent.hostname",
+        19
+      ],
+      [
+        "Free inodes on $1 (percentage) : vfs.fs.inode[/hanadata,pfree]",
+        3
+      ],
+      [
+        "Free inodes on $1 (percentage) : vfs.fs.inode[/hana,pfree]",
+        3
+      ],
+      [
+        "Free disk space on $1 : vfs.fs.size[/hanadata,free]",
+        3
+      ],
+      [
+        "Free disk space on $1 : vfs.fs.size[/hana,free]",
+        3
+      ],
+      [
+        "Free disk space on $1 (percentage) : vfs.fs.size[/hanadata,pfree]",
+        3
+      ],
+      [
+        "Free disk space on $1 (percentage) : vfs.fs.size[/hana,pfree]",
+        3
+      ],
+      [
+        "Total disk space on $1 : vfs.fs.size[/hanadata,total]",
+        3
+      ],
+      [
+        "Total disk space on $1 : vfs.fs.size[/hana,total]",
+        3
+      ],
+      [
+        "Used disk space on $1 : vfs.fs.size[/hanadata,used]",
+        3
+      ],
+      [
+        "Used disk space on $1 : vfs.fs.size[/hana,used]",
+        3
+      ],
+      [
+        "nginx workers memory usage : proc.mem[nginx,nginx]",
+        2
+      ],
+      [
+        "nginx master memory usage : proc.mem[nxing,root]",
+        2
+      ],
+      [
+        "nginx worker process count : proc.num[nginx,nginx]",
+        2
+      ],
+      [
+        "nginx master process count : proc.num[nginx,root]",
+        2
+      ],
+      [
+        "B1 BA Web Service HTTPS 443 port open : net.tcp.service[tcp,,443]",
+        2
+      ],
+      [
+        "B1 BA Web Service on 443 response : net.tcp.service.perf[tcp,,443]",
+        2
+      ],
+      [
+        "B1 Client Agent Service : service_state[SBOClientAgent]",
+        3
+      ],
+      [
+        "B1 Client count : proc.num[<name>]",
+        3
+      ],
+      [
+        "B1 Client registry entries : service_state[service]",
+        3
+      ],
+      [
+        "B1 GK help file size : vfs.file.size[C:\Program Files\SAP\SAP Business One BAS GateKeeper\tomcat\webapps\help.war]",
+        3
+      ],
+      [
+        "B1 GK listening on 443 : net.tcp.service[https,,443]",
+        3
+      ],
+      [
+        "B1 GK log error: help missing : vfs.file.regmatch[C:\Program Files\SAP\SAP Business One BAS GateKeeper\tomcat\logs\catalina.2015-11-10.log,help does not exist]",
+        3
+      ],
+      [
+        "B1 GK service running : service_state[Gatekeeper]",
+        3
+      ],
+      [
+        "B1i DI Proxy Service : service_state[SAPB1iDIProxy]",
+        3
+      ],
+      [
+        "B1i DI Proxy Service Monitor : service_state[SAPB1iDIProxy_Monitor]",
+        3
+      ],
+      [
+        "B1i EventSender Service : service_state[SAPB1iEventSender]",
+        3
+      ],
+      [
+        "B1i HTTPS service is listening on 443 : net.tcp.service[service,<ip>,<port>]",
+        3
+      ],
+      [
+        "B1i HTTPS service is listening on 8080 : net.tcp.service[https,,8080]",
+        3
+      ],
+      [
+        "B1i Integration Service : service_state[Tomcat6]",
+        3
+      ],
+      [
+        "Template App B1 LS service is listening on 40000 : net.tcp.service[tcp,,40000]",
+        2
+      ],
+      [
+        "B1 RD Remote Desktop Service : service_state[TermService]",
+        4
+      ],
+      [
+        "RD Host Configuration Service : service_state[SessionEnv]",
+        4
+      ],
+      [
+        "RD Host TCP port : net.tcp.service[tcp,,3389]",
+        4
+      ],
+      [
+        "RD Host UDP port : net.tcp.service[udp,,3389]",
+        4
+      ],
+      [
+        "B1 RD Web Broker Service : service_state[tssdis]",
+        2
+      ],
+      [
+        "B1 RD Web Configuration Service : service_state[SessionEnv]",
+        2
+      ],
+      [
+        "B1 RD Web GW Service : service_state[TSGateway]",
+        2
+      ],
+      [
+        "B1 RD Web IIS Service : service_state[W3SVC]",
+        2
+      ],
+      [
+        "B1 RD Web Management Service : service_state[RDMS]",
+        2
+      ],
+      [
+        "B1 RD Web RemoteApp Service : service_state[TSCPubRPC]",
+        2
+      ],
+      [
+        "B1 Service Unit Count : zabbix-sld-primitive.sh[ServiceUnits/%24count]",
+        5
+      ],
+      [
+        "B1 SLD Agent configuration file checksum : vfs.file.cksum[C:\Program Files\sap\SAP Business One SLD Agent\sldagentservice\cmdExecutor.properties]",
+        6
+      ],
+      [
+        "B1 SLD Agent configuration file checksum on {HOST.NAME} : vfs.file.md5sum[C:\Program Files\sap\SAP Business One SLD Agent\sldagentservice\cmdExecutor.properties]",
+        6
+      ],
+      [
+        "B1 SLD Agent log file size : vfs.file.size[C:\Users\SAPserviceB1C\AppData\Local\SAP\SAP Business One\Log\SLDAgent\sldAgent]",
+        6
+      ],
+      [
+        "B1 SLD Agent service running state [0] : service_state[sldagentservice]",
+        6
+      ],
+      [
+        "B1 SLD configuration file checksum : vfs.file.cksum[c:\Program Files\sap\sld\conf\server.xml]",
+        2
+      ],
+      [
+        "B1 SLD HTTPS service on 443 is listening : net.tcp.service[tcp,,443]",
+        2
+      ],
+      [
+        "B1 SLD HTTPS service on 443 response time : net.tcp.service.perf[service,{HOST.IP},443]",
+        2
+      ],
+      [
+        "B1 SLD service running state [0] : service_state[SLD]",
+        2
+      ],
+      [
+        "Daemon service is listening on 30017 : net.tcp.service[tcp,,30017]",
+        4
+      ],
+      [
+        "HANA B1C Mount Backup : vfs.file.regmatch[/proc/mounts,^\S+ /mnt/bckHana .*]",
+        4
+      ],
+      [
+        "HANA B1C Mount Tenant : vfs.file.regmatch[/proc/mounts,^\S+ /mnt/TenantStorage .*]",
+        4
+      ],
+      [
+        "HANA Backups: Data Last Age : zabbix-hana.sh[{HOST.HOST}, hanaDataBackup.sql, 4]",
+        4
+      ],
+      [
+        "HANA Backups: Data Last Duration : zabbix-hana.sh[{HOST.HOST}, hanaDataBackup.sql, 5]",
+        4
+      ],
+      [
+        "HANA Backups: Data Last State : zabbix-hana-backups.sh[{HOST.HOST}, hanaDataBackup.sql]",
+        4
+      ],
+      [
+        "HANA Backups: Data Succ Age : zabbix-hana.sh[{HOST.HOST}, hanaBackups.sql, 1]",
+        4
+      ],
+      [
+        "HANA Backups: Data Succ Duration : zabbix-hana.sh[{HOST.HOST}, hanaBackups.sql, 2]",
+        4
+      ],
+      [
+        "HANA Backups: Log Last Age : zabbix-hana.sh[{HOST.HOST}, hanaLogBackup.sql, 4]",
+        4
+      ],
+      [
+        "HANA Backups: Log Last Duration : zabbix-hana.sh[{HOST.HOST}, hanaLogBackup.sql, 5]",
+        4
+      ],
+      [
+        "HANA Backups: Log Last State : zabbix-hana-backups.sh[{HOST.HOST}, hanaLogBackup.sql]",
+        4
+      ],
+      [
+        "HANA Backups: Log Succ Age : zabbix-hana.sh[{HOST.HOST}, hanaBackups.sql, 3]",
+        4
+      ],
+      [
+        "HANA Backups: Log Succ Duration : zabbix-hana.sh[{HOST.HOST}, hanaBackups.sql, 4]",
+        4
+      ],
+      [
+        "HANA Service Memory: Installed : zabbix-hana.sh[{HOST.HOST},hanaMemory.sql,3]",
+        4
+      ],
+      [
+        "HANA Service Memory: Limit : zabbix-hana.sh[{HOST.HOST},hanaMemory.sql,2]",
+        4
+      ],
+      [
+        "HANA Service Memory: Resident : zabbix-hana.sh[{HOST.HOST},hanaMemory.sql,1]",
+        4
+      ],
+      [
+        "Indexserver service is listening on 30015 : net.tcp.service[tcp,,30015]",
+        4
+      ],
+      [
+        "HANA Client Win32 installed : vfs.file.exists[C:\Program Files (x86)\SAP\hdbclient\libodbcHDB32.dll]",
+        6
+      ],
+      [
+        "HANA Client Win64 installed : vfs.file.exists[C:\Program Files\sap\hdbclient\libodbcHDB.dll]",
+        6
+      ],
+      [
+        "B1 SLD Customer Count (x) : sld.customers",
+        1
+      ],
+      [
+        "B1 SLD Code : sld.code",
+        1
+      ],
+      [
+        "B1 SLD Message : sld.message",
+        1
+      ],
+      [
+        "B1 SLD Status : sld.status",
+        1
+      ],
+      [
+        "B1 SLD Version : sld.version",
+        1
+      ],
+      [
+        "B1 SLD Customer Count : zabbix-sld-cust-count.sh",
+        2
+      ],
+      [
+        "B1 SLD Customer Count : zabbix-sld-primitive.sh[Customers/%24count]",
+        1
+      ],
+      [
+        "B1 SU #$1 Name : sld.suname[1]",
+        2
+      ],
+      [
+        "B1 SU #$1 Name : sld.suname[21]",
+        2
+      ],
+      [
+        "B1 Customer (2) xx Users : zabbix-sld-cust.sh[2,Users]",
+        1
+      ],
+      [
+        "B1 Customer (2) xx Tenants : zabbix-sld-cust.sh[\"2\",\"Tenants\"]",
+        1
+      ],
+      [
+        "B1 Customer (21) xx Tenants : zabbix-sld-cust.sh[\"21\",\"Tenants\"]",
+        1
+      ],
+      [
+        "B1 Customer (41) xx Tenants : zabbix-sld-cust.sh[\"41\",\"Tenants\"]",
+        1
+      ],
+      [
+        "B1 Customer (21) xx Users : zabbix-sld-cust.sh[21,Users]",
+        1
+      ],
+      [
+        "B1 Customer (41) xx Users : zabbix-sld-cust.sh[41,Users]",
+        1
+      ],
+      [
+        "HANA Version : zabbix-hana.sh[{HOST.HOST},hanaVersion.sql,1]",
+        4
+      ],
+      [
+        "B1 SU 1 Name : zabbix-sld-su-name.sh[1]",
+        1
+      ],
+      [
+        "B1 SU 21 Name : zabbix-sld-su-name.sh[21]",
+        1
+      ],
+      [
+        "B1 SU 1 Version : zabbix-sld-su-version.sh[1]",
+        1
+      ],
+      [
+        "B1 SU 21 Version : zabbix-sld-su-version.sh[21]",
+        1
+      ],
+      [
+        "B1 SU 1 Status : zabbix-sld-su-status.sh[1]",
+        1
+      ],
+      [
+        "B1 SU 21 Status : zabbix-sld-su-status.sh[21]",
+        1
+      ],
+      [
+        "B1 SU 1 Purpose : zabbix-sld-su-purpose.sh[1]",
+        1
+      ],
+      [
+        "B1 SU 21 Purpose : zabbix-sld-su-purpose.sh[21]",
+        1
+      ],
+      [
+        "B1 Customer (42) xx Users : zabbix-sld-cust.sh[42,Users]",
+        1
+      ],
+      [
+        "B1 Customer (42) xx Tenants : zabbix-sld-cust.sh[\"42\",\"Tenants\"]",
+        1
+      ],
+      [
+        "B1 Customer (43) xx Users : zabbix-sld-cust.sh[43,Users]",
+        1
+      ],
+      [
+        "B1 Customer (43) xx Tenants : zabbix-sld-cust.sh[\"43\",\"Tenants\"]",
+        1
+      ],
+      [
+        "B1 Customer (2) xx Tenants : zabbix-sld-cust-tenants.sh[\"2\"]",
+        1
+      ],
+      [
+        "B1 Customer (21) xx Tenants : zabbix-sld-cust-tenants.sh[\"21\"]",
+        1
+      ],
+      [
+        "B1 Customer (41) xx Tenants : zabbix-sld-cust-tenants.sh[\"41\"]",
+        1
+      ],
+      [
+        "B1 Customer (42) xx Tenants : zabbix-sld-cust-tenants.sh[\"42\"]",
+        1
+      ],
+      [
+        "B1 Customer (43) xx Tenants : zabbix-sld-cust-tenants.sh[\"43\"]",
+        1
+      ],
+      [
+        "B1 Customer (2) xx Users : zabbix-sld-cust-users.sh[2]",
+        1
+      ],
+      [
+        "B1 Customer (21) xx Users : zabbix-sld-cust-users.sh[21]",
+        1
+      ],
+      [
+        "B1 Customer (41) xx Users : zabbix-sld-cust-users.sh[41]",
+        1
+      ],
+      [
+        "B1 Customer (42) xx Users : zabbix-sld-cust-users.sh[42]",
+        1
+      ],
+      [
+        "B1 Customer (43) xx Users : zabbix-sld-cust-users.sh[43]",
+        1
+      ],
+      [
+        "B1 Customer (61) xx Users : zabbix-sld-cust.sh[61,Users]",
+        1
+      ],
+      [
+        "B1 Customer (61) xx Tenants : zabbix-sld-cust.sh[\"61\",\"Tenants\"]",
+        1
+      ],
+      [
+        "B1 Customer (61) xx Tenants : zabbix-sld-cust-tenants.sh[\"61\"]",
+        1
+      ],
+      [
+        "B1 Customer (61) xx Users : zabbix-sld-cust-users.sh[61]",
+        1
+      ],
+      [
+        "B1 SLD Code : zabbix-sld-status.sh[\"Code\"]",
+        2
+      ],
+      [
+        "B1 SLD Message : zabbix-sld-status.sh[\"Message\"]",
+        2
+      ],
+      [
+        "B1 SLD Status : zabbix-sld-status.sh[\"Status\"]",
+        2
+      ],
+      [
+        "B1 SU 1 Comp: DB : zabbix-sld-su-comp-db.sh[1]",
+        1
+      ],
+      [
+        "B1 SU 21 Comp: DB : zabbix-sld-su-comp-db.sh[21]",
+        1
+      ],
+      [
+        "B1 SU 1 Tenants: Productive : zabbix-sld-su-tenants.sh[1,\"Productive\"]",
+        1
+      ],
+      [
+        "B1 SU 21 Tenants: Productive : zabbix-sld-su-tenants.sh[21,\"Productive\"]",
+        1
+      ],
+      [
+        "B1 SU 1 Tenants: Testing : zabbix-sld-su-tenants.sh[1,\"Testing\"]",
+        1
+      ],
+      [
+        "B1 SU 21 Tenants: Testing : zabbix-sld-su-tenants.sh[21,\"Testing\"]",
+        1
+      ],
+      [
+        "B1 SU 1 Tenants: Demo : zabbix-sld-su-tenants.sh[1,\"Demo\"]",
+        1
+      ],
+      [
+        "B1 SU 21 Tenants: Demo : zabbix-sld-su-tenants.sh[21,\"Demo\"]",
+        1
+      ],
+      [
+        "B1 SU 1 Tenants: Trial : zabbix-sld-su-tenants.sh[1,\"Trial\"]",
+        1
+      ],
+      [
+        "B1 SU 21 Tenants: Trial : zabbix-sld-su-tenants.sh[21,\"Trial\"]",
+        1
+      ],
+      [
+        "B1 Customer (2) xx Tenants: Productive : zabbix-sld-cust-tenants.sh[2, \"Productive\"]",
+        1
+      ],
+      [
+        "B1 Customer (21) xx Tenants: Productive : zabbix-sld-cust-tenants.sh[21, \"Productive\"]",
+        1
+      ],
+      [
+        "B1 Customer (41) xx Tenants: Productive : zabbix-sld-cust-tenants.sh[41, \"Productive\"]",
+        1
+      ],
+      [
+        "B1 Customer (42) xx Tenants: Productive : zabbix-sld-cust-tenants.sh[42, \"Productive\"]",
+        1
+      ],
+      [
+        "B1 Customer (43) xx Tenants: Productive : zabbix-sld-cust-tenants.sh[43, \"Productive\"]",
+        1
+      ],
+      [
+        "B1 Customer (61) xx Tenants: Productive : zabbix-sld-cust-tenants.sh[61, \"Productive\"]",
+        1
+      ],
+      [
+        "B1 Customer (2) xx Tenants: Testing : zabbix-sld-cust-tenants.sh[2, \"Testing\"]",
+        1
+      ],
+      [
+        "B1 Customer (21) xx Tenants: Testing : zabbix-sld-cust-tenants.sh[21, \"Testing\"]",
+        1
+      ],
+      [
+        "B1 Customer (41) xx Tenants: Testing : zabbix-sld-cust-tenants.sh[41, \"Testing\"]",
+        1
+      ],
+      [
+        "B1 Customer (42) xx Tenants: Testing : zabbix-sld-cust-tenants.sh[42, \"Testing\"]",
+        1
+      ],
+      [
+        "B1 Customer (43) xx Tenants: Testing : zabbix-sld-cust-tenants.sh[43, \"Testing\"]",
+        1
+      ],
+      [
+        "B1 Customer (61) xx Tenants: Testing : zabbix-sld-cust-tenants.sh[61, \"Testing\"]",
+        1
+      ],
+      [
+        "B1 Customer (2) xx Tenants: Demo : zabbix-sld-cust-tenants.sh[2, \"Demo\"]",
+        1
+      ],
+      [
+        "B1 Customer (21) xx Tenants: Demo : zabbix-sld-cust-tenants.sh[21, \"Demo\"]",
+        1
+      ],
+      [
+        "B1 Customer (41) xx Tenants: Demo : zabbix-sld-cust-tenants.sh[41, \"Demo\"]",
+        1
+      ],
+      [
+        "B1 Customer (42) xx Tenants: Demo : zabbix-sld-cust-tenants.sh[42, \"Demo\"]",
+        1
+      ],
+      [
+        "B1 Customer (43) xx Tenants: Demo : zabbix-sld-cust-tenants.sh[43, \"Demo\"]",
+        1
+      ],
+      [
+        "B1 Customer (61) xx Tenants: Demo : zabbix-sld-cust-tenants.sh[61, \"Demo\"]",
+        1
+      ],
+      [
+        "B1 Customer (2) xx Tenants: Trial : zabbix-sld-cust-tenants.sh[2, \"Trial\"]",
+        1
+      ],
+      [
+        "B1 Customer (21) xx Tenants: Trial : zabbix-sld-cust-tenants.sh[21, \"Trial\"]",
+        1
+      ],
+      [
+        "B1 Customer (41) xx Tenants: Trial : zabbix-sld-cust-tenants.sh[41, \"Trial\"]",
+        1
+      ],
+      [
+        "B1 Customer (42) xx Tenants: Trial : zabbix-sld-cust-tenants.sh[42, \"Trial\"]",
+        1
+      ],
+      [
+        "B1 Customer (43) xx Tenants: Trial : zabbix-sld-cust-tenants.sh[43, \"Trial\"]",
+        1
+      ],
+      [
+        "B1 Customer (61) xx Tenants: Trial : zabbix-sld-cust-tenants.sh[61, \"Trial\"]",
+        1
+      ],
+      [
+        "B1 Customer (2) xx Users: RDS licenses : zabbix-sld-cust-users.sh[2,\"RDS\"]",
+        1
+      ],
+      [
+        "B1 Customer (21) xx Users: RDS licenses : zabbix-sld-cust-users.sh[21,\"RDS\"]",
+        1
+      ],
+      [
+        "B1 Customer (41) xx Users: RDS licenses : zabbix-sld-cust-users.sh[41,\"RDS\"]",
+        1
+      ],
+      [
+        "B1 Customer (42) xx Users: RDS licenses : zabbix-sld-cust-users.sh[42,\"RDS\"]",
+        1
+      ],
+      [
+        "B1 Customer (43) xx Users: RDS licenses : zabbix-sld-cust-users.sh[43,\"RDS\"]",
+        1
+      ],
+      [
+        "B1 Customer (61) xx Users: RDS licenses : zabbix-sld-cust-users.sh[61,\"RDS\"]",
+        1
+      ]
+    ]
+  }
+}

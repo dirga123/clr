@@ -1,0 +1,76 @@
+{
+  "private": true,
+  "name": "pay",
+  "version": "1.0.0",
+  "description": "pay",
+  "main": "server/index.js",
+  "scripts": {
+    "lint": "eslint src scripts && jscs src scripts",
+    "test": "eslint src && jest",
+    "clean": "babel-node scripts/run clean",
+    "copy": "babel-node scripts/run copy",
+    "bundle": "babel-node scripts/run bundle",
+    "build": "babel-node scripts/run build",
+    "deploy": "babel-node scripts/run deploy",
+    "start": "babel-node scripts/run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dirga123/pay.git"
+  },
+  "keywords": [
+    "zabbix"
+  ],
+  "author": "dirga123@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dirga123/pay/issues"
+  },
+  "homepage": "https://github.com/dirga123/pay#readme",
+  "engines": {
+    "node": "^5.5.0",
+    "npm": "^3.3.12"
+  },
+  "dependencies": {
+    "babel-core": "^6.5.2",
+    "babel-plugin-transform-runtime": "^6.5.2",
+    "babel-polyfill": "^6.3.14",
+    "babel-runtime": "^6.3.19",
+    "bluebird": "^3.3.1",
+    "debug": "^2.2.0",
+    "koa": "^2.0.0-alpha.3",
+    "koa-convert": "^1.2.0",
+    "koa-logger": "^2.0.0",
+    "koa-mount": "^1.3.0",
+    "koa-parse-json": "^1.0.1",
+    "koa-router": "^7.0.1",
+    "koa-send": "^3.1.0",
+    "koa-static": "^2.0.0",
+    "moment": "^2.11.2",
+    "node-fetch": "^1.3.3",
+    "redis": "^2.4.2"
+  },
+  "devDependencies": {
+    "assets-webpack-plugin": "^3.2.0",
+    "babel-cli": "^6.4.0",
+    "babel-eslint": "^5.0.0",
+    "babel-loader": "^6.2.1",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-stage-0": "^6.3.13",
+    "browser-sync": "^2.11.1",
+    "del": "^2.2.0",
+    "eslint": "^2.2.0",
+    "eslint-config-airbnb": "^6.0.2",
+    "eslint-plugin-react": "^4.1.0",
+    "extend": "^3.0.0",
+    "gaze": "^0.5.2",
+    "git-repository": "^0.1.1",
+    "jscs": "^2.9.0",
+    "mkdirp": "^0.5.1",
+    "ncp": "^2.0.0",
+    "replace": "^0.3.0",
+    "webpack": "^1.12.14",
+    "webpack-hot-middleware": "^2.6.4",
+    "webpack-middleware": "^1.4.0"
+  }
+}

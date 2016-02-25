@@ -1,0 +1,552 @@
+{
+  "jsonrpc": "2.0",
+  "result": [
+    {
+      "serviceid": "1",
+      "name": "SLD",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "0",
+      "showsla": "1",
+      "goodsla": "99.5000",
+      "sortorder": "1",
+      "dependencies": [
+        {
+          "linkid": "86",
+          "serviceupid": "1",
+          "servicedownid": "4",
+          "soft": "0",
+          "sortorder": "0",
+          "serviceid": "4"
+        },
+        {
+          "linkid": "87",
+          "serviceupid": "1",
+          "servicedownid": "5",
+          "soft": "0",
+          "sortorder": "0",
+          "serviceid": "5"
+        },
+        {
+          "linkid": "88",
+          "serviceupid": "1",
+          "servicedownid": "30",
+          "soft": "0",
+          "sortorder": "0",
+          "serviceid": "30"
+        }
+      ]
+    },
+    {
+      "serviceid": "2",
+      "name": "Portal",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "0",
+      "showsla": "1",
+      "goodsla": "99.5000",
+      "sortorder": "2",
+      "dependencies": [
+        {
+          "linkid": "90",
+          "serviceupid": "2",
+          "servicedownid": "10",
+          "soft": "0",
+          "sortorder": "0",
+          "serviceid": "10"
+        },
+        {
+          "linkid": "91",
+          "serviceupid": "2",
+          "servicedownid": "11",
+          "soft": "0",
+          "sortorder": "0",
+          "serviceid": "11"
+        },
+        {
+          "linkid": "92",
+          "serviceupid": "2",
+          "servicedownid": "12",
+          "soft": "0",
+          "sortorder": "0",
+          "serviceid": "12"
+        },
+        {
+          "linkid": "93",
+          "serviceupid": "2",
+          "servicedownid": "13",
+          "soft": "0",
+          "sortorder": "0",
+          "serviceid": "13"
+        },
+        {
+          "linkid": "94",
+          "serviceupid": "2",
+          "servicedownid": "14",
+          "soft": "0",
+          "sortorder": "0",
+          "serviceid": "14"
+        }
+      ]
+    },
+    {
+      "serviceid": "3",
+      "name": "Common Components",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "0",
+      "showsla": "1",
+      "goodsla": "99.5000",
+      "sortorder": "1",
+      "dependencies": [
+        {
+          "linkid": "79",
+          "serviceupid": "3",
+          "servicedownid": "8",
+          "soft": "0",
+          "sortorder": "0",
+          "serviceid": "8"
+        },
+        {
+          "linkid": "80",
+          "serviceupid": "3",
+          "servicedownid": "9",
+          "soft": "0",
+          "sortorder": "0",
+          "serviceid": "9"
+        },
+        {
+          "linkid": "85",
+          "serviceupid": "3",
+          "servicedownid": "1",
+          "soft": "0",
+          "sortorder": "1",
+          "serviceid": "1"
+        },
+        {
+          "linkid": "89",
+          "serviceupid": "3",
+          "servicedownid": "2",
+          "soft": "0",
+          "sortorder": "2",
+          "serviceid": "2"
+        },
+        {
+          "linkid": "95",
+          "serviceupid": "3",
+          "servicedownid": "6",
+          "soft": "0",
+          "sortorder": "3",
+          "serviceid": "6"
+        }
+      ]
+    },
+    {
+      "serviceid": "4",
+      "name": "SLD: service",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "13623",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "0",
+      "dependencies": []
+    },
+    {
+      "serviceid": "5",
+      "name": "SLD: port",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "13998",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "0",
+      "dependencies": []
+    },
+    {
+      "serviceid": "6",
+      "name": "SLD Agents",
+      "status": "0",
+      "algorithm": "2",
+      "triggerid": "0",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "3",
+      "dependencies": [
+        {
+          "linkid": "96",
+          "serviceupid": "6",
+          "servicedownid": "7",
+          "soft": "0",
+          "sortorder": "0",
+          "serviceid": "7"
+        }
+      ]
+    },
+    {
+      "serviceid": "7",
+      "name": "SLD Agent: CCC",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "13629",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "0",
+      "dependencies": []
+    },
+    {
+      "serviceid": "8",
+      "name": "HANA",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "13753",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "0",
+      "dependencies": []
+    },
+    {
+      "serviceid": "9",
+      "name": "B1 License Service",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "13957",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "0",
+      "dependencies": []
+    },
+    {
+      "serviceid": "10",
+      "name": "Portal: Browser Access",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "0",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "0",
+      "dependencies": []
+    },
+    {
+      "serviceid": "11",
+      "name": "Portal: RD Web",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "0",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "0",
+      "dependencies": []
+    },
+    {
+      "serviceid": "12",
+      "name": "Portal: RD Gateway",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "13991",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "0",
+      "dependencies": []
+    },
+    {
+      "serviceid": "13",
+      "name": "Portal: HTTPS",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "13995",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "0",
+      "dependencies": []
+    },
+    {
+      "serviceid": "14",
+      "name": "Portal: Browser Access Web Scenario",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "14005",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "0",
+      "dependencies": []
+    },
+    {
+      "serviceid": "15",
+      "name": "SU-9108-01",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "0",
+      "showsla": "1",
+      "goodsla": "99.5000",
+      "sortorder": "11",
+      "dependencies": [
+        {
+          "linkid": "98",
+          "serviceupid": "15",
+          "servicedownid": "18",
+          "soft": "0",
+          "sortorder": "1",
+          "serviceid": "18"
+        },
+        {
+          "linkid": "111",
+          "serviceupid": "15",
+          "servicedownid": "25",
+          "soft": "0",
+          "sortorder": "1",
+          "serviceid": "25"
+        },
+        {
+          "linkid": "109",
+          "serviceupid": "15",
+          "servicedownid": "24",
+          "soft": "0",
+          "sortorder": "2",
+          "serviceid": "24"
+        }
+      ]
+    },
+    {
+      "serviceid": "16",
+      "name": "SU-9109-01",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "0",
+      "showsla": "1",
+      "goodsla": "99.5000",
+      "sortorder": "12",
+      "dependencies": [
+        {
+          "linkid": "106",
+          "serviceupid": "16",
+          "servicedownid": "21",
+          "soft": "0",
+          "sortorder": "1",
+          "serviceid": "21"
+        },
+        {
+          "linkid": "107",
+          "serviceupid": "16",
+          "servicedownid": "23",
+          "soft": "0",
+          "sortorder": "1",
+          "serviceid": "23"
+        },
+        {
+          "linkid": "104",
+          "serviceupid": "16",
+          "servicedownid": "22",
+          "soft": "0",
+          "sortorder": "2",
+          "serviceid": "22"
+        }
+      ]
+    },
+    {
+      "serviceid": "17",
+      "name": "Non-Productive",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "0",
+      "showsla": "1",
+      "goodsla": "0.0100",
+      "sortorder": "90",
+      "dependencies": []
+    },
+    {
+      "serviceid": "18",
+      "name": "SU-9108-01: HANA",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "13604",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "1",
+      "dependencies": []
+    },
+    {
+      "serviceid": "20",
+      "name": "SU-9109-01 RDS #1",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "14017",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "0",
+      "dependencies": []
+    },
+    {
+      "serviceid": "21",
+      "name": "SU-9109-01: HANA",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "13730",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "1",
+      "dependencies": []
+    },
+    {
+      "serviceid": "22",
+      "name": "SU-9109-01: Gatekeepers",
+      "status": "0",
+      "algorithm": "2",
+      "triggerid": "0",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "2",
+      "dependencies": [
+        {
+          "linkid": "105",
+          "serviceupid": "22",
+          "servicedownid": "27",
+          "soft": "0",
+          "sortorder": "0",
+          "serviceid": "27"
+        }
+      ]
+    },
+    {
+      "serviceid": "23",
+      "name": "SU-9109-01: RDs",
+      "status": "0",
+      "algorithm": "2",
+      "triggerid": "0",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "1",
+      "dependencies": [
+        {
+          "linkid": "108",
+          "serviceupid": "23",
+          "servicedownid": "20",
+          "soft": "0",
+          "sortorder": "0",
+          "serviceid": "20"
+        }
+      ]
+    },
+    {
+      "serviceid": "24",
+      "name": "SU-9108-01: GKs",
+      "status": "0",
+      "algorithm": "2",
+      "triggerid": "0",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "2",
+      "dependencies": [
+        {
+          "linkid": "110",
+          "serviceupid": "24",
+          "servicedownid": "28",
+          "soft": "0",
+          "sortorder": "0",
+          "serviceid": "28"
+        }
+      ]
+    },
+    {
+      "serviceid": "25",
+      "name": "SU-9108-01: RDs",
+      "status": "0",
+      "algorithm": "2",
+      "triggerid": "0",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "1",
+      "dependencies": [
+        {
+          "linkid": "112",
+          "serviceupid": "25",
+          "servicedownid": "26",
+          "soft": "0",
+          "sortorder": "0",
+          "serviceid": "26"
+        }
+      ]
+    },
+    {
+      "serviceid": "26",
+      "name": "SU-9108-01 RD #1",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "14016",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "0",
+      "dependencies": []
+    },
+    {
+      "serviceid": "27",
+      "name": "SU-9109-01 GK #1",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "13843",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "0",
+      "dependencies": []
+    },
+    {
+      "serviceid": "28",
+      "name": "SU-9108-01 GK #1",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "13837",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "0",
+      "dependencies": []
+    },
+    {
+      "serviceid": "29",
+      "name": "Productive",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "0",
+      "showsla": "1",
+      "goodsla": "99.5000",
+      "sortorder": "1",
+      "dependencies": [
+        {
+          "linkid": "113",
+          "serviceupid": "29",
+          "servicedownid": "3",
+          "soft": "0",
+          "sortorder": "1",
+          "serviceid": "3"
+        },
+        {
+          "linkid": "114",
+          "serviceupid": "29",
+          "servicedownid": "15",
+          "soft": "0",
+          "sortorder": "11",
+          "serviceid": "15"
+        },
+        {
+          "linkid": "115",
+          "serviceupid": "29",
+          "servicedownid": "16",
+          "soft": "0",
+          "sortorder": "12",
+          "serviceid": "16"
+        }
+      ]
+    },
+    {
+      "serviceid": "30",
+      "name": "SLD: status",
+      "status": "0",
+      "algorithm": "1",
+      "triggerid": "14021",
+      "showsla": "0",
+      "goodsla": "99.9000",
+      "sortorder": "0",
+      "dependencies": []
+    }
+  ],
+  "id": 2
+}

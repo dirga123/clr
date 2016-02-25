@@ -1,0 +1,31 @@
+{
+  "general": [
+    "system.uname",
+    "system.uptime"
+  ],
+  "agent": [
+    "agent.hostname",
+    "agent.version",
+    "agent.ping"
+  ],
+  "services": [
+    "net.tcp.service.perf",
+    "net.tcp.service",
+    "service_state",
+    "vfs.file.cksum",
+    "vfs.file.exists",
+    "vfs.file.md5sum",
+    "vfs.file.size",
+    "zabbix-sld-primitive.sh",
+    "zabbix-sld-su2.sh"
+  ],
+  "disk": [
+    "vfs.fs.size",
+    "vm.memory.size"
+  ],
+  "processes": [
+    "proc.num",
+    "perf_counter[\2\250]",
+    "system.cpu.load"
+  ]
+}

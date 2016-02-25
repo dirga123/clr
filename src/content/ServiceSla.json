@@ -1,0 +1,20 @@
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "29": {
+      "status": "0",
+      "problems": [],
+      "sla": [
+        {
+          "from": 1454284801,
+          "to": 1456617601,
+          "sla": 100,
+          "okTime": 2332800,
+          "problemTime": 0,
+          "downtimeTime": 0
+        }
+      ]
+    }
+  },
+  "id": 2
+}
