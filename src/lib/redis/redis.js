@@ -113,4 +113,38 @@ export default class Redis {
       throw e.message;
     }
   }
+
+  async existsLandscape(lsId) {
+    try {
+      debug('redis')(`existsLandscape(${lsId})`);
+
+      const isInSet = await this.client.sismemberAsync('ls', lsId);
+      if (isInSet === 0) {
+        return false;
+      }
+      return true;
+    } catch (e) {
+      debug('redis')(`existsLandscape error: ${e.message}`);
+      throw e.message;
+    }
+  }
+
+  async addLandscape(ls) {
+    try {
+      debug('redis')(`addLandscape(${ls.id})`);
+
+      const addedCount = await this.client.saddAsync('ls', ls.id);
+      if (addedCount !== 1) {
+        throw { message: `Adding of Landscape ${ls.id} failed.` };
+      }
+
+      await this.client.hmsetAsync(`ls:${ls.id}`, 'zabbix', ls.zabbix);
+      await this.client.hmsetAsync(`ls:${ls.id}`, 'domain', ls.domain);
+
+      return addedCount;
+    } catch (e) {
+      debug('redis')(`addLandscape error: ${e.message}`);
+      throw e.message;
+    }
+  }
 }

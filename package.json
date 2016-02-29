@@ -1,8 +1,8 @@
 {
   "private": true,
-  "name": "pay",
+  "name": "clr",
   "version": "1.0.0",
-  "description": "pay",
+  "description": "Cloud reporting",
   "main": "server/index.js",
   "scripts": {
     "lint": "eslint src scripts && jscs src scripts",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dirga123/pay.git"
+    "url": "git+https://github.com/dirga123/clr.git"
   },
   "keywords": [
     "zabbix"
@@ -24,9 +24,9 @@
   "author": "dirga123@gmail.com",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/dirga123/pay/issues"
+    "url": "https://github.com/dirga123/clr/issues"
   },
-  "homepage": "https://github.com/dirga123/pay#readme",
+  "homepage": "https://github.com/dirga123/clr#readme",
   "engines": {
     "node": "^5.5.0",
     "npm": "^3.3.12"
@@ -43,6 +43,7 @@
     "koa-logger": "^2.0.0",
     "koa-mount": "^1.3.0",
     "koa-parse-json": "^1.0.1",
+    "koa-qs": "^2.0.0",
     "koa-router": "^7.0.1",
     "koa-send": "^3.1.0",
     "koa-static": "^2.0.0",

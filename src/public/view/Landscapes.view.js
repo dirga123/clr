@@ -4,7 +4,7 @@ sap.ui.define([
 	'sap/m/Toolbar',
 	'sap/m/ToolbarSpacer',
 	'sap/m/TileContainer',
-	'sap/m/StandardTile',
+	'sap/m/StandardTile'
 ], function (Page, Button, Toolbar, ToolbarSpacer, TileContainer, StandardTile) {
 	'use strict';
 
@@ -15,8 +15,8 @@ sap.ui.define([
 
 		createContent: function (oController) {
 			var oAddButton = new Button(this.createId('addButton'), {
-					text: '{i18n>landscapeAddButton}',
-					press: [ oController.onPressAdd, oController ]
+				text: '{i18n>landscapeAddButton}',
+				press: [ oController.onPressAdd, oController ]
 			});
 
 			var oBar = new Toolbar({
@@ -34,7 +34,7 @@ sap.ui.define([
 				title: '{landscapes>id} {landscapes>domain}',
 				info: '{landscapes>status}',
 				infoState: '{landscapes>infoState}',
-				press: [ oController.onPressDetail, oController]
+				press: [ oController.onPressDetail, oController ]
 			});
 
 			var oTileContainer = new TileContainer(this.createId('tileContainer'), {

@@ -21,7 +21,7 @@ sap.ui.define([
 	'sap/m/Column',
 	'sap/m/ColumnListItem',
 	'sap/m/ObjectIdentifier',
-	'sap/m/ObjectNumber',
+	'sap/m/ObjectNumber'
 ], function (Page, Button, Toolbar,	ToolbarSpacer, Panel, Title, SimpleForm,
 	Label, Text, List, ObjectListItem, ObjectAttribute, ObjectStatus,
 	formatter, jQuery, CustomListItem, VerticalLayout, FlexBox,
@@ -559,14 +559,14 @@ sap.ui.define([
 				showHeader: true,
 				showNavButton: true,
 				navButtonPress: [ oController.onNavBack, oController ],
-				//busy: '{landscapeView>/busy}',
-				//busyIndicatorDelay: '{landscapeView>/delay}',
+				// busy: '{landscapeView>/busy}',
+				// busyIndicatorDelay: '{landscapeView>/delay}',
 				content: [
 					oGeneralPanel,
 					oSlaPanel,
 					oCustomersPanel,
 					oServiceUnitsPanel
-					//oHostList
+					// oHostList
 				],
 				footer: [
 					oBar

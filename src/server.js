@@ -10,13 +10,14 @@ import koaMount from 'koa-mount';
 import convert from 'koa-convert';
 import body from 'koa-parse-json';
 import debug from 'debug';
-import { host, port } from './config';
+import { host, port, versionStr } from './config';
 import Zabbix from './lib/zabbix';
 import hosts from './zabbix/hosts';
 import { servicesAsMap } from './zabbix/services';
 import * as ZK from './zabbix/keys';
 import items from './zabbix/items';
 import Redis from './lib/redis';
+import koaQs from 'koa-qs';
 
 const { NODE_ENV } = process.env;
 if (NODE_ENV === 'development') {
@@ -24,6 +25,8 @@ if (NODE_ENV === 'development') {
 }
 
 const server = new Koa();
+koaQs(server, 'first');
+
 const router = new Router();
 const zabbix = new Zabbix();
 const redis = new Redis();
@@ -42,8 +45,6 @@ server.use(async (ctx, next) => {
 });
 
 router.post('/login', async (ctx) => {
-  const versionStr = '1.0.0';
-
   if (ctx.request.body === null || ctx.request.body.input === null) {
     ctx.body = {
       error: 'Wrong input'
@@ -88,8 +89,6 @@ router.post('/login', async (ctx) => {
 });
 
 router.get('/Home', async ctx => {
-  const versionStr = '1.0.0';
-
   try {
     await redis.login();
   } catch (e) {
@@ -117,8 +116,6 @@ router.get('/Home', async ctx => {
 });
 
 router.get('/Landscapes', async ctx => {
-  const versionStr = '1.0.0';
-
   try {
     await redis.login();
   } catch (e) {
@@ -149,8 +146,6 @@ router.get('/Landscapes', async ctx => {
 });
 
 router.get('/Hosts', async ctx => {
-  const versionStr = '1.0.0';
-
   const hostsRet = {
     version: versionStr
   };
@@ -177,24 +172,16 @@ router.get('/Hosts', async ctx => {
   ctx.body = hostsRet;
 });
 
-router.post('/Landscape', async (ctx) => {
-  const versionStr = '1.0.0';
-
+router.get('/Landscape/:id', async (ctx) => {
   const lsRet = {
     version: versionStr
   };
-
-  if (ctx.request.body === null || ctx.request.body.id === null) {
-    lsRet.error = 'Wrong input';
-    ctx.body = lsRet;
-    return;
-  }
 
   try {
     await redis.login();
 
     // Retrieve DB info
-    lsRet.landscape = await redis.getLandscape(ctx.request.body.id);
+    lsRet.landscape = await redis.getLandscape(ctx.params.id);
 
     await redis.logout();
   } catch (e) {
@@ -209,7 +196,7 @@ router.post('/Landscape', async (ctx) => {
     await zabbix.login(zabbixUrl);
 
     const today = moment();
-    const paramDate = ctx.request.body.date || +moment();
+    const paramDate = Number.parseInt(ctx.query.date, 10) || +moment();
 
     // Current month till today, cant use end of month explicitly
     // (zabbix bug returns N days backwards - from prev month too)
@@ -256,6 +243,42 @@ router.post('/Landscape', async (ctx) => {
     ctx.body = lsRet;
     return;
   }
+
+  ctx.body = lsRet;
+});
+
+router.post('/Landscape', async (ctx) => {
+  const lsRet = {
+    version: versionStr
+  };
+  // Check for parameters
+  if (ctx.request.body === undefined ||
+    ctx.request.body.id === undefined ||
+    ctx.request.body.domain === undefined ||
+    ctx.request.body.zabbix === undefined) {
+    lsRet.error = 'Wrong input';
+    ctx.body = lsRet;
+    return;
+  }
+
+  try {
+    await redis.login();
+
+    const lsId = ctx.request.body.id;
+
+    if (await redis.existsLandscape(lsId)) {
+      throw `Landscape ${lsId} already exists.`;
+    }
+
+    lsRet.added = await redis.addLandscape(ctx.request.body);
+
+    await redis.logout();
+  } catch (e) {
+    lsRet.error = e;
+    ctx.body = lsRet;
+    return;
+  }
+
 
   ctx.body = lsRet;
 });

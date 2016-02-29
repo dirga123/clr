@@ -14,3 +14,5 @@ export const redisPassword = process.env.REDIS_PASSWORD || 'nbusr123';
 export const zabbixHost = process.env.ZABBIX_HOST || 'http://localhost:1080/api_jsonrpc.php';
 export const zabbixUser = process.env.ZABBIX_USER || 'reader';
 export const zabbixPassword = process.env.ZABBIX_PASSWORD || 'nbusr123';
+
+export const versionStr = '1.0.0';

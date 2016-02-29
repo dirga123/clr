@@ -6,8 +6,8 @@ sap.ui.define([
 	'use strict';
 
 	return BaseController.extend('sap.clr.controller.Landscape', {
-		onInit : function () {
-			console.log('Landscape.controller:onInit');
+		onInit: function() {
+			jQuery.sap.log.info('Landscape.controller:onInit');
 
 			// Model used to manipulate control states. The chosen values make sure,
 			// detail page is busy indication immediately so there is no break in
@@ -17,41 +17,45 @@ sap.ui.define([
 				delay: 0,
 				date: new Date()
 			});
-			this.setModel(oViewModel, "landscapeView");
+			this.setModel(oViewModel, 'landscapeView');
 
 /*
 			this.getView().byId('pickMonth').bindProperty('value', {
 				path: 'landscapeView>/ahoj'
 			});
 */
-			this.getRouter().getRoute("landscape").attachPatternMatched(this._onObjectMatched, this);
+			this.getRouter().getRoute('landscape').attachPatternMatched(
+				this._onObjectMatched, this
+			);
 		},
 
 		onPressRefresh: function() {
-			//this.getView().setBusy(true);
-			//var oViewModel = this.getModel("landscapeView");
-			//oViewModel.setProperty("/busy", true);
+			// this.getView().setBusy(true);
+			// var oViewModel = this.getModel("landscapeView");
+			// oViewModel.setProperty("/busy", true);
 			this.getView().setBusy(true);
 			this._requestData();
 		},
 
 		onPressPrint: function(oEvent) {
 			var oTarget = this.getView();
-			var sTargetId = oEvent.getSource().data("targetId");
+			var sTargetId = oEvent.getSource().data('targetId');
 
 			if (sTargetId) {
 				oTarget = oTarget.byId(sTargetId);
 			}
 
 			if (oTarget) {
-				var $domTarget = oTarget.$()[0],
-				sTargetContent = $domTarget.innerHTML,
-				sOriginalContent = document.body.innerHTML;
+				var $domTarget = oTarget.$()[0];
+				var sTargetContent = $domTarget.innerHTML;
+				var sOriginalContent = document.body.innerHTML;
 				document.body.innerHTML = sTargetContent;
 				window.print();
 				document.body.innerHTML = sOriginalContent;
 			} else {
-				jQuery.sap.log.error("onPrint needs a valid target container [view|data:targetId=\"SID\"]");
+				jQuery.sap.log.error(
+					'onPrint needs a valid target container [view|data:targetId=\"SID\"]'
+				);
 			}
 		},
 
@@ -70,23 +74,24 @@ sap.ui.define([
 		 * @private
 		 */
 		_onObjectMatched: function (oEvent) {
-			console.log('Landscape.controller:_onObjectMatched');
-			//console.log(oEvent.getParameter("arguments").id);
+			jQuery.sap.log.info('Landscape.controller:_onObjectMatched');
+			// jQuery.sap.log.info(oEvent.getParameter("arguments").id);
 
-			//this.getView().setBusy(true);
+			// this.getView().setBusy(true);
 
 			// Set busy indicator during view binding
-			var oViewModel = this.getModel("landscapeView");
+			var oViewModel = this.getModel('landscapeView');
 
-			// If the view was not bound yet its not busy, only if the binding requests data it is set to busy again
-			//oViewModel.setProperty("/busy", true);
+			// If the view was not bound yet its not busy,
+			// only if the binding requests data it is set to busy again
+			// oViewModel.setProperty("/busy", true);
 			this.getView().setBusy(true);
 
 
 			// Get Landscape id
-			var sLandscapeId =  oEvent.getParameter("arguments").id;
+			var sLandscapeId = oEvent.getParameter('arguments').id;
 
-			oViewModel.setProperty("/id", sLandscapeId);
+			oViewModel.setProperty('/id', sLandscapeId);
 
 			// Create model and set it to view
 			var oModel = new JSONModel();
@@ -96,7 +101,7 @@ sap.ui.define([
 		},
 
 		_requestData: function() {
-			console.log('Landscape.controller:_requestData');
+			jQuery.sap.log.info('Landscape.controller:_requestData');
 			var oViewModel = this.getModel('landscapeView');
 			var sLandscapeId = oViewModel.getProperty('/id');
 			var oDate = oViewModel.getProperty('/date');
@@ -104,19 +109,18 @@ sap.ui.define([
 			// Load model
 			var oModel = this.getModel('landscape');
 			oModel.attachRequestCompleted(this._requestCompleted, this);
-			oModel.loadData('/Landscape', JSON.stringify({
-				id: sLandscapeId,
+			oModel.loadData('/Landscape/' + sLandscapeId, {
 				date: oDate.getTime()
-			}), true, 'POST');
+			});
 		},
 
 		_requestCompleted: function(oEvent) {
-			console.log('Landscape.controller:_requestCompleted');
+			jQuery.sap.log.info('Landscape.controller:_requestCompleted');
 
 			var oModel = this.getModel('landscape');
 			oModel.detachRequestCompleted(this._requestCompleted, this);
 
-			//console.log(oEvent.getParameter('success'));
+			// jQuery.sap.log.info(oEvent.getParameter('success'));
 			if (oEvent.getParameter('success')) {
 				var sError = oModel.getProperty('/error');
 				if (sError) {
@@ -126,16 +130,16 @@ sap.ui.define([
 				}
 			} else {
 				var oError = oEvent.getParameter('errorobject');
-				console.log(oError);
-				MessageToast.show('Error '+oError.statusCode+': '+oError.statusText+' '+oError.responseText);
+				jQuery.sap.log.error(oError);
+				MessageToast.show(
+					'Error ' + oError.statusCode + ': ' + oError.statusText +
+					' ' + oError.responseText
+				);
 			}
 
-			//this.getView().setBusy(false);
-
-			//var oViewModel = this.getModel('landscapeView');
-			//oViewModel.setProperty('/busy', false);
+			// var oViewModel = this.getModel('landscapeView');
+			// oViewModel.setProperty('/busy', false);
 			this.getView().setBusy(false);
-
 		},
 
 		/*
@@ -145,8 +149,8 @@ sap.ui.define([
 		 * @param {string} sObjectPath path to the object to be bound to the view.
 		 * @private
 		 */
-		_bindView : function (sPath) {
-			console.log('Landscape.controller:_bindView');
+		_bindView: function (sPath) {
+			jQuery.sap.log.info('Landscape.controller:_bindView');
 
 			this.getView().bindElement({
 				path: sPath,
@@ -160,7 +164,8 @@ sap.ui.define([
 			// Set busy indicator during view binding
 			var oViewModel = this.getModel("detailView");
 
-			// If the view was not bound yet its not busy, only if the binding requests data it is set to busy again
+			// If the view was not bound yet its not busy,
+			// only if the binding requests data it is set to busy again
 			oViewModel.setProperty("/busy", false);
 
 			this.getView().bindElement({
@@ -178,8 +183,8 @@ sap.ui.define([
 			*/
 		},
 
-		_onBindingChange : function () {
-			console.log('Landscape.controller:_onBindingChange');
+		_onBindingChange: function () {
+			jQuery.sap.log.info('Landscape.controller:_onBindingChange');
 /*
 						this.getView().byId('slaList').bindItems({
 							path: '{landscape>services}',
@@ -212,12 +217,14 @@ sap.ui.define([
 
 			this.getOwnerComponent().oListSelector.selectAListItem(sPath);
 
-			oViewModel.setProperty("/saveAsTileTitle",oResourceBundle.getText("shareSaveTileAppTitle", [sObjectName]));
+			oViewModel.setProperty("/saveAsTileTitle",
+				oResourceBundle.getText("shareSaveTileAppTitle", [sObjectName]));
 			oViewModel.setProperty("/shareOnJamTitle", sObjectName);
 			oViewModel.setProperty("/shareSendEmailSubject",
 				oResourceBundle.getText("shareSendEmailObjectSubject", [sObjectId]));
 			oViewModel.setProperty("/shareSendEmailMessage",
-				oResourceBundle.getText("shareSendEmailObjectMessage", [sObjectName, sObjectId, location.href]));
+				oResourceBundle.getText("shareSendEmailObjectMessage",
+					[sObjectName, sObjectId, location.href]));
 				*/
 		}
 

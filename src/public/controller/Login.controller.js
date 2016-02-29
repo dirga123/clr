@@ -16,10 +16,10 @@ sap.ui.define([
 			this.getView().setModel(oModel);
 
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			var oTarget = oRouter.getTarget("login");
+			var oTarget = oRouter.getTarget('login');
 
 			oTarget.attachDisplay(function (oEvent) {
-				this._oData = oEvent.getParameter("data");
+				this._oData = oEvent.getParameter('data');
 			}, this);
 		},
 
@@ -31,7 +31,7 @@ sap.ui.define([
 		login: function() {
 			var sInput = this.getView().getModel().getProperty('/input');
 
-			var req = jQuery.ajax('/login', {
+			jQuery.ajax('/login', {
 				method: 'POST',
 				contentType: 'application/json',
 				dataType: 'json',
@@ -45,10 +45,7 @@ sap.ui.define([
 
 		onLoginError: function(resp, textStatus, errorThrown) {
 			this.getView().setBusy(false);
-
-			var oBundle = this.getView().getModel("i18n").getResourceBundle();
-			var sMsg = oBundle.getText("loginFailed", [errorThrown]);
-
+			var sMsg = this.getResourceBundle().getText('loginFailed', [ errorThrown ]);
 			MessageToast.show(sMsg);
 		},
 
@@ -69,7 +66,7 @@ sap.ui.define([
 
 		// override the parent's onNavBack (inherited from BaseController)
 		onNavBackWithoutHash: function () {
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);;
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			// in some cases we could display a certain target when the back button is pressed
 			if (this._oData && this._oData.fromTarget) {
 				oRouter.getTargets().display(this._oData.fromTarget);
