@@ -3,12 +3,12 @@ import fetch from '../fetch';
 import { zabbixHost, zabbixUser, zabbixPassword } from '../../config';
 import { ZabbixApiError } from './error';
 
-let instance = null;
+let _this = null;
 
 export default class Zabbix {
   constructor() {
-    if (!instance) {
-      instance = this;
+    if (!_this) {
+      _this = this;
     }
 
     this.url = zabbixHost;
@@ -24,7 +24,7 @@ export default class Zabbix {
 
     this.time = new Date();
 
-    return instance;
+    return _this;
   }
 
   async getApiVersion() {
@@ -68,11 +68,11 @@ export default class Zabbix {
       this.rpcid = 0;
       await this.call('user.logout', {});
       this.authid = null;
-      debug('zabbix')(`logout: success`);
+      debug('zabbix')('logout: success');
       return this.authid;
     } catch (e) {
       debug('zabbix')(`logout error: ${JSON.stringify(e)}`);
-      throw e.message || e ;
+      throw e.message || e;
     }
   }
 
@@ -96,11 +96,13 @@ export default class Zabbix {
         timeout: 0,
         body: JSON.stringify(callBody)
       });
+
       const data = await response.json();
       if (data.error) {
         debug('zabbix')(`call: throwing error: ${JSON.stringify(data.error)}`);
         throw new ZabbixApiError(data.error);
       }
+
       return data;
     } catch (e) {
       debug('zabbix')(`call: throwing message from error: ${e}`);

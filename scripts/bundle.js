@@ -10,7 +10,7 @@ function bundle() {
       }
 
       debug('tools:bundle')(stats.toString(webpackConfig[0].stats));
-      resolve();
+      return resolve();
     });
   });
 }

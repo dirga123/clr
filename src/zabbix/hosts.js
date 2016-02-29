@@ -107,27 +107,29 @@ function transformHosts(data) {
       case 'system.uname':
         newHost.os = transformOS(item.lastvalue);
         break;
-      case ((item.key_.match(/vfs.fs.size/)) ? item.key_ : 'undefined'):
-        // 12 is where the name of the disk starts
-        const diskName = /\[.*?(,|])/.exec(item.key_)[0].slice(1, -1);
-        let nameIndex = newHost.Disks.findIndex((disk) => { disk.Name === diskName; });
-        if (nameIndex === -1) {
-          newHost.Disks.push(new Disk(diskName));
-          nameIndex = newHost.Disks.findIndex((disk) => { disk.Name === diskName; });
-        }
+      case (item.key_.match(/vfs.fs.size/) ? item.key_ : 'undefined'):
+        {
+          // 12 is where the name of the disk starts
+          const diskName = /\[.*?(,|])/.exec(item.key_)[0].slice(1, -1);
+          let nameIndex = newHost.Disks.findIndex((disk) => disk.Name === diskName);
+          if (nameIndex === -1) {
+            newHost.Disks.push(new Disk(diskName));
+            nameIndex = newHost.Disks.findIndex((disk) => disk.Name === diskName);
+          }
 
-        switch (item.key_) {
-        case ((item.key_.match(/,pfree/)) ? item.key_ : 'undefined'):
-          newHost.Disks[nameIndex].pctFree = 100 - item.lastvalue;
-          break;
-        case ((item.key_.match(/,used/)) ? item.key_ : 'undefined'):
-          newHost.Disks[nameIndex].used = item.lastvalue / 1073741824;
-          break;
-        case ((item.key_.match(/,total/)) ? item.key_ : 'undefined'):
-          newHost.Disks[nameIndex].total = item.lastvalue / 1073741824;
-          break;
-        default:
-          break;
+          switch (item.key_) {
+          case ((item.key_.match(/,pfree/)) ? item.key_ : 'undefined'):
+            newHost.Disks[nameIndex].pctFree = 100 - item.lastvalue;
+            break;
+          case ((item.key_.match(/,used/)) ? item.key_ : 'undefined'):
+            newHost.Disks[nameIndex].used = item.lastvalue / 1073741824;
+            break;
+          case ((item.key_.match(/,total/)) ? item.key_ : 'undefined'):
+            newHost.Disks[nameIndex].total = item.lastvalue / 1073741824;
+            break;
+          default:
+            break;
+          }
         }
         break;
       default:
@@ -146,7 +148,7 @@ function transformHosts(data) {
 }
 
 async function hosts() {
-  debug('zabbix')(`hosts()`);
+  debug('zabbix')('hosts()');
 
   const zabbix = new Zabbix();
 
@@ -170,4 +172,4 @@ async function hosts() {
   );
 }
 
-export { hosts as default };
+export { hosts as default, transformHosts };

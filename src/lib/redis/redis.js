@@ -33,7 +33,7 @@ export default class Redis {
       });
 
       this.client.on('ready', () => {
-        debug('redis')(`login ready`);
+        debug('redis')('login ready');
         resolve();
       });
     });
@@ -41,7 +41,7 @@ export default class Redis {
 
   async logout() {
     await new Promise((resolve) => {
-      debug('redis')(`quit`);
+      debug('redis')('quit');
       this.client.quit();
       this.client = null;
       resolve();
@@ -50,11 +50,13 @@ export default class Redis {
 
   async getPassword() {
     try {
-      debug('redis')(`getPassword`);
+      debug('redis')('getPassword');
+
       let pass = await this.client.getAsync('users:password');
       if (pass === null || pass.length === 0) {
         pass = password;
       }
+
       return pass;
     } catch (e) {
       debug('redis')(`getPassword error: ${e}`);
@@ -64,7 +66,7 @@ export default class Redis {
 
   async getLandscapes() {
     try {
-      debug('redis')(`getLandscapes`);
+      debug('redis')('getLandscapes');
       const lsSet = await this.client.smembersAsync('ls');
       const lsArr = [];
       for (const ls of lsSet) {

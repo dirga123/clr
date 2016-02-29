@@ -15,14 +15,6 @@ sap.ui.define([
 			this.getRouter().getRoute("landscapes").attachPatternMatched(this._onObjectMatched, this);
 		},
 
-		onPressAddAdd: function() {
-			this._requestData();
-		},
-
-		onPressAddCancel: function() {
-			this._requestData();
-		},
-
 		onPressAdd: function(oEvent) {
 			var oModel = this.getModel('landscapes');
 
@@ -37,24 +29,10 @@ sap.ui.define([
 		},
 
 		addLandscape: function() {
-			MessageToast.show('Adding landscape.');
-			this._requestData();			
-		},
-
-		onPressDelete: function(oEvent) {
-			var tile = oEvent.getParameter("tile");
-			oEvent.getSource().removeTile(tile);
-		},
-
-		onPressEdit: function(oEvent) {
-			var oTileContainer = this.getView().byId('tileContainer');
-
-			var newValue = !oTileContainer.getEditable();
-			oTileContainer.setEditable(newValue);
-
-			var sText = this.getResourceBundle().getText(newValue ? "landscapeDoneEditButton" : "landscapeEditButton");
-
-			oEvent.getSource().setText(sText);
+			var oModel = this.getModel('landscapes');
+			var oData = oModel.getProperty('/new');
+			MessageToast.show('Adding landscape.' + JSON.stringify(oData));
+			this._requestData();
 		},
 
 		onPressDetail: function(oEvent) {
@@ -95,13 +73,10 @@ sap.ui.define([
 			var oModel = this.getModel('landscapes');
 			oModel.detachRequestCompleted(this._requestCompleted, this);
 
-			//console.log(oEvent.getParameter('success'));
 			if (oEvent.getParameter('success')) {
 				var sError = oModel.getProperty('/error');
 				if (sError) {
 					MessageToast.show(sError);
-				}	else {
-					//this._bindView('landscape>/landscape');
 				}
 			} else {
 				var oError = oEvent.getParameter('errorobject');
@@ -111,39 +86,5 @@ sap.ui.define([
 
 			this.getView().setBusy(false);
 		},
-
-		_bindView : function (sPath) {
-			console.log('Landscapes.controller:_bindView');
-
-			this.getView().bindElement({
-				path: sPath,
-				model: 'landscape',
-				events: {
-					change: this._onBindingChange.bind(this)
-				}
-			});
-
-			/*
-			// Set busy indicator during view binding
-			var oViewModel = this.getModel("detailView");
-
-			// If the view was not bound yet its not busy, only if the binding requests data it is set to busy again
-			oViewModel.setProperty("/busy", false);
-
-			this.getView().bindElement({
-				path : sObjectPath,
-				events: {
-					change : this._onBindingChange.bind(this),
-					dataRequested : function () {
-						oViewModel.setProperty("/busy", true);
-					},
-					dataReceived: function () {
-						oViewModel.setProperty("/busy", false);
-					}
-				}
-			});
-			*/
-		}
-
 	});
 });

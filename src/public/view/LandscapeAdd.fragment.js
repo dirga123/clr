@@ -11,16 +11,15 @@ sap.ui.define([
 		createContent: function(oController) {
 			var oDialog = new sap.m.Dialog({
 				title: '{i18n>landscapeAddTitle}',
-				press: [ oController.doSomething, oController ],
 				content: new SimpleForm({
 						layout: 'ResponsiveGridLayout',
 						content: [
 							new Label({ text: '{i18n>landscapeAddId}' }),
-							new Input({ value: '{home>/new/id}' }),
+							new Input({ value: '{landscapes>/new/id}' }),
 							new Label({ text: '{i18n>landscapeAddDomain}' }),
-							new Input({ value: '{home>/new/domain}' }),
+							new Input({ value: '{landscapes>/new/domain}' }),
 							new Label({ text: '{i18n>landscapeAddZabbix}' }),
-							new Input({ value: '{home>/new/zabbix}' })
+							new Input({ value: '{landscapes>/new/zabbix}' })
 						]
 				}),
 				beginButton: new Button({

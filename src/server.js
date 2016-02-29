@@ -148,7 +148,6 @@ router.get('/Landscapes', async ctx => {
   };
 });
 
-
 router.get('/Hosts', async ctx => {
   const versionStr = '1.0.0';
 
@@ -225,6 +224,7 @@ router.post('/Landscape', async (ctx) => {
 
     // Get services as map, so it can be spread to landscape root and serviceUnits
     const servicesMap = await servicesAsMap(firstDay.unix(), lastDay.unix());
+
     // Create services array (will hold just 2 values)
     lsRet.landscape.services = [];
 

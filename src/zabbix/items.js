@@ -73,36 +73,40 @@ async function items(fromDate, toDate) {
       objectFromItem('customerCount', item);
       break;
     case (item.key_.startsWith(ZK.CUST_USERS) ? item.key_ : undefined):
-      arr.push(item);
-      const usersParams = /\[.*?]/.exec(item.key_)[0].slice(1, -1).split(',');
-      if (usersParams.length === 1) {
-        customerFromItemWithId('users', item, usersParams[0]);
-      } else if (usersParams.length === 2) {
-        customerFromItemWithId('usersRDS', item, usersParams[0]);
+      {
+        arr.push(item);
+        const usersParams = /\[.*?]/.exec(item.key_)[0].slice(1, -1).split(',');
+        if (usersParams.length === 1) {
+          customerFromItemWithId('users', item, usersParams[0]);
+        } else if (usersParams.length === 2) {
+          customerFromItemWithId('usersRDS', item, usersParams[0]);
+        }
       }
       break;
     case (item.key_.startsWith(ZK.CUST_TENANTS) ? item.key_ : undefined):
-      arr.push(item);
-      const custTenantsParams = /\[.*?]/.exec(item.key_)[0].slice(1, -1).split(',');
-      if (custTenantsParams.length === 1) {
-        customerFromItemWithId('tenants', item, custTenantsParams[0].slice(1, -1));
-      } else if (custTenantsParams.length === 2) {
-        const type = custTenantsParams[1].trim().slice(1, -1);
-        switch (type) {
-        case ZK.TENANTS_TRIAL:
-          customerFromItemWithId('tenantsTrial', item, custTenantsParams[0]);
-          break;
-        case ZK.TENANTS_DEMO:
-          customerFromItemWithId('tenantsDemo', item, custTenantsParams[0]);
-          break;
-        case ZK.TENANTS_TESTING:
-          customerFromItemWithId('tenantsTesting', item, custTenantsParams[0]);
-          break;
-        case ZK.TENANTS_PRODUCTIVE:
-          customerFromItemWithId('tenantsProductive', item, custTenantsParams[0]);
-          break;
-        default:
-          break;
+      {
+        arr.push(item);
+        const custTenantsParams = /\[.*?]/.exec(item.key_)[0].slice(1, -1).split(',');
+        if (custTenantsParams.length === 1) {
+          customerFromItemWithId('tenants', item, custTenantsParams[0].slice(1, -1));
+        } else if (custTenantsParams.length === 2) {
+          const type = custTenantsParams[1].trim().slice(1, -1);
+          switch (type) {
+          case ZK.TENANTS_TRIAL:
+            customerFromItemWithId('tenantsTrial', item, custTenantsParams[0]);
+            break;
+          case ZK.TENANTS_DEMO:
+            customerFromItemWithId('tenantsDemo', item, custTenantsParams[0]);
+            break;
+          case ZK.TENANTS_TESTING:
+            customerFromItemWithId('tenantsTesting', item, custTenantsParams[0]);
+            break;
+          case ZK.TENANTS_PRODUCTIVE:
+            customerFromItemWithId('tenantsProductive', item, custTenantsParams[0]);
+            break;
+          default:
+            break;
+          }
         }
       }
       break;
@@ -119,66 +123,78 @@ async function items(fromDate, toDate) {
       break;
       */
     case (item.key_.startsWith(ZK.SU_NAME) ? item.key_ : undefined):
-      arr.push(item);
-      const suNameParams = /\[.*?]/.exec(item.key_)[0].slice(1, -1).split(',');
-      if (suNameParams.length === 1) {
-        suFromItemWithId('name', item, suNameParams[0]);
+      {
+        arr.push(item);
+        const suNameParams = /\[.*?]/.exec(item.key_)[0].slice(1, -1).split(',');
+        if (suNameParams.length === 1) {
+          suFromItemWithId('name', item, suNameParams[0]);
+        }
       }
       break;
     case (item.key_.startsWith(ZK.SU_VERSION) ? item.key_ : undefined):
-      arr.push(item);
-      const suVersionParams = /\[.*?]/.exec(item.key_)[0].slice(1, -1).split(',');
-      if (suVersionParams.length === 1) {
-        suFromItemWithId('version', item, suVersionParams[0]);
+      {
+        arr.push(item);
+        const suVersionParams = /\[.*?]/.exec(item.key_)[0].slice(1, -1).split(',');
+        if (suVersionParams.length === 1) {
+          suFromItemWithId('version', item, suVersionParams[0]);
+        }
       }
       break;
     case (item.key_.startsWith(ZK.SU_PURPOSE) ? item.key_ : undefined):
-      arr.push(item);
-      const suPurposeParams = /\[.*?]/.exec(item.key_)[0].slice(1, -1).split(',');
-      if (suPurposeParams.length === 1) {
-        suFromItemWithId('purpose', item, suPurposeParams[0]);
+      {
+        arr.push(item);
+        const suPurposeParams = /\[.*?]/.exec(item.key_)[0].slice(1, -1).split(',');
+        if (suPurposeParams.length === 1) {
+          suFromItemWithId('purpose', item, suPurposeParams[0]);
+        }
       }
       break;
     case (item.key_.startsWith(ZK.SU_COMP_DB) ? item.key_ : undefined):
-      const suCompDBParams = /\[.*?]/.exec(item.key_)[0].slice(1, -1).split(',');
-      if (suCompDBParams.length === 2) {
-        const type = suCompDBParams[1].trim().slice(1, -1);
-        switch (type) {
-        case ZK.SU_COMP_DB_SERVER_VERSION:
-          arr.push(item);
-          suFromItemWithId('hanaVersion', item, suCompDBParams[0]);
-          break;
-        default:
-          break;
+      {
+        const suCompDBParams = /\[.*?]/.exec(item.key_)[0].slice(1, -1).split(',');
+        if (suCompDBParams.length === 2) {
+          const type = suCompDBParams[1].trim().slice(1, -1);
+          switch (type) {
+          case ZK.SU_COMP_DB_SERVER_VERSION:
+            arr.push(item);
+            suFromItemWithId('hanaVersion', item, suCompDBParams[0]);
+            break;
+          default:
+            break;
+          }
         }
       }
       break;
     case (item.key_.startsWith(ZK.SU_TENANTS) ? item.key_ : undefined):
-      arr.push(item);
-      const suTenantsParams = /\[.*?]/.exec(item.key_)[0].slice(1, -1).split(',');
-      if (suTenantsParams.length === 2) {
-        const type = suTenantsParams[1].trim().slice(1, -1);
-        switch (type) {
-        case ZK.TENANTS_TRIAL:
-          suFromItemWithId('tenantsTrial', item, suTenantsParams[0]);
-          break;
-        case ZK.TENANTS_DEMO:
-          suFromItemWithId('tenantsDemo', item, suTenantsParams[0]);
-          break;
-        case ZK.TENANTS_TESTING:
-          suFromItemWithId('tenantsTesting', item, suTenantsParams[0]);
-          break;
-        case ZK.TENANTS_PRODUCTIVE:
-          suFromItemWithId('tenantsProductive', item, suTenantsParams[0]);
-          break;
-        default:
-          break;
+      {
+        arr.push(item);
+        const suTenantsParams = /\[.*?]/.exec(item.key_)[0].slice(1, -1).split(',');
+        if (suTenantsParams.length === 2) {
+          const type = suTenantsParams[1].trim().slice(1, -1);
+          switch (type) {
+          case ZK.TENANTS_TRIAL:
+            suFromItemWithId('tenantsTrial', item, suTenantsParams[0]);
+            break;
+          case ZK.TENANTS_DEMO:
+            suFromItemWithId('tenantsDemo', item, suTenantsParams[0]);
+            break;
+          case ZK.TENANTS_TESTING:
+            suFromItemWithId('tenantsTesting', item, suTenantsParams[0]);
+            break;
+          case ZK.TENANTS_PRODUCTIVE:
+            suFromItemWithId('tenantsProductive', item, suTenantsParams[0]);
+            break;
+          default:
+            break;
+          }
         }
       }
       break;
     case (item.key_.startsWith(ZK.SU_COUNT) ? item.key_ : undefined):
-      arr.push(item);
-      objectFromItem('serviceUnitCount', item);
+      {
+        arr.push(item);
+        objectFromItem('serviceUnitCount', item);
+      }
       break;
     default:
       break;

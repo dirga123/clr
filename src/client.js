@@ -13,10 +13,10 @@ sap.ui.getCore().attachInit(() => {
     name: 'sap.clr',
     height: '100%'
   }).placeAt('content');
-/*
-  new sap.ui.unified.Shell({
-    name: 'sap.clr',
-    height: '100%',
-  }).placeAt('content');
-*/
+  /*
+    new sap.ui.unified.Shell({
+      name: 'sap.clr',
+      height: '100%',
+    }).placeAt('content');
+  */
 });
