@@ -9,7 +9,8 @@
     "mocha": true
   },
   "globals": {
-    "sap": true
+    "sap": true,
+    "jQuery": true    
   },
   "rules": {
     "react/display-name": [2, { "ignoreTranspilerName": false }],

@@ -1,13 +1,3 @@
-// import 'babel-polyfill';
-// import debug from 'debug';
-
-/*
-const { NODE_ENV } = process.env;
-if (NODE_ENV === 'development') {
-  debug.enable('dev,koa');
-}
-*/
-
 sap.ui.getCore().attachInit(() => {
   new sap.ui.core.ComponentContainer({
     name: 'sap.clr',
@@ -20,3 +10,8 @@ sap.ui.getCore().attachInit(() => {
     }).placeAt('content');
   */
 });
+
+const { NODE_ENV } = process.env;
+if (NODE_ENV === 'development') {
+  jQuery.sap.log.setLevel(jQuery.sap.log.Level.INFO);
+}

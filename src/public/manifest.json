@@ -83,6 +83,16 @@
   				"pattern": "landscape/{id}",
   				"name": "landscape",
           "target": "landscape"
+  			},
+        {
+  				"pattern": "landscape/{id}/report/new",
+  				"name": "landscapeReportNew",
+          "target": "landscapeReportNew"
+  			},
+        {
+  				"pattern": "landscape/{id}/report/{reportId}",
+  				"name": "landscapeReport",
+          "target": "landscapeReport"
   			}
       ],
       "targets": {
@@ -97,6 +107,12 @@
           },
           "landscape": {
              "viewName": "Landscape"
+          },
+          "landscapeReportNew": {
+             "viewName": "LandscapeReportNew"
+          },
+          "landscapeReport": {
+             "viewName": "LandscapeReport"
           },
           "notfound": {
              "viewName": "NotFound",
