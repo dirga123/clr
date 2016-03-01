@@ -247,6 +247,54 @@ router.get('/Landscape/:id', async (ctx) => {
   ctx.body = lsRet;
 });
 
+router.get('/Landscape/:id/general', async (ctx) => {
+  const lsRet = {
+    version: versionStr
+  };
+
+  try {
+    await redis.login();
+
+    // Retrieve DB info
+    lsRet.landscape = await redis.getLandscape(ctx.params.id);
+
+    await redis.logout();
+  } catch (e) {
+    lsRet.error = e;
+    ctx.body = lsRet;
+    return;
+  }
+
+  ctx.body = lsRet;
+});
+
+router.get('/Landscape/:id/status', async (ctx) => {
+  const lsRet = {
+    version: versionStr,
+    error: 'Status: Not implemented'
+  };
+  await new Promise(r => setTimeout(r, 2000));
+  ctx.body = lsRet;
+});
+
+router.get('/Landscape/:id/internal', async (ctx) => {
+  const lsRet = {
+    version: versionStr,
+    error: 'Internal report list: Not implemented'
+  };
+  await new Promise(r => setTimeout(r, 2000));
+  ctx.body = lsRet;
+});
+
+router.get('/Landscape/:id/external', async (ctx) => {
+  const lsRet = {
+    version: versionStr,
+    error: 'External report list: Not implemented'
+  };
+  await new Promise(r => setTimeout(r, 2000));
+  ctx.body = lsRet;
+});
+
 router.post('/Landscape', async (ctx) => {
   const lsRet = {
     version: versionStr
@@ -278,8 +326,6 @@ router.post('/Landscape', async (ctx) => {
     ctx.body = lsRet;
     return;
   }
-
-
   ctx.body = lsRet;
 });
 

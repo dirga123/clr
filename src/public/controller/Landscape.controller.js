@@ -1,13 +1,17 @@
 sap.ui.define([
 	'sap/clr/controller/BaseController',
 	'sap/ui/model/json/JSONModel',
-	'sap/m/MessageToast'
-], function (BaseController, JSONModel, MessageToast) {
+	'sap/m/MessageToast',
+	'sap/m/MessageStrip'
+], function (BaseController, JSONModel, MessageToast, MessageStrip) {
 	'use strict';
 
 	return BaseController.extend('sap.clr.controller.Landscape', {
 		onInit: function() {
 			jQuery.sap.log.info('Landscape.controller:onInit');
+
+			// Set the initial form to be the display one
+			this._toggleButtonsAndView(false);
 
 			// Model used to manipulate control states. The chosen values make sure,
 			// detail page is busy indication immediately so there is no break in
@@ -19,53 +23,137 @@ sap.ui.define([
 			});
 			this.setModel(oViewModel, 'landscapeView');
 
-/*
-			this.getView().byId('pickMonth').bindProperty('value', {
-				path: 'landscapeView>/ahoj'
-			});
-*/
+			// Create model and set it to view
+			var oModel = new JSONModel();
+			this.setModel(oModel, 'landscape');
+			this._bindElement('generalPanel', 'landscape>/landscape');
+
+			var oModelStatus = new JSONModel();
+			this.setModel(oModelStatus, 'landscapeStatus');
+			this._bindElement('statusPanel', 'landscapeStatus>/status');
+
+			var oModelExternal = new JSONModel();
+			this.setModel(oModelExternal, 'landscapeExternal');
+			this._bindElement('externalPanel', 'landscapeExternal>/external');
+
+			var oModelInternal = new JSONModel();
+			this.setModel(oModelInternal, 'landscapeInternal');
+			this._bindElement('internalPanel', 'landscapeInternal>/internal');
+
 			this.getRouter().getRoute('landscape').attachPatternMatched(
 				this._onObjectMatched, this
 			);
 		},
 
+		onExit: function() {
+			jQuery.sap.log.info('Landscape.controller:onExit');
+			for (var sPropertyName in this._formFragments) {
+				if (!this._formFragments.hasOwnProperty(sPropertyName)) {
+					return;
+				}
+
+				this._formFragments[sPropertyName].destroy();
+				this._formFragments[sPropertyName] = null;
+			}
+		},
+
+		// General tab
+
+		onPressEdit: function() {
+			// Clone the data
+			this._oLandscape = jQuery.extend({},
+				this.getView().getModel('landscape').getData().landscape
+			);
+			this._toggleButtonsAndView(true);
+		},
+
+		onPressCancel: function() {
+			// Restore the data
+			var oModel = this.getView().getModel('landscape');
+			var oData = oModel.getData();
+
+			oData.landscape = this._oLandscape;
+
+			oModel.setData(oData);
+			this._toggleButtonsAndView(false);
+		},
+
+		onPressSave: function() {
+			this._toggleButtonsAndView(false);
+		},
+
 		onPressRefresh: function() {
-			// this.getView().setBusy(true);
-			// var oViewModel = this.getModel("landscapeView");
-			// oViewModel.setProperty("/busy", true);
-			this.getView().setBusy(true);
+			jQuery.sap.log.info('Landscape.controller:onPressRefresh');
+			this._setBusy();
 			this._requestData();
 		},
 
-		onPressPrint: function(oEvent) {
-			var oTarget = this.getView();
-			var sTargetId = oEvent.getSource().data('targetId');
-
-			if (sTargetId) {
-				oTarget = oTarget.byId(sTargetId);
-			}
-
-			if (oTarget) {
-				var $domTarget = oTarget.$()[0];
-				var sTargetContent = $domTarget.innerHTML;
-				var sOriginalContent = document.body.innerHTML;
-				document.body.innerHTML = sTargetContent;
-				window.print();
-				document.body.innerHTML = sOriginalContent;
-			} else {
-				jQuery.sap.log.error(
-					'onPrint needs a valid target container [view|data:targetId=\"SID\"]'
-				);
-			}
-		},
-
-		onPressExport: function() {
-
-		},
+		// Status tab
 
 		/* =========================================================== */
 		/* begin: internal methods                                     */
 		/* =========================================================== */
+
+		_formFragments: {},
+		_messageStrips: [],
+
+		_toggleButtonsAndView: function(bEdit) {
+			var oView = this.getView();
+
+			// Show the appropriate action buttons
+			oView.byId('toolbarEdit').setVisible(!bEdit);
+			oView.byId('toolbarRefresh').setVisible(!bEdit);
+			oView.byId('toolbarSave').setVisible(bEdit);
+			oView.byId('toolbarCancel').setVisible(bEdit);
+
+			// oView.byId('printButton').setVisible(!bEdit);
+			// oView.byId('printExport').setVisible(!bEdit);
+
+			// Set the right form type
+			this._showFormFragment(bEdit ? 'Change' : 'Display');
+		},
+
+		_getFormFragment: function (sFragmentName) {
+			var oFormFragment = this._formFragments[sFragmentName];
+
+			if (oFormFragment) {
+				return oFormFragment;
+			}
+
+			oFormFragment = sap.ui.jsfragment(
+				this.getView().getId(),
+				'sap.clr.view.Landscape' + sFragmentName,
+				this
+			);
+
+			this._formFragments[sFragmentName] = oFormFragment;
+
+			return this._formFragments[sFragmentName];
+		},
+
+		_showFormFragment: function (sFragmentName) {
+			var oPanel = this.getView().byId('generalPanel');
+
+			oPanel.removeAllContent();
+			oPanel.insertContent(this._getFormFragment(sFragmentName));
+		},
+
+		_closeMessageStrips: function() {
+			for (var i = 0; i < this._messageStrips.length; i++) {
+				this._messageStrips[i].getParent().removeContent(this._messageStrips[i]);
+				this._messageStrips[i].destroy();
+				this._messageStrips[i] = null;
+			}
+			this._messageStrips = [];
+		},
+
+		_setBusy: function() {
+			this._closeMessageStrips();
+			this.getView().byId('generalPanel').setBusy(true);
+			this.getView().byId('statusPanel').setBusy(true);
+			this.getView().byId('externalPanel').setBusy(true);
+			this.getView().byId('internalPanel').setBusy(true);
+		},
 
 		/**
 		 * Binds the view to the object path and expands the aggregated line items.
@@ -75,27 +163,14 @@ sap.ui.define([
 		 */
 		_onObjectMatched: function (oEvent) {
 			jQuery.sap.log.info('Landscape.controller:_onObjectMatched');
-			// jQuery.sap.log.info(oEvent.getParameter("arguments").id);
 
-			// this.getView().setBusy(true);
-
-			// Set busy indicator during view binding
-			var oViewModel = this.getModel('landscapeView');
-
-			// If the view was not bound yet its not busy,
-			// only if the binding requests data it is set to busy again
-			// oViewModel.setProperty("/busy", true);
-			this.getView().setBusy(true);
-
+			this._setBusy();
 
 			// Get Landscape id
 			var sLandscapeId = oEvent.getParameter('arguments').id;
 
+			var oViewModel = this.getModel('landscapeView');
 			oViewModel.setProperty('/id', sLandscapeId);
-
-			// Create model and set it to view
-			var oModel = new JSONModel();
-			this.setModel(oModel, 'landscape');
 
 			this._requestData();
 		},
@@ -106,40 +181,97 @@ sap.ui.define([
 			var sLandscapeId = oViewModel.getProperty('/id');
 			var oDate = oViewModel.getProperty('/date');
 
-			// Load model
+			// Load landscape model
 			var oModel = this.getModel('landscape');
-			oModel.attachRequestCompleted(this._requestCompleted, this);
-			oModel.loadData('/Landscape/' + sLandscapeId, {
+			oModel.attachRequestCompleted(this._requestCompletedGeneral, this);
+			oModel.loadData('/Landscape/' + sLandscapeId + '/general', {
+				date: oDate.getTime()
+			});
+
+			// Load landscape status model
+			var oModelStatus = this.getModel('landscapeStatus');
+			oModelStatus.attachRequestCompleted(this._requestCompletedStatus, this);
+			oModelStatus.loadData('/Landscape/' + sLandscapeId + '/status', {
+				date: oDate.getTime()
+			});
+
+			// Load landscape status model
+			var oModelInternal = this.getModel('landscapeInternal');
+			oModelInternal.attachRequestCompleted(this._requestCompletedInternal, this);
+			oModelInternal.loadData('/Landscape/' + sLandscapeId + '/internal', {
+				date: oDate.getTime()
+			});
+
+			var oModelExternal = this.getModel('landscapeExternal');
+			oModelExternal.attachRequestCompleted(this._requestCompletedExternal, this);
+			oModelExternal.loadData('/Landscape/' + sLandscapeId + '/external', {
 				date: oDate.getTime()
 			});
 		},
 
-		_requestCompleted: function(oEvent) {
+		_requestCompletedGeneral: function(oEvent) {
+			jQuery.sap.log.info('Landscape.controller:_requestCompletedGeneral');
+			var oPanel = this.getView().byId('generalPanel');
+			var oModel = this.getModel('landscape');
+			oModel.detachRequestCompleted(this._requestCompletedGeneral, this);
+			this._requestCompleted(oEvent, oPanel, oModel);
+		},
+
+		_requestCompletedStatus: function(oEvent) {
+			jQuery.sap.log.info('Landscape.controller:_requestCompletedStatus');
+			var oPanel = this.getView().byId('statusPanel');
+			var oModel = this.getModel('landscapeStatus');
+			oModel.detachRequestCompleted(this._requestCompletedStatus, this);
+			this._requestCompleted(oEvent, oPanel, oModel);
+		},
+
+		_requestCompletedInternal: function(oEvent) {
+			jQuery.sap.log.info('Landscape.controller:_requestCompletedInternal');
+			var oPanel = this.getView().byId('internalPanel');
+			var oModel = this.getModel('landscapeInternal');
+			oModel.detachRequestCompleted(this._requestCompletedInternal, this);
+			this._requestCompleted(oEvent, oPanel, oModel);
+		},
+
+		_requestCompletedExternal: function(oEvent) {
+			jQuery.sap.log.info('Landscape.controller:_requestCompletedExternal');
+			var oPanel = this.getView().byId('externalPanel');
+			var oModel = this.getModel('landscapeExternal');
+			oModel.detachRequestCompleted(this._requestCompletedExternal, this);
+			this._requestCompleted(oEvent, oPanel, oModel);
+		},
+
+		_requestCompleted: function(oEvent, oPanel, oModel) {
 			jQuery.sap.log.info('Landscape.controller:_requestCompleted');
 
-			var oModel = this.getModel('landscape');
-			oModel.detachRequestCompleted(this._requestCompleted, this);
+			//console.log(oEvent.oSource);
+			//console.log(oEvent.mParameters);
+			var sError;
 
-			// jQuery.sap.log.info(oEvent.getParameter('success'));
 			if (oEvent.getParameter('success')) {
-				var sError = oModel.getProperty('/error');
-				if (sError) {
-					MessageToast.show(sError);
-				}	else {
-					this._bindView('landscape>/landscape');
+				if (oEvent.oSource.oData.error) {
+					sError = oEvent.oSource.oData.error;
 				}
 			} else {
 				var oError = oEvent.getParameter('errorobject');
-				jQuery.sap.log.error(oError);
-				MessageToast.show(
-					'Error ' + oError.statusCode + ': ' + oError.statusText +
-					' ' + oError.responseText
-				);
+				// jQuery.sap.log.error(JSON.stringify(oError));
+				sError = 'Error ' + oError.statusCode + ': ' + oError.statusText +
+					' ' + oError.responseText;
 			}
+			if (sError) {
+				//jQuery.sap.log.error(sError);
 
-			// var oViewModel = this.getModel('landscapeView');
-			// oViewModel.setProperty('/busy', false);
-			this.getView().setBusy(false);
+				var oMessageStrip = new MessageStrip({
+					text: sError,
+					type: 'Error',
+					showIcon: true,
+					showCloseButton: true
+				}).addStyleClass('sapUiMediumMarginBottom');
+
+				this._messageStrips.push(oMessageStrip);
+				oPanel.insertContent(oMessageStrip,	0);
+			}
+			oPanel.setBusy(false);
 		},
 
 		/*
@@ -149,83 +281,19 @@ sap.ui.define([
 		 * @param {string} sObjectPath path to the object to be bound to the view.
 		 * @private
 		 */
-		_bindView: function (sPath) {
-			jQuery.sap.log.info('Landscape.controller:_bindView');
+		_bindElement: function (sId, sPath) {
+			jQuery.sap.log.info('Landscape.controller:_bindElement');
 
-			this.getView().bindElement({
+			this.getView().byId(sId).bindElement({
 				path: sPath,
-				model: 'landscape',
 				events: {
 					change: this._onBindingChange.bind(this)
 				}
 			});
-
-			/*
-			// Set busy indicator during view binding
-			var oViewModel = this.getModel("detailView");
-
-			// If the view was not bound yet its not busy,
-			// only if the binding requests data it is set to busy again
-			oViewModel.setProperty("/busy", false);
-
-			this.getView().bindElement({
-				path : sObjectPath,
-				events: {
-					change : this._onBindingChange.bind(this),
-					dataRequested : function () {
-						oViewModel.setProperty("/busy", true);
-					},
-					dataReceived: function () {
-						oViewModel.setProperty("/busy", false);
-					}
-				}
-			});
-			*/
 		},
 
 		_onBindingChange: function () {
 			jQuery.sap.log.info('Landscape.controller:_onBindingChange');
-/*
-						this.getView().byId('slaList').bindItems({
-							path: '{landscape>services}',
-							model: 'landscape',
-							template: new ObjectListItem({
-								title: '{landscape>name}'
-							})
-						});
-*/
-
-			/*
-			var oView = this.getView(),
-				oElementBinding = oView.getElementBinding();
-
-			// No data for the binding
-			if (!oElementBinding.getBoundContext()) {
-				this.getRouter().getTargets().display("detailObjectNotFound");
-				// if object could not be found, the selection in the master list
-				// does not make sense anymore.
-				this.getOwnerComponent().oListSelector.clearMasterListSelection();
-				return;
-			}
-
-			var sPath = oElementBinding.getPath(),
-				oResourceBundle = this.getResourceBundle(),
-				oObject = oView.getModel().getObject(sPath),
-				sObjectId = oObject.ID,
-				sObjectName = oObject.Name,
-				oViewModel = this.getModel("detailView");
-
-			this.getOwnerComponent().oListSelector.selectAListItem(sPath);
-
-			oViewModel.setProperty("/saveAsTileTitle",
-				oResourceBundle.getText("shareSaveTileAppTitle", [sObjectName]));
-			oViewModel.setProperty("/shareOnJamTitle", sObjectName);
-			oViewModel.setProperty("/shareSendEmailSubject",
-				oResourceBundle.getText("shareSendEmailObjectSubject", [sObjectId]));
-			oViewModel.setProperty("/shareSendEmailMessage",
-				oResourceBundle.getText("shareSendEmailObjectMessage",
-					[sObjectName, sObjectId, location.href]));
-				*/
 		}
 
 	});
