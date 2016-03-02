@@ -85,14 +85,14 @@
           "target": "landscape"
   			},
         {
-  				"pattern": "landscape/{id}/report/new",
-  				"name": "landscapeReportNew",
-          "target": "landscapeReportNew"
+  				"pattern": "landscape/{id}/external/new",
+  				"name": "landscapeExternalNew",
+          "target": "landscapeExternalNew"
   			},
         {
-  				"pattern": "landscape/{id}/report/{reportId}",
-  				"name": "landscapeReport",
-          "target": "landscapeReport"
+  				"pattern": "landscape/{id}/external/{reportId}",
+  				"name": "landscapeExternal",
+          "target": "landscapeExternal"
   			}
       ],
       "targets": {
@@ -108,11 +108,11 @@
           "landscape": {
              "viewName": "Landscape"
           },
-          "landscapeReportNew": {
-             "viewName": "LandscapeReportNew"
+          "landscapeExternalNew": {
+             "viewName": "LandscapeExternalNew"
           },
-          "landscapeReport": {
-             "viewName": "LandscapeReport"
+          "landscapeExternal": {
+             "viewName": "LandscapeExternal"
           },
           "notfound": {
              "viewName": "NotFound",

@@ -16,10 +16,11 @@ sap.ui.define([
 			// Model used to manipulate control states. The chosen values make sure,
 			// detail page is busy indication immediately so there is no break in
 			// between the busy indication for loading the view's meta data
+			var oDate = new Date();
 			var oViewModel = new JSONModel({
 				busy: false,
 				delay: 0,
-				date: new Date()
+				date: oDate
 			});
 			this.setModel(oViewModel, 'landscapeView');
 
@@ -34,7 +35,7 @@ sap.ui.define([
 
 			var oModelExternal = new JSONModel();
 			this.setModel(oModelExternal, 'landscapeExternal');
-			this._bindElement('externalPanel', 'landscapeExternal>/external');
+			this._bindElement('externalPanel', 'landscapeExternal>/');
 
 			var oModelInternal = new JSONModel();
 			this.setModel(oModelInternal, 'landscapeInternal');
@@ -96,6 +97,36 @@ sap.ui.define([
 		},
 
 		// Status tab
+
+		// External tab
+		onAddExternal: function() {
+			var oViewModel = this.getModel('landscapeView');
+			var sLandscapeId = oViewModel.getProperty('/id');
+
+			var oRouter = this.getRouter();
+			oRouter.navTo('landscapeExternalNew', {
+				id: sLandscapeId
+			});
+		},
+
+		onDisplayExternal: function(oEvent) {
+			var oViewModel = this.getModel('landscapeView');
+			var sLandscapeId = oViewModel.getProperty('/id');
+
+			var oItem = oEvent.getSource();
+			var oBindingContext = oItem.getBindingContext('landscapeExternal');
+			var sReportId = oBindingContext.getProperty('id');
+
+			var oRouter = this.getRouter();
+			oRouter.navTo('landscapeExternal', {
+				id: sLandscapeId,
+				reportId: sReportId
+			});
+		},
+
+		// Internal tab
+		onAddInternal: function() {
+		},
 
 		/* =========================================================== */
 		/* begin: internal methods                                     */
@@ -192,9 +223,7 @@ sap.ui.define([
 			// Load landscape model
 			var oModel = this.getModel('landscape');
 			oModel.attachRequestCompleted(this._requestCompletedGeneral, this);
-			oModel.loadData('/Landscape/' + sLandscapeId + '/general', {
-				date: oDate.getTime()
-			});
+			oModel.loadData('/Landscape/' + sLandscapeId + '/general', {});
 
 			// Load landscape status model
 			var oModelStatus = this.getModel('landscapeStatus');
@@ -206,15 +235,11 @@ sap.ui.define([
 			// Load landscape status model
 			var oModelInternal = this.getModel('landscapeInternal');
 			oModelInternal.attachRequestCompleted(this._requestCompletedInternal, this);
-			oModelInternal.loadData('/Landscape/' + sLandscapeId + '/internal', {
-				date: oDate.getTime()
-			});
+			oModelInternal.loadData('/Landscape/' + sLandscapeId + '/internal', {});
 
 			var oModelExternal = this.getModel('landscapeExternal');
 			oModelExternal.attachRequestCompleted(this._requestCompletedExternal, this);
-			oModelExternal.loadData('/Landscape/' + sLandscapeId + '/external', {
-				date: oDate.getTime()
-			});
+			oModelExternal.loadData('/Landscape/' + sLandscapeId + '/external', {});
 		},
 
 		_requestCompletedGeneral: function(oEvent) {
@@ -252,8 +277,8 @@ sap.ui.define([
 		_requestCompleted: function(oEvent, oPanel, oModel) {
 			jQuery.sap.log.info('Landscape.controller:_requestCompleted');
 
-			//console.log(oEvent.oSource);
-			//console.log(oEvent.mParameters);
+			// console.log(oEvent.oSource);
+			// console.log(oEvent.mParameters);
 			var sError;
 
 			if (oEvent.getParameter('success')) {
@@ -267,14 +292,15 @@ sap.ui.define([
 					' ' + oError.responseText;
 			}
 			if (sError) {
-				//jQuery.sap.log.error(sError);
+				// jQuery.sap.log.error(sError);
 
 				var oMessageStrip = new MessageStrip({
 					text: sError,
 					type: 'Error',
 					showIcon: true,
 					showCloseButton: true
-				}).addStyleClass('sapUiMediumMarginBottom');
+				});
+				// .addStyleClass('sapUiMediumMarginBottom');
 
 				this._messageStrips.push(oMessageStrip);
 				oPanel.insertContent(oMessageStrip,	0);

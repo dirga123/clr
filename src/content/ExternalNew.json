@@ -1,0 +1,528 @@
+{
+    "version": "1.0.0",
+    "external": {
+        "id": "partner_40",
+        "zabbix": "http://mo-5064b8256.dmzmo.sap.corp:1080/zabbix/api_jsonrpc.php",
+        "domain": "consultare.net",
+        "services": [
+            {
+                "name": "Productive",
+                "status": "0",
+                "goodSla": "99.5000",
+                "currSla": 93.175404364386,
+                "okTime": 2334602,
+                "problemTime": 170997,
+                "downtimeTime": 0
+            },
+            {
+                "name": "Non-Productive",
+                "status": "0",
+                "goodSla": "0.0100",
+                "currSla": 100,
+                "okTime": 2505599,
+                "problemTime": 0,
+                "downtimeTime": 0
+            }
+        ],
+        "items": {
+            "customers": [
+                {
+                    "id": "2",
+                    "tenants": {
+                        "first": 1,
+                        "last": 2,
+                        "min": 0,
+                        "max": 2,
+                        "avg": 1.5781268689446195
+                    },
+                    "tenantsDemo": {
+                        "first": 2,
+                        "last": 2,
+                        "min": 0,
+                        "max": 2,
+                        "avg": 1.174003466204506
+                    },
+                    "tenantsProductive": {
+                        "first": 2,
+                        "last": 2,
+                        "min": 0,
+                        "max": 2,
+                        "avg": 1.5833766233766233
+                    },
+                    "tenantsTesting": {
+                        "first": 2,
+                        "last": 2,
+                        "min": 0,
+                        "max": 2,
+                        "avg": 1.1013689135331832
+                    },
+                    "tenantsTrial": {
+                        "first": 2,
+                        "last": 2,
+                        "min": 0,
+                        "max": 2,
+                        "avg": 1.596950268584301
+                    },
+                    "usersRDS": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "users": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    }
+                },
+                {
+                    "id": "21",
+                    "tenants": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.775532169337479
+                    },
+                    "tenantsDemo": {
+                        "first": 0,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.6142782879916826
+                    },
+                    "tenantsProductive": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.7852813852813852
+                    },
+                    "tenantsTesting": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.4782533356437359
+                    },
+                    "tenantsTrial": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.7970888927395599
+                    },
+                    "usersRDS": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "users": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    }
+                },
+                {
+                    "id": "41",
+                    "tenants": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "tenantsDemo": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "tenantsProductive": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "tenantsTesting": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "tenantsTrial": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "usersRDS": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "users": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    }
+                },
+                {
+                    "id": "42",
+                    "tenants": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.7788702679033478
+                    },
+                    "tenantsDemo": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.6967596603708196
+                    },
+                    "tenantsProductive": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.776969696969697
+                    },
+                    "tenantsTesting": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.8073124241899151
+                    },
+                    "tenantsTrial": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.7728296655692254
+                    },
+                    "usersRDS": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "users": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    }
+                },
+                {
+                    "id": "43",
+                    "tenants": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.7778176168280149
+                    },
+                    "tenantsDemo": {
+                        "first": 0,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.6984924623115578
+                    },
+                    "tenantsProductive": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.7864195392343669
+                    },
+                    "tenantsTesting": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.808352105354358
+                    },
+                    "tenantsTrial": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.7744452149791956
+                    },
+                    "usersRDS": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "users": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    }
+                },
+                {
+                    "id": "61",
+                    "tenants": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.7802232854864434
+                    },
+                    "tenantsDemo": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.7931034482758621
+                    },
+                    "tenantsProductive": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.7833766233766234
+                    },
+                    "tenantsTesting": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.8048865014728817
+                    },
+                    "tenantsTrial": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.8097383469069486
+                    },
+                    "usersRDS": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "users": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    }
+                },
+                {
+                    "id": "81",
+                    "tenants": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.7017108851971238
+                    },
+                    "tenantsDemo": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.7389937106918238
+                    },
+                    "tenantsProductive": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.7602805999032414
+                    },
+                    "tenantsTesting": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.7376058041112454
+                    },
+                    "tenantsTrial": {
+                        "first": 1,
+                        "last": 1,
+                        "min": 0,
+                        "max": 1,
+                        "avg": 0.7453446191051996
+                    },
+                    "usersRDS": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "users": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    }
+                }
+            ],
+            "serviceUnits": [
+                {
+                    "id": "1",
+                    "hanaVersion": {
+                        "first": "1.00.097.00.1434028111",
+                        "last": "1.00.85.03.400544"
+                    },
+                    "name": {
+                        "first": "SU-9108-01",
+                        "last": "SU-9108-01"
+                    },
+                    "purpose": {
+                        "first": "Productive",
+                        "last": "Productive"
+                    },
+                    "tenantsDemo": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "tenantsProductive": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "tenantsTesting": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "tenantsTrial": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "version": {
+                        "first": 91018008,
+                        "last": 91018008,
+                        "min": 91018008,
+                        "max": 91018008,
+                        "avg": 91018008
+                    },
+                    "sla": {
+                        "status": "0",
+                        "goodSla": "99.5000",
+                        "currSla": 100,
+                        "okTime": 2505599,
+                        "problemTime": 0,
+                        "downtimeTime": 0
+                    }
+                },
+                {
+                    "id": "21",
+                    "hanaVersion": {
+                        "first": "",
+                        "last": "1.00.097.00.1434028111"
+                    },
+                    "name": {
+                        "first": "SU-9109-01",
+                        "last": "SU-9109-01"
+                    },
+                    "purpose": {
+                        "first": "Productive",
+                        "last": "Productive"
+                    },
+                    "tenantsDemo": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "tenantsProductive": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "tenantsTesting": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "tenantsTrial": {
+                        "first": 0,
+                        "last": 0,
+                        "min": 0,
+                        "max": 0,
+                        "avg": 0
+                    },
+                    "version": {
+                        "first": 91019009,
+                        "last": 91019009,
+                        "min": 91019009,
+                        "max": 91019009,
+                        "avg": 91019009
+                    },
+                    "sla": {
+                        "status": "0",
+                        "goodSla": "99.5000",
+                        "currSla": 99.994013407572,
+                        "okTime": 2505449,
+                        "problemTime": 150,
+                        "downtimeTime": 0
+                    }
+                }
+            ],
+            "customerCount": {
+                "first": 5,
+                "last": 7,
+                "min": 5,
+                "max": 7,
+                "avg": 6.522808538303175
+            },
+            "serviceUnitCount": {
+                "first": 2,
+                "last": 2,
+                "min": 2,
+                "max": 2,
+                "avg": 2
+            }
+        }
+    }
+}

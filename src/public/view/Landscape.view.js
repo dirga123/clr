@@ -9,9 +9,14 @@ sap.ui.define([
 	'sap/m/IconTabBar',
 	'sap/m/Title',
 	'sap/m/IconTabFilter',
-	'sap/m/Text'
+	'sap/m/Text',
+	'sap/ui/layout/VerticalLayout',
+	'sap/m/List',
+	'sap/m/StandardListItem',
+	'sap/m/FlexBox'
 ], function (Page, Button, Toolbar,	ToolbarSpacer, Panel, formatter, jQuery,
-	IconTabBar, Title, IconTabFilter, Text) {
+	IconTabBar, Title, IconTabFilter, Text, VerticalLayout, List, StandardListItem,
+	FlexBox) {
 	'use strict';
 
 	sap.ui.jsview('sap.clr.view.Landscape', {
@@ -20,26 +25,8 @@ sap.ui.define([
 		},
 
 		createContent: function (oController) {
-			/*
-			var oPrintButton = new Button(this.createId('printButton'), {
-				icon: 'sap-icon://print',
-				text: '{i18n>landscapePrintButton}',
-				press: [ oController.onPressPrint, oController ]
-			});
-
-			var oExportButton = new Button(this.createId('exportButton'), {
-				text: '{i18n>landscapeExportButton}',
-				press: [ oController.onPressExport, oController ]
-			});
-			*/
-
 			var oBar = new Toolbar({
 				content: [
-					new ToolbarSpacer(),
-					/*
-					oPrintButton,
-					oExportButton,
-					*/
 					new ToolbarSpacer()
 				]
 			});
@@ -83,14 +70,50 @@ sap.ui.define([
 				content: []
 			});
 
+			var oExternalList = new List(this.createId('externalList'), {
+			});
+
+			var oExternalItem = new StandardListItem({
+				title: '{landscapeExternal>name}',
+				type: 'Navigation',
+				press: [ oController.onDisplayExternal, oController ]
+			});
+
+			oExternalList.bindItems({
+				path: 'landscapeExternal>/externals',
+				template: oExternalItem
+			});
+
 			var oExternalPanel = new Panel(this.createId('externalPanel'), {
 				busyIndicatorDelay: 0,
-				content: []
+				content: [
+					new VerticalLayout({
+						width: '100%',
+						content: [
+							new Button({
+								text: 'Add report',
+								type: sap.m.ButtonType.Emphasized,
+								press: [ oController.onAddExternal, oController ]
+							}),
+							oExternalList
+						]
+					})
+				]
 			});
 
 			var oInternalPanel = new Panel(this.createId('internalPanel'), {
 				busyIndicatorDelay: 0,
-				content: []
+				content: [
+					new VerticalLayout({
+						content: [
+							new Button({
+								text: 'Add report',
+								type: sap.m.ButtonType.Emphasized,
+								press: [ oController.onAddInternal, oController ]
+							})
+						]
+					})
+				]
 			});
 
 			var oTabs = new IconTabBar({

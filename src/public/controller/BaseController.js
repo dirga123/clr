@@ -18,7 +18,7 @@ sap.ui.define([
 		 */
 		getRouter: function() {
 			return this.getOwnerComponent().getRouter();
-			// return sap.ui.core.UIComponent.getRouterFor(this);
+			//return sap.ui.core.UIComponent.getRouterFor(this);
 		},
 
 		/**

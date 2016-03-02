@@ -29,7 +29,6 @@ koaQs(server, 'first');
 
 const router = new Router();
 const zabbix = new Zabbix();
-const redis = new Redis();
 
 // app.use(compress());
 server.use(logger());
@@ -51,6 +50,8 @@ router.post('/login', async (ctx) => {
     };
     return;
   }
+
+  const redis = new Redis();
 
   try {
     await redis.login();
@@ -89,6 +90,8 @@ router.post('/login', async (ctx) => {
 });
 
 router.get('/Home', async ctx => {
+  const redis = new Redis();
+
   try {
     await redis.login();
   } catch (e) {
@@ -116,6 +119,8 @@ router.get('/Home', async ctx => {
 });
 
 router.get('/Landscapes', async ctx => {
+  const redis = new Redis();
+
   try {
     await redis.login();
   } catch (e) {
@@ -176,6 +181,8 @@ router.get('/Landscape/:id', async (ctx) => {
   const lsRet = {
     version: versionStr
   };
+
+  const redis = new Redis();
 
   try {
     await redis.login();
@@ -252,6 +259,8 @@ router.get('/Landscape/:id/general', async (ctx) => {
     version: versionStr
   };
 
+  const redis = new Redis();
+
   try {
     await redis.login();
 
@@ -287,11 +296,151 @@ router.get('/Landscape/:id/internal', async (ctx) => {
 });
 
 router.get('/Landscape/:id/external', async (ctx) => {
-  const lsRet = {
-    version: versionStr,
-    error: 'External report list: Not implemented'
+  const lsExtRet = {
+    version: versionStr
   };
-  await new Promise(r => setTimeout(r, 2000));
+
+  try {
+    const redis = new Redis();
+    await redis.login();
+    lsExtRet.externals = await redis.getExternalList(ctx.params.id);
+    await redis.logout();
+  } catch (e) {
+    lsExtRet.error = e;
+    ctx.body = lsExtRet;
+    return;
+  }
+
+  ctx.body = lsExtRet;
+});
+
+router.get('/Landscape/:id/external/new', async (ctx) => {
+  const lsRet = {
+    version: versionStr
+  };
+
+  // Retrieve DB info
+  try {
+    const redis = new Redis();
+    await redis.login();
+    lsRet.external = await redis.getLandscape(ctx.params.id);
+    await redis.logout();
+  } catch (e) {
+    lsRet.error = e;
+    ctx.body = lsRet;
+    return;
+  }
+
+  // Retrieve Zabbix info
+  try {
+    const zabbixUrl = lsRet.external.zabbix;
+    await zabbix.login(zabbixUrl);
+
+    const today = moment();
+    const paramDate = Number.parseInt(ctx.query.date, 10) || +moment();
+
+    // Current month till today, cant use end of month explicitly
+    // (zabbix bug returns N days backwards - from prev month too)
+    let firstDay = moment(paramDate).startOf('month');
+    if (today < firstDay) {
+      firstDay = today.clone().startOf('month');
+    }
+    let lastDay = moment(paramDate).endOf('month');
+    if (today < lastDay) {
+      lastDay = today;
+    }
+
+    // Get services as map, so it can be spread to landscape root and serviceUnits
+    const servicesMap = await servicesAsMap(firstDay.unix(), lastDay.unix());
+
+    // Create services array (will hold just 2 values)
+    lsRet.external.services = [];
+
+    lsRet.external.services.push({
+      name: ZK.SLA_PRODUCTIVE,
+      ...servicesMap.get(ZK.SLA_PRODUCTIVE)
+    });
+    lsRet.external.services.push({
+      name: ZK.SLA_NONPRODUCTIVE,
+      ...servicesMap.get(ZK.SLA_NONPRODUCTIVE)
+    });
+
+    // lsRet.external.hosts = await hosts();
+
+    // Retrieve all relevant items
+    lsRet.external.items = await items(firstDay.unix(), lastDay.unix());
+
+    // Update sla to serviceUnits
+    lsRet.external.items.serviceUnits.forEach((currentValue) => {
+      if (currentValue.name && currentValue.name.last) {
+        currentValue.sla = servicesMap.get(currentValue.name.last);
+      }
+    });
+
+    await zabbix.logout();
+  } catch (e) {
+    debug('dev')(`Internal error catched ${e}/`);
+    lsRet.error = e;
+    ctx.body = lsRet;
+    return;
+  }
+
+  ctx.body = lsRet;
+});
+
+router.post('/Landscape/:id/external/new', async (ctx) => {
+  const lsRet = {
+    version: versionStr
+  };
+
+  // Check for parameters
+  if (ctx.request.body === undefined ||
+    ctx.request.body.external === undefined) {
+    lsRet.error = 'Wrong input';
+    ctx.body = lsRet;
+    return;
+  }
+
+  // Retrieve DB info
+  try {
+    const redis = new Redis();
+    await redis.login();
+
+    const lsId = ctx.params.id;
+    if ((await redis.existsLandscape(lsId)) === false) {
+      throw `Landscape ${lsId} doesnt exists.`;
+    }
+
+    lsRet.addedId = await redis.addExternal(lsId, ctx.request.body);
+
+    await redis.logout();
+  } catch (e) {
+    lsRet.error = e;
+    ctx.body = lsRet;
+    return;
+  }
+
+  ctx.body = lsRet;
+});
+
+router.get('/Landscape/:id/external/:reportId', async (ctx) => {
+  let lsRet = {
+    version: versionStr
+  };
+
+  // Retrieve DB info
+  try {
+    const redis = new Redis();
+    await redis.login();
+    // Overwrite version, error, etc.
+    lsRet = await redis.getExternal(ctx.params.id, ctx.params.reportId);
+    await redis.logout();
+  } catch (e) {
+    lsRet.error = e;
+    ctx.body = lsRet;
+    return;
+  }
+
   ctx.body = lsRet;
 });
 
@@ -299,6 +448,7 @@ router.post('/Landscape', async (ctx) => {
   const lsRet = {
     version: versionStr
   };
+
   // Check for parameters
   if (ctx.request.body === undefined ||
     ctx.request.body.id === undefined ||
@@ -310,6 +460,8 @@ router.post('/Landscape', async (ctx) => {
   }
 
   try {
+    const redis = new Redis();
+
     await redis.login();
 
     const lsId = ctx.request.body.id;

@@ -28,9 +28,9 @@ sap.ui.define([
 	Table, Column, ColumnListItem, ObjectIdentifier, ObjectNumber) {
 	'use strict';
 
-	sap.ui.jsview('sap.clr.view.LandscapeReportNew', {
+	sap.ui.jsview('sap.clr.view.LandscapeExternal', {
 		getControllerName: function () {
-			return 'sap.clr.controller.LandscapeReportNew';
+			return 'sap.clr.controller.LandscapeExternal';
 		},
 
 		createContent: function (oController) {
@@ -65,8 +65,8 @@ sap.ui.define([
 						new sap.m.DateTimeInput(this.createId('pickMonth'), {
 							width: '15em',
 							displayFormat: 'MM/yyyy',
-							dateValue: '{landscapeView>/date}',
-							valueFormat: 'dd.MM.yyyy',
+							dateValue: '{/date}',
+//							valueFormat: 'dd.MM.yyyy',
 							change: [ oController.onPressRefresh, oController ]
 						}),
 						new Button({
@@ -89,11 +89,11 @@ sap.ui.define([
 						columnsM: 1,
 						content: [
 							new Label({ text: '{i18n>landscapeID}' }),
-							new Text({ text: '{landscape>id}' }),
+							new Text({ text: '{external>id}' }),
 							new Label({ text: '{i18n>landscapeZabbix}' }),
-							new Text({ text: '{landscape>zabbix}' }),
+							new Text({ text: '{external>zabbix}' }),
 							new Label({ text: '{i18n>landscapeDomain}' }),
-							new Text({ text: '{landscape>domain}' })
+							new Text({ text: '{external>domain}' })
 						]
 					})
 				]
@@ -103,10 +103,10 @@ sap.ui.define([
 			});
 
 			var oSlaItem = new ObjectListItem({
-				title: '{landscape>name}',
+				title: '{external>name}',
 				type: 'Inactive',
 				number: {
-					parts: [ 'landscape>currSla', 'landscape>goodSla' ],
+					parts: [ 'external>currSla', 'external>goodSla' ],
 					formatter: function(currSla, goodSla) {
 						var text = '';
 						if (currSla) {
@@ -119,28 +119,28 @@ sap.ui.define([
 					}
 				},
 				numberState: {
-					parts: [ 'landscape>status' ],
+					parts: [ 'external>status' ],
 					formatter: jQuery.proxy(formatter.statusToState, this)
 				},
 				attributes: [
 					new ObjectAttribute({
 						title: '{i18n>landscapeOkTime}',
 						text: {
-							parts: [ 'landscape>okTime' ],
+							parts: [ 'external>okTime' ],
 							formatter: jQuery.proxy(formatter.secondsToString, this)
 						}
 					}),
 					new ObjectAttribute({
 						title: '{i18n>landscapeProblemTime}',
 						text: {
-							parts: [ 'landscape>problemTime' ],
+							parts: [ 'external>problemTime' ],
 							formatter: jQuery.proxy(formatter.secondsToString, this)
 						}
 					}),
 					new ObjectAttribute({
 						title: '{i18n>landscapeDowntime}',
 						text: {
-							parts: [ 'landscape>downtimeTime' ],
+							parts: [ 'external>downtimeTime' ],
 							formatter: jQuery.proxy(formatter.secondsToString, this)
 						}
 					})
@@ -148,19 +148,18 @@ sap.ui.define([
 				firstStatus: new ObjectStatus({
 					title: '{i18n>landscapeStatus}',
 					text: {
-						parts: [ 'landscape>status' ],
+						parts: [ 'external>status' ],
 						formatter: jQuery.proxy(formatter.statusToText, this)
 					},
 					state: {
-						parts: [ 'landscape>status' ],
+						parts: [ 'external>status' ],
 						formatter: jQuery.proxy(formatter.statusToState, this)
 					}
 				})
 			});
 
 			oSlaList.bindItems({
-				path: 'landscape>services',
-				model: 'landscape',
+				path: 'external>services',
 				template: oSlaItem
 			});
 
@@ -185,21 +184,21 @@ sap.ui.define([
 			});
 
 			var oHostItem = new ObjectListItem({
-				title: '{landscape>name}',
+				title: '{external>name}',
 				type: 'Inactive',
 				number: {
-					parts: [ 'landscape>status' ],
+					parts: [ 'external>status' ],
 					formatter: jQuery.proxy(formatter.statusToText, this)
 				},
 				numberState: {
-					parts: [ 'landscape>status' ],
+					parts: [ 'external>status' ],
 					formatter: jQuery.proxy(formatter.statusToState, this)
 				},
 				attributes: [
 					new ObjectAttribute({
 						title: '{i18n>landscapeAgentStatus}',
 						text: {
-							parts: [ 'landscape>available' ],
+							parts: [ 'external>available' ],
 							formatter: function(available) {
 								var resourceBundle = this.getModel('i18n').getResourceBundle();
 
@@ -216,13 +215,13 @@ sap.ui.define([
 					})
 				],
 				firstStatus: new ObjectStatus({
-					text: '{landscape>error}',
+					text: '{external>error}',
 					state: 'Error'
 				})
 			});
 
 			oHostList.bindItems({
-				path: 'landscape>hosts',
+				path: 'external>hosts',
 				template: oHostItem
 			});
 
@@ -254,13 +253,13 @@ sap.ui.define([
 					new ColumnListItem({
 						cells: [
 							new ObjectIdentifier({ title: 'Users' }),
-							new ObjectNumber({ number: '{landscape>users/first}' }),
-							new ObjectNumber({ number: '{landscape>users/last}' }),
-							new ObjectNumber({ number: '{landscape>users/min}' }),
-							new ObjectNumber({ number: '{landscape>users/max}' }),
+							new ObjectNumber({ number: '{external>users/first}' }),
+							new ObjectNumber({ number: '{external>users/last}' }),
+							new ObjectNumber({ number: '{external>users/min}' }),
+							new ObjectNumber({ number: '{external>users/max}' }),
 							new ObjectNumber({
 								number: {
-									parts: [ 'landscape>users/avg' ],
+									parts: [ 'external>users/avg' ],
 									formatter: jQuery.proxy(formatter.avgToText, this)
 								}
 							})
@@ -269,13 +268,13 @@ sap.ui.define([
 					new ColumnListItem({
 						cells: [
 							new ObjectIdentifier({ title: 'RDS users' }),
-							new ObjectNumber({ number: '{landscape>usersRDS/first}' }),
-							new ObjectNumber({ number: '{landscape>usersRDS/last}' }),
-							new ObjectNumber({ number: '{landscape>usersRDS/min}' }),
-							new ObjectNumber({ number: '{landscape>usersRDS/max}' }),
+							new ObjectNumber({ number: '{external>usersRDS/first}' }),
+							new ObjectNumber({ number: '{external>usersRDS/last}' }),
+							new ObjectNumber({ number: '{external>usersRDS/min}' }),
+							new ObjectNumber({ number: '{external>usersRDS/max}' }),
 							new ObjectNumber({
 								number: {
-									parts: [ 'landscape>usersRDS/avg' ],
+									parts: [ 'external>usersRDS/avg' ],
 									formatter: jQuery.proxy(formatter.avgToText, this)
 								}
 							})
@@ -309,13 +308,13 @@ sap.ui.define([
 					new ColumnListItem({
 						cells: [
 							new ObjectIdentifier({ title: 'Demo' }),
-							new ObjectNumber({ number: '{landscape>tenantsDemo/first}' }),
-							new ObjectNumber({ number: '{landscape>tenantsDemo/last}' }),
-							new ObjectNumber({ number: '{landscape>tenantsDemo/min}' }),
-							new ObjectNumber({ number: '{landscape>tenantsDemo/max}' }),
+							new ObjectNumber({ number: '{external>tenantsDemo/first}' }),
+							new ObjectNumber({ number: '{external>tenantsDemo/last}' }),
+							new ObjectNumber({ number: '{external>tenantsDemo/min}' }),
+							new ObjectNumber({ number: '{external>tenantsDemo/max}' }),
 							new ObjectNumber({
 								number: {
-									parts: [ 'landscape>tenantsDemo/avg' ],
+									parts: [ 'external>tenantsDemo/avg' ],
 									formatter: jQuery.proxy(formatter.avgToText, this)
 								}
 							})
@@ -324,13 +323,13 @@ sap.ui.define([
 					new ColumnListItem({
 						cells: [
 							new ObjectIdentifier({ title: 'Productive' }),
-							new ObjectNumber({ number: '{landscape>tenantsProductive/first}' }),
-							new ObjectNumber({ number: '{landscape>tenantsProductive/last}' }),
-							new ObjectNumber({ number: '{landscape>tenantsProductive/min}' }),
-							new ObjectNumber({ number: '{landscape>tenantsProductive/max}' }),
+							new ObjectNumber({ number: '{external>tenantsProductive/first}' }),
+							new ObjectNumber({ number: '{external>tenantsProductive/last}' }),
+							new ObjectNumber({ number: '{external>tenantsProductive/min}' }),
+							new ObjectNumber({ number: '{external>tenantsProductive/max}' }),
 							new ObjectNumber({
 								number: {
-									parts: [ 'landscape>tenantsProductive/avg' ],
+									parts: [ 'external>tenantsProductive/avg' ],
 									formatter: jQuery.proxy(formatter.avgToText, this)
 								}
 							})
@@ -339,13 +338,13 @@ sap.ui.define([
 					new ColumnListItem({
 						cells: [
 							new ObjectIdentifier({ title: 'Testing' }),
-							new ObjectNumber({ number: '{landscape>tenantsTesting/first}' }),
-							new ObjectNumber({ number: '{landscape>tenantsTesting/last}' }),
-							new ObjectNumber({ number: '{landscape>tenantsTesting/min}' }),
-							new ObjectNumber({ number: '{landscape>tenantsTesting/max}' }),
+							new ObjectNumber({ number: '{external>tenantsTesting/first}' }),
+							new ObjectNumber({ number: '{external>tenantsTesting/last}' }),
+							new ObjectNumber({ number: '{external>tenantsTesting/min}' }),
+							new ObjectNumber({ number: '{external>tenantsTesting/max}' }),
 							new ObjectNumber({
 								number: {
-									parts: [ 'landscape>tenantsTesting/avg' ],
+									parts: [ 'external>tenantsTesting/avg' ],
 									formatter: jQuery.proxy(formatter.avgToText, this)
 								}
 							})
@@ -354,13 +353,13 @@ sap.ui.define([
 					new ColumnListItem({
 						cells: [
 							new ObjectIdentifier({ title: 'Trial' }),
-							new ObjectNumber({ number: '{landscape>tenantsTrial/first}' }),
-							new ObjectNumber({ number: '{landscape>tenantsTrial/last}' }),
-							new ObjectNumber({ number: '{landscape>tenantsTrial/min}' }),
-							new ObjectNumber({ number: '{landscape>tenantsTrial/max}' }),
+							new ObjectNumber({ number: '{external>tenantsTrial/first}' }),
+							new ObjectNumber({ number: '{external>tenantsTrial/last}' }),
+							new ObjectNumber({ number: '{external>tenantsTrial/min}' }),
+							new ObjectNumber({ number: '{external>tenantsTrial/max}' }),
 							new ObjectNumber({
 								number: {
-									parts: [ 'landscape>tenantsTrial/avg' ],
+									parts: [ 'external>tenantsTrial/avg' ],
 									formatter: jQuery.proxy(formatter.avgToText, this)
 								}
 							})
@@ -387,7 +386,7 @@ sap.ui.define([
 								columnsM: 1,
 								content: [
 									new Label({ text: 'Name' }),
-									new ObjectIdentifier({ title: 'Customer {landscape>id}' })
+									new ObjectIdentifier({ title: 'Customer {external>id}' })
 								]
 							}),
 							oCustomerUsersTable,
@@ -398,7 +397,7 @@ sap.ui.define([
 			});
 
 			oCustomerList.bindItems({
-				path: 'landscape>items/customers',
+				path: 'external>items/customers',
 				template: oCustomerItem
 			});
 
@@ -410,7 +409,7 @@ sap.ui.define([
 							titleStyle: 'H3'
 						}),
 						new Title({
-							text: '{landscape>items/customerCount/max}',
+							text: '{external>items/customerCount/max}',
 							titleStyle: 'H1'
 						}),
 						new ToolbarSpacer()
@@ -449,41 +448,41 @@ sap.ui.define([
 					new ColumnListItem({
 						cells: [
 							new ObjectIdentifier({ title: 'Demo' }),
-							new ObjectNumber({ number: '{landscape>tenantsDemo/first}' }),
-							new ObjectNumber({ number: '{landscape>tenantsDemo/last}' }),
-							new ObjectNumber({ number: '{landscape>tenantsDemo/min}' }),
-							new ObjectNumber({ number: '{landscape>tenantsDemo/max}' }),
-							new ObjectNumber({ number: '{landscape>tenantsDemo/avg}' })
+							new ObjectNumber({ number: '{external>tenantsDemo/first}' }),
+							new ObjectNumber({ number: '{external>tenantsDemo/last}' }),
+							new ObjectNumber({ number: '{external>tenantsDemo/min}' }),
+							new ObjectNumber({ number: '{external>tenantsDemo/max}' }),
+							new ObjectNumber({ number: '{external>tenantsDemo/avg}' })
 						]
 					}),
 					new ColumnListItem({
 						cells: [
 							new ObjectIdentifier({ title: 'Productive' }),
-							new ObjectNumber({ number: '{landscape>tenantsProductive/first}' }),
-							new ObjectNumber({ number: '{landscape>tenantsProductive/last}' }),
-							new ObjectNumber({ number: '{landscape>tenantsProductive/min}' }),
-							new ObjectNumber({ number: '{landscape>tenantsProductive/max}' }),
-							new ObjectNumber({ number: '{landscape>tenantsProductive/avg}' })
+							new ObjectNumber({ number: '{external>tenantsProductive/first}' }),
+							new ObjectNumber({ number: '{external>tenantsProductive/last}' }),
+							new ObjectNumber({ number: '{external>tenantsProductive/min}' }),
+							new ObjectNumber({ number: '{external>tenantsProductive/max}' }),
+							new ObjectNumber({ number: '{external>tenantsProductive/avg}' })
 						]
 					}),
 					new ColumnListItem({
 						cells: [
 							new ObjectIdentifier({ title: 'Testing' }),
-							new ObjectNumber({ number: '{landscape>tenantsTesting/first}' }),
-							new ObjectNumber({ number: '{landscape>tenantsTesting/last}' }),
-							new ObjectNumber({ number: '{landscape>tenantsTesting/min}' }),
-							new ObjectNumber({ number: '{landscape>tenantsTesting/max}' }),
-							new ObjectNumber({ number: '{landscape>tenantsTesting/avg}' })
+							new ObjectNumber({ number: '{external>tenantsTesting/first}' }),
+							new ObjectNumber({ number: '{external>tenantsTesting/last}' }),
+							new ObjectNumber({ number: '{external>tenantsTesting/min}' }),
+							new ObjectNumber({ number: '{external>tenantsTesting/max}' }),
+							new ObjectNumber({ number: '{external>tenantsTesting/avg}' })
 						]
 					}),
 					new ColumnListItem({
 						cells: [
 							new ObjectIdentifier({ title: 'Trial' }),
-							new ObjectNumber({ number: '{landscape>tenantsTrial/first}' }),
-							new ObjectNumber({ number: '{landscape>tenantsTrial/last}' }),
-							new ObjectNumber({ number: '{landscape>tenantsTrial/min}' }),
-							new ObjectNumber({ number: '{landscape>tenantsTrial/max}' }),
-							new ObjectNumber({ number: '{landscape>tenantsTrial/avg}' })
+							new ObjectNumber({ number: '{external>tenantsTrial/first}' }),
+							new ObjectNumber({ number: '{external>tenantsTrial/last}' }),
+							new ObjectNumber({ number: '{external>tenantsTrial/min}' }),
+							new ObjectNumber({ number: '{external>tenantsTrial/max}' }),
+							new ObjectNumber({ number: '{external>tenantsTrial/avg}' })
 						]
 					})
 				]
@@ -512,22 +511,22 @@ sap.ui.define([
 										alignItems: sap.m.FlexAlignItems.Center,
 										items: [
 											new ObjectIdentifier({
-												title: '{landscape>name/last}'
+												title: '{external>name/last}'
 											}).addStyleClass('sapUiTinyMarginEnd'),
-											new Text({ text: '(was {landscape>name/first})' })
+											new Text({ text: '(was {external>name/first})' })
 										]
 									}),
 									new Label({ text: 'Purpose' }),
 									new Text({
-										text: '{landscape>purpose/last} (was {landscape>purpose/first})'
+										text: '{external>purpose/last} (was {external>purpose/first})'
 									}),
 									new Label({ text: 'B1 Version' }),
 									new Text({
-										text: '{landscape>version/last} (was {landscape>version/first})'
+										text: '{external>version/last} (was {external>version/first})'
 									}),
 									new Label({ text: 'Hana Version' }),
 									new Text({
-										text: '{landscape>hanaVersion/last} (was {landscape>hanaVersion/first})'
+										text: '{external>hanaVersion/last} (was {external>hanaVersion/first})'
 									}),
 									new Label({ text: 'SLA' }),
 									new FlexBox({
@@ -536,11 +535,11 @@ sap.ui.define([
 										items: [
 											new ObjectIdentifier({
 												title: {
-													parts: [ 'landscape>sla/currSla' ],
+													parts: [ 'external>sla/currSla' ],
 													formatter: jQuery.proxy(formatter.slaToText, this)
 												}
 											}).addStyleClass('sapUiTinyMarginEnd'),
-											new Text({ text: '(of {landscape>sla/goodSla})' })
+											new Text({ text: '(of {external>sla/goodSla})' })
 										]
 									})
 								]
@@ -552,7 +551,7 @@ sap.ui.define([
 			});
 
 			oServiceUnitsList.bindItems({
-				path: 'landscape>items/serviceUnits',
+				path: 'external>items/serviceUnits',
 				template: oServiceUnitItem
 			});
 
@@ -564,7 +563,7 @@ sap.ui.define([
 							titleStyle: 'H3'
 						}),
 						new Title({
-							text: '{landscape>items/serviceUnitCount/max}',
+							text: '{external>items/serviceUnitCount/max}',
 							titleStyle: 'H1'
 						}),
 						new ToolbarSpacer()
@@ -576,7 +575,7 @@ sap.ui.define([
 			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin');
 
 			var oPage = new Page(this.createId('landscapePage'), {
-				title: '{i18n>landscape}',
+				title: '{i18n>LandscapeExternal}',
 				showHeader: true,
 				showNavButton: true,
 				navButtonPress: [ oController.onNavBack, oController ],
