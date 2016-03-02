@@ -10,7 +10,7 @@
     "clean": "babel-node scripts/run clean",
     "copy": "babel-node scripts/run copy",
     "bundle": "babel-node scripts/run bundle",
-    "build": "babel-node scripts/run build",
+    "build": "babel-node scripts/run build --release",
     "deploy": "babel-node scripts/run deploy",
     "start": "babel-node scripts/run start"
   },
