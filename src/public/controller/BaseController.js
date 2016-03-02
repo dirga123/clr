@@ -7,27 +7,28 @@ sap.ui.define([
 
 	return Controller.extend('sap.clr.controller.BaseController', {
 
-		getComponent: function () {
-        return Component.getOwnerComponentFor(this.getView());
-    },
+		getComponent: function() {
+			return Component.getOwnerComponentFor(this.getView());
+		},
 
 		/**
 		 * Convenience method for accessing the router in every controller of the application.
 		 * @public
 		 * @returns {sap.ui.core.routing.Router} the router for this component
 		 */
-		getRouter : function () {
+		getRouter: function() {
 			return this.getOwnerComponent().getRouter();
-			//return sap.ui.core.UIComponent.getRouterFor(this);
+			// return sap.ui.core.UIComponent.getRouterFor(this);
 		},
 
 		/**
-		 * Convenience method for getting the view model by name in every controller of the application.
+		 * Convenience method for getting the view model
+		 // by name in every controller of the application.
 		 * @public
 		 * @param {string} sName the model name
 		 * @returns {sap.ui.model.Model} the model instance
 		 */
-		getModel : function (sName) {
+		getModel: function(sName) {
 			return this.getView().getModel(sName);
 		},
 
@@ -38,7 +39,7 @@ sap.ui.define([
 		 * @param {string} sName the model name
 		 * @returns {sap.ui.mvc.View} the view instance
 		 */
-		setModel : function (oModel, sName) {
+		setModel: function(oModel, sName) {
 			return this.getView().setModel(oModel, sName);
 		},
 
@@ -47,8 +48,8 @@ sap.ui.define([
 		 * @public
 		 * @returns {sap.ui.model.resource.ResourceModel} the resourceModel of the component
 		 */
-		getResourceBundle : function () {
-			return this.getOwnerComponent().getModel("i18n").getResourceBundle();
+		getResourceBundle: function() {
+			return this.getOwnerComponent().getModel('i18n').getResourceBundle();
 		},
 
 		/**
@@ -56,6 +57,7 @@ sap.ui.define([
 		 * It checks if there is a history entry. If yes, history.go(-1) will happen.
 		 * If not, it will replace the current entry of the browser history with the master route.
 		 * @public
+		 * @param {object} oEvent the model name
 		 */
 		onNavBack: function(oEvent) {
 			var oHistory = History.getInstance();
@@ -67,7 +69,7 @@ sap.ui.define([
 			} else {
 				// Otherwise we go backwards with a forward history
 				var bReplace = true;
-				this.getRouter().navTo("home", {}, bReplace);
+				this.getRouter().navTo('home', {}, bReplace);
 			}
 		}
 

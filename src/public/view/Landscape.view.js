@@ -68,6 +68,11 @@ sap.ui.define([
 						new Button(this.createId('toolbarRefresh'), {
 							icon: 'sap-icon://refresh',
 							press: [ oController.onPressRefresh, oController ]
+						}),
+						new Button(this.createId('toolbarDelete'), {
+							icon: 'sap-icon://delete',
+							type: 'Reject',
+							press: [ oController.onPressDelete, oController ]
 						})
 					]
 				})

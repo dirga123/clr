@@ -60,6 +60,7 @@ sap.ui.define([
 		// General tab
 
 		onPressEdit: function() {
+			jQuery.sap.log.info('Landscape.controller:onPressEdit');
 			// Clone the data
 			this._oLandscape = jQuery.extend({},
 				this.getView().getModel('landscape').getData().landscape
@@ -68,6 +69,7 @@ sap.ui.define([
 		},
 
 		onPressCancel: function() {
+			jQuery.sap.log.info('Landscape.controller:onPressCancel');
 			// Restore the data
 			var oModel = this.getView().getModel('landscape');
 			var oData = oModel.getData();
@@ -79,7 +81,12 @@ sap.ui.define([
 		},
 
 		onPressSave: function() {
+			jQuery.sap.log.info('Landscape.controller:onPressSave');
 			this._toggleButtonsAndView(false);
+		},
+
+		onPressDelete: function() {
+			jQuery.sap.log.info('Landscape.controller:onPressDelete');
 		},
 
 		onPressRefresh: function() {
@@ -105,6 +112,7 @@ sap.ui.define([
 			oView.byId('toolbarRefresh').setVisible(!bEdit);
 			oView.byId('toolbarSave').setVisible(bEdit);
 			oView.byId('toolbarCancel').setVisible(bEdit);
+			oView.byId('toolbarDelete').setVisible(bEdit);
 
 			// oView.byId('printButton').setVisible(!bEdit);
 			// oView.byId('printExport').setVisible(!bEdit);
