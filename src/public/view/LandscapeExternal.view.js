@@ -52,7 +52,7 @@ sap.ui.define([
 					oExportButton,
 					new ToolbarSpacer()
 				]
-			});
+			}).addStyleClass('uoNoPrint');
 
 			var oGeneralPanel = new Panel({
 				headerToolbar: new Toolbar({
@@ -61,18 +61,7 @@ sap.ui.define([
 							text: '{i18n>landscapeGeneral}',
 							titleStyle: 'H3'
 						}),
-						new ToolbarSpacer(),
-						new sap.m.DateTimeInput(this.createId('pickMonth'), {
-							width: '15em',
-							displayFormat: 'MM/yyyy',
-							dateValue: '{/date}',
-//							valueFormat: 'dd.MM.yyyy',
-							change: [ oController.onPressRefresh, oController ]
-						}),
-						new Button({
-							icon: 'sap-icon://refresh',
-							press: [ oController.onPressRefresh, oController ]
-						})
+						new ToolbarSpacer()
 					]
 				}),
 				content: [
@@ -93,14 +82,25 @@ sap.ui.define([
 							new Label({ text: '{i18n>landscapeZabbix}' }),
 							new Text({ text: '{external>zabbix}' }),
 							new Label({ text: '{i18n>landscapeDomain}' }),
-							new Text({ text: '{external>domain}' })
+							new Text({ text: '{external>domain}' }),
+							new Label({ text: 'Period' }),
+							new Text({
+								text: {
+									parts: [ 'external>/date' ],
+									formatter: function(reportDate) {
+										var date = new Date();
+										date.setTime(reportDate);
+										return date.getMonth() + '/' + date.getFullYear();
+									}
+								}
+							})
 						]
 					})
 				]
 			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin');
 
 			var oSlaList = new List(this.createId('slaList'), {
-			});
+			}).addStyleClass('page-break');
 
 			var oSlaItem = new ObjectListItem({
 				title: '{external>name}',
@@ -176,7 +176,7 @@ sap.ui.define([
 				content: [
 					oSlaList
 				]
-			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin');
+			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin page-break');
 
 			var oHostList = new List(this.createId('hostList'), {
 				inset: true,
@@ -575,7 +575,7 @@ sap.ui.define([
 			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin');
 
 			var oPage = new Page(this.createId('landscapePage'), {
-				title: '{i18n>LandscapeExternal}',
+				title: '{i18n>landscapeExternal}',
 				showHeader: true,
 				showNavButton: true,
 				navButtonPress: [ oController.onNavBack, oController ],

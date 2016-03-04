@@ -424,6 +424,8 @@ router.post('/Landscape/:id/external/new', async (ctx) => {
 });
 
 router.get('/Landscape/:id/external/:reportId', async (ctx) => {
+  await send(ctx, 'External.json', { root: path.resolve(__dirname, 'content') });
+  /*
   let lsRet = {
     version: versionStr
   };
@@ -442,6 +444,7 @@ router.get('/Landscape/:id/external/:reportId', async (ctx) => {
   }
 
   ctx.body = lsRet;
+  */
 });
 
 router.post('/Landscape', async (ctx) => {

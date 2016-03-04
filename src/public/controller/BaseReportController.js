@@ -18,10 +18,21 @@ sap.ui.define([
 			if (oTarget) {
 				var $domTarget = oTarget.$()[0];
 				var sTargetContent = $domTarget.innerHTML;
+				/*
+				var sTargetContent = $domTarget.innerHTML;
 				var sOriginalContent = document.body.innerHTML;
 				document.body.innerHTML = sTargetContent;
 				window.print();
 				document.body.innerHTML = sOriginalContent;
+				*/
+				/*
+				var ctrlString = 'width=500px,height=600px';
+				var w = window.open('', 'PrintWindow', ctrlString);
+				w.document.body.innerHTML = sTargetContent;
+				w.print();
+				w.close();
+*/
+				setTimeout(window.print);
 			} else {
 				jQuery.sap.log.error(
 					'onPrint needs a valid target container [view|data:targetId=\"SID\"]'
