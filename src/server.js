@@ -18,11 +18,16 @@ import * as ZK from './zabbix/keys';
 import items from './zabbix/items';
 import Redis from './lib/redis';
 import koaQs from 'koa-qs';
+import JsReport from 'jsreport-core';
+import bluebird from 'bluebird';
+import fs from 'fs';
 
 const { NODE_ENV } = process.env;
 if (NODE_ENV === 'development') {
   debug.enable('dev,koa');
 }
+
+bluebird.promisifyAll(fs);
 
 const server = new Koa();
 koaQs(server, 'first');
@@ -423,15 +428,14 @@ router.post('/Landscape/:id/external/new', async (ctx) => {
   ctx.body = lsRet;
 });
 
-import { render, renderDefaults } from 'jsreport';
-
 // http://localhost:3000/Landscape/partner_40/external/40/Partner_40_10022015.pdf
 // 'Content-Disposition': 'inline; filename="report.pdf"',
 router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
+  /*
   console.log(ctx.params.id);
   console.log(ctx.params.reportId);
   console.log(ctx.params.fileName);
-
+  */
   const lsRet = {
     version: versionStr
   };
@@ -443,20 +447,39 @@ router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
     await redis.logout();
 
     const externalObj = JSON.parse(external);
-    console.log(externalObj);
+    //console.log(externalObj);
 
-    const out = await render({
-      template: {
-        content: '<h1>Landscape: {{:id}} haha </h1>',
-        engine: 'jsrender',
-        recipe: 'phantom-pdf',
-        helpers: ''
-      },
-      data: externalObj.external
+    const template = await fs.readFileAsync(
+      path.resolve(__dirname, 'content/External.jsreport'),
+      'utf8'
+    );
+
+    const jsReport = new JsReport({
+      tasks: {
+        allowedModules: [ 'moment' ]
+      }
     });
-    console.log(out.headers);
+
+    await jsReport.init();
+    const out = await jsReport.render({
+      template: {
+        content: template,
+        engine: 'jsrender',
+        recipe: 'wkhtmltopdf',
+//        recipe: 'phantom-pdf',
+        helpers: 'function dateDisp(date) { return moment(date).format("YYYY-MM-DD"); };' +
+          'function periodDisp(date) { return moment(date).format("YYYY-MM"); };' +
+          'function slaDisp(sla) { return parseFloat(sla).toFixed(4) };' +
+          'function secondsDisp(val) { var s = Math.floor(val); var d = Math.floor(s / 86400);' +
+          's -= d * 86400; var h = Math.floor(s / 3600); s -= h * 3600;' +
+          'var m = Math.floor(s / 60); s -= m * 60; return d+"d "+h+"h "+m+"m "+s+"s";}'
+      },
+      data: externalObj
+    });
+    // console.log(out.headers);
     ctx.body = out.stream;
   } catch (e) {
+    console.log(e);
     lsRet.error = e;
     ctx.body = lsRet;
     return;
@@ -464,16 +487,20 @@ router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
 });
 
 router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
+  /*
   console.log(ctx.params.id);
   console.log(ctx.params.reportId);
   console.log(ctx.params.fileName);
-  const out = await render('<h1>Hi there!</h1>');
-  console.log(out.headers);
+  */
+  const jsReport = new JsReport();
+  await jsReport.init();
+  const out = await jsReport.render('<h1>Hi there!</h1>');
+  // console.log(out.headers);
   ctx.body = out.stream;
 });
 
 router.get('/Landscape/:id/external/:reportId', async (ctx) => {
-  //await send(ctx, 'External.json', { root: path.resolve(__dirname, 'content') });
+  // await send(ctx, 'External.json', { root: path.resolve(__dirname, 'content') });
   let lsRet = {
     version: versionStr
   };
