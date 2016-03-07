@@ -42,6 +42,13 @@ sap.ui.define([
 
 		onPressExport: function() {
 			jQuery.sap.log.info('BaseReportController.controller:onPressExport');
+			var oModel = this.getModel();
+			var id = oModel.getProperty('/id');
+			var reportId = oModel.getProperty('/reportId');
+			sap.m.URLHelper.redirect(
+				'/Landscape/' + id + '/external/' + reportId + '/' + id + '_' + '10022015.pdf',
+				true
+			);
 		}
 
 	});
