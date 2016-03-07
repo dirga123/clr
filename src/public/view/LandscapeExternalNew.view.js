@@ -60,7 +60,7 @@ sap.ui.define([
 					oExportButton,
 					new ToolbarSpacer()
 				]
-			});
+			}).addStyleClass('uoNoPrint');
 
 			var oGeneralPanel = new Panel({
 				headerToolbar: new Toolbar({
@@ -74,13 +74,12 @@ sap.ui.define([
 							width: '15em',
 							displayFormat: 'MM/yyyy',
 							dateValue: '{/date}',
-//							valueFormat: 'dd.MM.yyyy',
 							change: [ oController.onPressRefresh, oController ]
 						}),
 						new Button({
 							icon: 'sap-icon://refresh',
 							press: [ oController.onPressRefresh, oController ]
-						})
+						}).addStyleClass('uoNoPrint')
 					]
 				}),
 				content: [
@@ -108,7 +107,7 @@ sap.ui.define([
 			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin');
 
 			var oSlaList = new List(this.createId('slaList'), {
-			});
+			}).addStyleClass('page-break');
 
 			var oSlaItem = new ObjectListItem({
 				title: '{external>name}',

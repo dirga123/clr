@@ -176,7 +176,7 @@ sap.ui.define([
 				content: [
 					oSlaList
 				]
-			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin page-break');
+			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin');
 
 			var oHostList = new List(this.createId('hostList'), {
 				inset: true,

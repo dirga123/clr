@@ -85,6 +85,7 @@
       -webkit-region-break-before: always;
       page-break-before: always;
       break-before: always;
+      height: 600px;
     }
 
     .no-page-break {
