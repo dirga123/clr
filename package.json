@@ -38,6 +38,7 @@
     "babel-runtime": "^6.6.1",
     "bluebird": "^3.3.3",
     "debug": "^2.2.0",
+    "jsreport": "^0.13.1",
     "koa": "^2.0.0-alpha.3",
     "koa-convert": "^1.2.0",
     "koa-logger": "^2.0.0",

@@ -423,9 +423,57 @@ router.post('/Landscape/:id/external/new', async (ctx) => {
   ctx.body = lsRet;
 });
 
+import { render, renderDefaults } from 'jsreport';
+
+// http://localhost:3000/Landscape/partner_40/external/40/Partner_40_10022015.pdf
+// 'Content-Disposition': 'inline; filename="report.pdf"',
+router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
+  console.log(ctx.params.id);
+  console.log(ctx.params.reportId);
+  console.log(ctx.params.fileName);
+
+  const lsRet = {
+    version: versionStr
+  };
+
+  try {
+    const redis = new Redis();
+    await redis.login();
+    const external = await redis.getExternal(ctx.params.id, ctx.params.reportId);
+    await redis.logout();
+
+    const externalObj = JSON.parse(external);
+    console.log(externalObj);
+
+    const out = await render({
+      template: {
+        content: '<h1>Landscape: {{:id}} haha </h1>',
+        engine: 'jsrender',
+        recipe: 'phantom-pdf',
+        helpers: ''
+      },
+      data: externalObj.external
+    });
+    console.log(out.headers);
+    ctx.body = out.stream;
+  } catch (e) {
+    lsRet.error = e;
+    ctx.body = lsRet;
+    return;
+  }
+});
+
+router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
+  console.log(ctx.params.id);
+  console.log(ctx.params.reportId);
+  console.log(ctx.params.fileName);
+  const out = await render('<h1>Hi there!</h1>');
+  console.log(out.headers);
+  ctx.body = out.stream;
+});
+
 router.get('/Landscape/:id/external/:reportId', async (ctx) => {
-  await send(ctx, 'External.json', { root: path.resolve(__dirname, 'content') });
-  /*
+  //await send(ctx, 'External.json', { root: path.resolve(__dirname, 'content') });
   let lsRet = {
     version: versionStr
   };
@@ -444,7 +492,6 @@ router.get('/Landscape/:id/external/:reportId', async (ctx) => {
   }
 
   ctx.body = lsRet;
-  */
 });
 
 router.post('/Landscape', async (ctx) => {
