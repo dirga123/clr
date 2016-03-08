@@ -13,13 +13,9 @@ sap.ui.define([
 		onInit: function() {
 			jQuery.sap.log.info('LandscapeExternalNew.controller:onInit');
 
-			// Model used to manipulate control states. The chosen values make sure,
-			// detail page is busy indication immediately so there is no break in
-			// between the busy indication for loading the view's meta data
 			var oViewModel = new JSONModel({
-				busy: false,
-				delay: 0,
 				date: new Date(),
+				createDate: new Date(),
 				name: ''
 			});
 			this.setModel(oViewModel);
@@ -41,7 +37,9 @@ sap.ui.define([
 
 			var oModel = this.getModel();
 			var oDate = oModel.getProperty('/date');
-			var sDefaultName = oDate.getFullYear() + '-' + (oDate.getMonth() + 1);
+			var oCreateDate = oModel.getProperty('/createDate');
+			var sDefaultName = oDate.getFullYear() + '-' + (oDate.getMonth() + 1) +
+				'-' + oCreateDate.toISOString();
 
 			oModel.setProperty('/name', sDefaultName);
 			oModel.setProperty('/saveEnabled', sDefaultName.length > 0);
@@ -98,6 +96,7 @@ sap.ui.define([
 			var oModel = this.getModel('external');
 			oModel.setProperty('/name', oViewModel.getProperty('/name'));
 			oModel.setProperty('/date', oViewModel.getProperty('/date').getTime());
+			oModel.setProperty('/createDate', oViewModel.getProperty('/createDate').getTime());
 
 			var sLandscapeId = oViewModel.getProperty('/id');
 
@@ -113,7 +112,6 @@ sap.ui.define([
 
 		onAddError: function(resp, textStatus, errorThrown) {
 			this.getView().setBusy(false);
-			// var sMsg = this.getResourceBundle().getText('loginFailed', [ errorThrown ]);
 			MessageToast.show(errorThrown);
 		},
 

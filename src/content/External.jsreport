@@ -1015,17 +1015,22 @@
         <h5><div class="chapterName">Customers</div></h5>
       </div>
     	<div class="chapterBody">
+        {{if external.items}}
     		<table class="verticalTable" width="100%">
         <tbody>
           <tr>
             <td class="title">Customer count</td>
-            <td>{{:external.items.customerCount.max}}</td>
+            <td>
+                {{:external.items.customerCount.max}}
+            </td>
           </tr>
         </tbody>
         </table>
+        {{/if}}
 
+        {{if external.items && external.items.customers}}
+        {{for external.items.customers}}
         <div class="unbreakable">
-          {{for external.items.customers}}
           <table class="verticalTable" width="100%">
           <tbody>
             <tr>
@@ -1060,9 +1065,10 @@
             <tr>
           </tbody>
           </table>
-          {{/for}}
         </div>
     	</div>
+      {{/for}}
+      {{/if}}
 
       <div class='page-break'></div>
 
@@ -1072,15 +1078,20 @@
         <h5><div class="chapterName">Service Units</div></h5>
       </div>
     	<div class="chapterBody">
+        {{if external.items}}
     		<table class="verticalTable" width="100%">
         <tbody>
           <tr>
             <td class="title">Service Units count</td>
-            <td colspan="2">{{:external.items.serviceUnitCount.max}}</td>
+            <td colspan="2">
+                {{:external.items.serviceUnitCount.max}}
+            </td>
           </tr>
         </tbody>
         </table>
+        {{/if}}
 
+        {{if external.items && external.items.serviceUnits}}
         {{for external.items.serviceUnits}}
         <div class="unbreakable">
         <table class="verticalTable" width="100%">
@@ -1132,6 +1143,7 @@
         </table>
         </div>
         {{/for}}
+        {{/if}}
     	</div>
     </div>
 

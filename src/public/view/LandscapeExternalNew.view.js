@@ -586,14 +586,11 @@ sap.ui.define([
 				showHeader: true,
 				showNavButton: true,
 				navButtonPress: [ oController.onNavBack, oController ],
-				// busy: '{landscapeView>/busy}',
-				// busyIndicatorDelay: '{landscapeView>/delay}',
 				content: [
 					oGeneralPanel,
 					oSlaPanel,
 					oCustomersPanel,
 					oServiceUnitsPanel
-					// oHostList
 				],
 				footer: [
 					oBar

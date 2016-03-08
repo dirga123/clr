@@ -32,13 +32,11 @@ bluebird.promisifyAll(fs);
 const server = new Koa();
 koaQs(server, 'first');
 
-const router = new Router();
 const zabbix = new Zabbix();
 
 // app.use(compress());
 server.use(logger());
 
-// uses async arrow functions
 server.use(async (ctx, next) => {
   try {
     await next(); // next is now a function
@@ -47,6 +45,8 @@ server.use(async (ctx, next) => {
     ctx.status = err.status || 500;
   }
 });
+
+const router = new Router();
 
 router.post('/login', async (ctx) => {
   if (ctx.request.body === null || ctx.request.body.input === null) {
@@ -259,6 +259,44 @@ router.get('/Landscape/:id', async (ctx) => {
   ctx.body = lsRet;
 });
 
+// Landscape add
+router.post('/Landscape', async (ctx) => {
+  const lsRet = {
+    version: versionStr
+  };
+
+  // Check for parameters
+  if (ctx.request.body === undefined ||
+    ctx.request.body.id === undefined ||
+    ctx.request.body.domain === undefined ||
+    ctx.request.body.zabbix === undefined) {
+    lsRet.error = 'Wrong input';
+    ctx.body = lsRet;
+    return;
+  }
+
+  try {
+    const redis = new Redis();
+
+    await redis.login();
+
+    const lsId = ctx.request.body.id;
+
+    if (await redis.existsLandscape(lsId)) {
+      throw `Landscape ${lsId} already exists.`;
+    }
+
+    lsRet.added = await redis.addLandscape(ctx.request.body);
+
+    await redis.logout();
+  } catch (e) {
+    lsRet.error = e;
+    ctx.body = lsRet;
+    return;
+  }
+  ctx.body = lsRet;
+});
+
 router.get('/Landscape/:id/general', async (ctx) => {
   const lsRet = {
     version: versionStr
@@ -300,6 +338,9 @@ router.get('/Landscape/:id/internal', async (ctx) => {
   ctx.body = lsRet;
 });
 
+// External
+
+// External list
 router.get('/Landscape/:id/external', async (ctx) => {
   const lsExtRet = {
     version: versionStr
@@ -319,6 +360,7 @@ router.get('/Landscape/:id/external', async (ctx) => {
   ctx.body = lsExtRet;
 });
 
+// External get new
 router.get('/Landscape/:id/external/new', async (ctx) => {
   const lsRet = {
     version: versionStr
@@ -393,6 +435,7 @@ router.get('/Landscape/:id/external/new', async (ctx) => {
   ctx.body = lsRet;
 });
 
+// External save new
 router.post('/Landscape/:id/external/new', async (ctx) => {
   const lsRet = {
     version: versionStr
@@ -428,14 +471,8 @@ router.post('/Landscape/:id/external/new', async (ctx) => {
   ctx.body = lsRet;
 });
 
-// http://localhost:3000/Landscape/partner_40/external/40/Partner_40_10022015.pdf
 // 'Content-Disposition': 'inline; filename="report.pdf"',
 router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
-  /*
-  console.log(ctx.params.id);
-  console.log(ctx.params.reportId);
-  console.log(ctx.params.fileName);
-  */
   const lsRet = {
     version: versionStr
   };
@@ -447,7 +484,6 @@ router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
     await redis.logout();
 
     const externalObj = JSON.parse(external);
-    //console.log(externalObj);
 
     const template = await fs.readFileAsync(
       path.resolve(__dirname, 'content/External.jsreport'),
@@ -460,13 +496,15 @@ router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
       }
     });
 
+    jsReport.use(require('jsreport-wkhtmltopdf')());
+    jsReport.use(require('jsreport-jsrender')());
+
     await jsReport.init();
     const out = await jsReport.render({
       template: {
         content: template,
         engine: 'jsrender',
         recipe: 'wkhtmltopdf',
-//        recipe: 'phantom-pdf',
         helpers: 'function dateDisp(date) { return moment(date).format("YYYY-MM-DD"); };' +
           'function periodDisp(date) { return moment(date).format("YYYY-MM"); };' +
           'function slaDisp(sla) { return parseFloat(sla).toFixed(4) };' +
@@ -499,8 +537,10 @@ router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
   ctx.body = out.stream;
 });
 
+// External get report by id
 router.get('/Landscape/:id/external/:reportId', async (ctx) => {
-  // await send(ctx, 'External.json', { root: path.resolve(__dirname, 'content') });
+  await send(ctx, 'External.json', { root: path.resolve(__dirname, 'content') });
+  /*
   let lsRet = {
     version: versionStr
   };
@@ -519,43 +559,7 @@ router.get('/Landscape/:id/external/:reportId', async (ctx) => {
   }
 
   ctx.body = lsRet;
-});
-
-router.post('/Landscape', async (ctx) => {
-  const lsRet = {
-    version: versionStr
-  };
-
-  // Check for parameters
-  if (ctx.request.body === undefined ||
-    ctx.request.body.id === undefined ||
-    ctx.request.body.domain === undefined ||
-    ctx.request.body.zabbix === undefined) {
-    lsRet.error = 'Wrong input';
-    ctx.body = lsRet;
-    return;
-  }
-
-  try {
-    const redis = new Redis();
-
-    await redis.login();
-
-    const lsId = ctx.request.body.id;
-
-    if (await redis.existsLandscape(lsId)) {
-      throw `Landscape ${lsId} already exists.`;
-    }
-
-    lsRet.added = await redis.addLandscape(ctx.request.body);
-
-    await redis.logout();
-  } catch (e) {
-    lsRet.error = e;
-    ctx.body = lsRet;
-    return;
-  }
-  ctx.body = lsRet;
+  */
 });
 
 router.post('/Landscape.json', async (ctx) => {

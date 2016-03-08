@@ -194,6 +194,7 @@ export default class Redis {
       const extMapId = `ls:${lsId}:external:${nextExtId}`;
       await this.client.hmsetAsync(extMapId, 'name', ext.name);
       await this.client.hmsetAsync(extMapId, 'date', ext.date);
+      await this.client.hmsetAsync(extMapId, 'createDate', ext.createDate);
       await this.client.hmsetAsync(extMapId, 'body', JSON.stringify(ext));
 
       return nextExtId;

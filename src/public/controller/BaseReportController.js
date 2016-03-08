@@ -16,9 +16,9 @@ sap.ui.define([
 			}
 
 			if (oTarget) {
+				/*
 				var $domTarget = oTarget.$()[0];
 				var sTargetContent = $domTarget.innerHTML;
-				/*
 				var sTargetContent = $domTarget.innerHTML;
 				var sOriginalContent = document.body.innerHTML;
 				document.body.innerHTML = sTargetContent;
@@ -44,11 +44,21 @@ sap.ui.define([
 			jQuery.sap.log.info('BaseReportController.controller:onPressExport');
 			var oModel = this.getModel();
 			var id = oModel.getProperty('/id');
+			var oDate = oModel.getProperty('/date');
 			var reportId = oModel.getProperty('/reportId');
-			sap.m.URLHelper.redirect(
-				'/Landscape/' + id + '/external/' + reportId + '/' + id + '_' + '10022015.pdf',
-				true
-			);
+			if (reportId === undefined) {
+				sap.m.URLHelper.redirect(
+					'/Landscape/' + id + '/external/' + reportId + '/' + id + '_' +
+					oDate.getFullYear() + oDate.getMonth() + '.pdf',
+					true
+				);
+			} else {
+				sap.m.URLHelper.redirect(
+					'/Landscape/' + id + '/external/' + reportId + '/' + id + '_' +
+					oDate.getFullYear() + oDate.getMonth() + '.pdf',
+					true
+				);
+			}
 		}
 
 	});
