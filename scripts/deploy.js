@@ -15,6 +15,8 @@ const getRemote = (slot) => ({
  * server via Git. Example: `npm run deploy -- production`
  */
 async function deploy() {
+  const pjson = require('../package.json');
+  console.log(pjson.version);
   console.log(process.env.npm_package_version);
 
   // By default deploy to the staging deployment slot
