@@ -11,7 +11,7 @@
     "copy": "babel-node scripts/run copy",
     "bundle": "babel-node scripts/run bundle",
     "build": "babel-node scripts/run build --release",
-    "deploy": "babel-node scripts/run deploy --production",
+    "deploy": "npm version patch && babel-node scripts/run deploy --production",
     "start": "babel-node scripts/run start"
   },
   "repository": {
