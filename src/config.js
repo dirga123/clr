@@ -21,7 +21,9 @@ class Config {
     _this.zabbixUser = process.env.ZABBIX_USER || data.zabbixUser;
     _this.zabbixPassword = process.env.ZABBIX_PASSWORD || data.zabbixPassword;
 
-    _this.versionStr = data.versionStr;
+    const data2 = require('../package.json');
+    _this.versionStr = data2.version;
+    console.log(_this.versionStr);
 
     return _this;
   }
