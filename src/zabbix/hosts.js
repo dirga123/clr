@@ -1,5 +1,4 @@
 import debug from 'debug';
-import Zabbix from '../lib/zabbix';
 
 class Disk {
   constructor(Name, pctFree, used, total) {
@@ -147,10 +146,8 @@ function transformHosts(data) {
   return { Hosts: newData };
 }
 
-async function hosts() {
+async function hosts(zabbix) {
   debug('zabbix')('hosts()');
-
-  const zabbix = new Zabbix();
 
   const hostsRet = await zabbix.call('host.get', {
     output: 'extend',

@@ -23,7 +23,6 @@ class Config {
 
     const data2 = require('../package.json');
     _this.versionStr = data2.version;
-    console.log(_this.versionStr);
 
     return _this;
   }

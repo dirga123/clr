@@ -1,15 +1,12 @@
 import debug from 'debug';
-import Zabbix from '../lib/zabbix';
 import * as ZK from './keys';
 /*
 import bluebird from 'bluebird';
 const fs = bluebird.promisifyAll(require('fs'));
 */
 
-async function items(fromDate, toDate) {
+async function items(zabbix, fromDate, toDate) {
   debug('zabbix')(`items(${fromDate}, ${toDate})`);
-
-  const zabbix = new Zabbix();
 
   const itemsRet = await zabbix.call('item.get', {
     // selectHosts: 'extend',

@@ -33,8 +33,6 @@ const config = new Config();
 const server = new Koa();
 koaQs(server, 'first');
 
-const zabbix = new Zabbix();
-
 // app.use(compress());
 server.use(logger());
 
@@ -148,8 +146,6 @@ router.get('/Landscapes', async ctx => {
     return;
   }
 
-  // Retrieve Zabbix info
-
   ctx.body = {
     version: config.versionStr,
     landscapes: ls
@@ -168,10 +164,10 @@ router.get('/Hosts', async ctx => {
   }
 
   try {
-    // const zabbixUrl = ls.zabbix;
-    await zabbix.login(); // zabbixUrl);
+    const zabbix = new Zabbix();
+    await zabbix.login();
 
-    hostsRet.hosts = await hosts();
+    hostsRet.hosts = await hosts(zabbix);
 
     await zabbix.logout();
   } catch (e) {
@@ -206,6 +202,7 @@ router.get('/Landscape/:id', async (ctx) => {
   // Retrieve Zabbix info
   try {
     const zabbixUrl = lsRet.landscape.zabbix;
+    const zabbix = new Zabbix();
     await zabbix.login(zabbixUrl);
 
     const today = moment();
@@ -223,7 +220,7 @@ router.get('/Landscape/:id', async (ctx) => {
     }
 
     // Get services as map, so it can be spread to landscape root and serviceUnits
-    const servicesMap = await servicesAsMap(firstDay.unix(), lastDay.unix());
+    const servicesMap = await servicesAsMap(zabbix, firstDay.unix(), lastDay.unix());
 
     // Create services array (will hold just 2 values)
     lsRet.landscape.services = [];
@@ -240,7 +237,7 @@ router.get('/Landscape/:id', async (ctx) => {
     // lsRet.landscape.hosts = await hosts();
 
     // Retrieve all relevant items
-    lsRet.landscape.items = await items(firstDay.unix(), lastDay.unix());
+    lsRet.landscape.items = await items(zabbix, firstDay.unix(), lastDay.unix());
 
     // Update sla to serviceUnits
     lsRet.landscape.items.serviceUnits.forEach((currentValue) => {
@@ -382,6 +379,7 @@ router.get('/Landscape/:id/external/new', async (ctx) => {
   // Retrieve Zabbix info
   try {
     const zabbixUrl = lsRet.external.zabbix;
+    const zabbix = new Zabbix();
     await zabbix.login(zabbixUrl);
 
     const today = moment();
@@ -399,7 +397,7 @@ router.get('/Landscape/:id/external/new', async (ctx) => {
     }
 
     // Get services as map, so it can be spread to landscape root and serviceUnits
-    const servicesMap = await servicesAsMap(firstDay.unix(), lastDay.unix());
+    const servicesMap = await servicesAsMap(zabbix, firstDay.unix(), lastDay.unix());
 
     // Create services array (will hold just 2 values)
     lsRet.external.services = [];
@@ -416,7 +414,7 @@ router.get('/Landscape/:id/external/new', async (ctx) => {
     // lsRet.external.hosts = await hosts();
 
     // Retrieve all relevant items
-    lsRet.external.items = await items(firstDay.unix(), lastDay.unix());
+    lsRet.external.items = await items(zabbix, firstDay.unix(), lastDay.unix());
 
     // Update sla to serviceUnits
     lsRet.external.items.serviceUnits.forEach((currentValue) => {

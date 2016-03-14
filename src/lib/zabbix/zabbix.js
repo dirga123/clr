@@ -3,30 +3,22 @@ import fetch from '../fetch';
 import Config from '../../config';
 import { ZabbixApiError } from './error';
 
-let _this = null;
-
 export default class Zabbix {
   constructor() {
-    if (!_this) {
-      _this = this;
-    }
-
     const config = new Config();
 
-    _this.url = config.zabbixHost;
-    _this.user = config.zabbixUser;
-    _this.password = config.zabbixPassword;
-    _this.rpcid = 0;
-    _this.authid = null;
+    this.url = config.zabbixHost;
+    this.user = config.zabbixUser;
+    this.password = config.zabbixPassword;
+    this.rpcid = 0;
+    this.authid = null;
 
     const { NODE_ENV } = process.env;
     if (NODE_ENV === 'development') {
       debug.enable('zabbix');
     }
 
-    _this.time = new Date();
-
-    return _this;
+    this.time = new Date();
   }
 
   async getApiVersion() {

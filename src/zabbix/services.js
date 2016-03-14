@@ -1,10 +1,7 @@
 import debug from 'debug';
-import Zabbix from '../lib/zabbix';
 
-async function services(fromDate, toDate) {
+async function services(zabbix, fromDate, toDate) {
   debug('zabbix')(`services(${fromDate}, ${toDate})`);
-
-  const zabbix = new Zabbix();
 
   const servicesRet = await zabbix.call('service.get', {
     output: [
@@ -62,10 +59,8 @@ async function services(fromDate, toDate) {
   });
 }
 
-async function servicesAsMap(fromDate, toDate) {
+async function servicesAsMap(zabbix, fromDate, toDate) {
   debug('zabbix')(`servicesAsMap(${fromDate}, ${toDate})`);
-
-  const zabbix = new Zabbix();
 
   const servicesRet = await zabbix.call('service.get', {
     output: [
