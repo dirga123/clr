@@ -15,10 +15,6 @@ const getRemote = (slot) => ({
  * server via Git. Example: `npm run deploy -- production`
  */
 async function deploy() {
-  const pjson = require('../package.json');
-  console.log(pjson.version);
-  console.log(process.env.npm_package_version);
-
   // By default deploy to the staging deployment slot
   const remote = getRemote(process.argv.includes('--production') ? null : 'staging');
 
@@ -41,7 +37,10 @@ async function deploy() {
 
   // Push the contents of the build folder to the remote server via Git
   await repo.add('--all .');
-  await repo.commit(`Version ${process.env.npm_package_version}`);
+
+  const pjson = require('../package.json');
+  await repo.commit(`Version ${pjson.version}`);
+
   await repo.push(remote.name, 'master');
 
   // Check if the site was successfully deployed
