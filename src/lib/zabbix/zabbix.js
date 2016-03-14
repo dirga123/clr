@@ -1,6 +1,6 @@
 import debug from 'debug';
 import fetch from '../fetch';
-import { zabbixHost, zabbixUser, zabbixPassword } from '../../config';
+import Config from '../../config';
 import { ZabbixApiError } from './error';
 
 let _this = null;
@@ -11,18 +11,20 @@ export default class Zabbix {
       _this = this;
     }
 
-    this.url = zabbixHost;
-    this.user = zabbixUser;
-    this.password = zabbixPassword;
-    this.rpcid = 0;
-    this.authid = null;
+    const config = new Config();
+
+    _this.url = config.zabbixHost;
+    _this.user = config.zabbixUser;
+    _this.password = config.zabbixPassword;
+    _this.rpcid = 0;
+    _this.authid = null;
 
     const { NODE_ENV } = process.env;
     if (NODE_ENV === 'development') {
       debug.enable('zabbix');
     }
 
-    this.time = new Date();
+    _this.time = new Date();
 
     return _this;
   }

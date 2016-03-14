@@ -1,15 +1,16 @@
 import redis from 'redis';
 import bluebird from 'bluebird';
 import debug from 'debug';
-import { password, redisUrl, redisPort, redisPassword } from '../../config';
+import Config from '../../config';
 
 bluebird.promisifyAll(redis);
 
 export default class Redis {
   constructor() {
-    this.url = redisUrl;
-    this.port = redisPort;
-    this.password = redisPassword;
+    const config = new Config();
+    this.url = config.redisUrl;
+    this.port = config.redisPort;
+    this.password = config.redisPassword;
 
     const { NODE_ENV } = process.env;
     if (NODE_ENV === 'development') {
@@ -54,7 +55,8 @@ export default class Redis {
 
       let pass = await this.client.getAsync('users:password');
       if (pass === null || pass.length === 0) {
-        pass = password;
+        const config = new Config();
+        pass = config.password;
       }
 
       return pass;

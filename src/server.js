@@ -10,7 +10,7 @@ import koaMount from 'koa-mount';
 import convert from 'koa-convert';
 import body from 'koa-parse-json';
 import debug from 'debug';
-import { host, port, versionStr } from './config';
+import Config from './config';
 import Zabbix from './lib/zabbix';
 import hosts from './zabbix/hosts';
 import { servicesAsMap } from './zabbix/services';
@@ -29,6 +29,7 @@ if (NODE_ENV === 'development') {
 
 bluebird.promisifyAll(fs);
 
+const config = new Config();
 const server = new Koa();
 koaQs(server, 'first');
 
@@ -86,7 +87,7 @@ router.post('/login', async (ctx) => {
   }
 
   ctx.body = {
-    version: versionStr,
+    version: config.versionStr,
     user: {
       id: 'admin',
       name: 'Administrator'
@@ -118,7 +119,7 @@ router.get('/Home', async ctx => {
   }
 
   ctx.body = {
-    version: versionStr,
+    version: config.versionStr,
     landscapes: ls.length
   };
 });
@@ -150,14 +151,14 @@ router.get('/Landscapes', async ctx => {
   // Retrieve Zabbix info
 
   ctx.body = {
-    version: versionStr,
+    version: config.versionStr,
     landscapes: ls
   };
 });
 
 router.get('/Hosts', async ctx => {
   const hostsRet = {
-    version: versionStr
+    version: config.versionStr
   };
 
   if (ctx.request.body === null || ctx.request.body.id === null) {
@@ -184,7 +185,7 @@ router.get('/Hosts', async ctx => {
 
 router.get('/Landscape/:id', async (ctx) => {
   const lsRet = {
-    version: versionStr
+    version: config.versionStr
   };
 
   const redis = new Redis();
@@ -262,7 +263,7 @@ router.get('/Landscape/:id', async (ctx) => {
 // Landscape add
 router.post('/Landscape', async (ctx) => {
   const lsRet = {
-    version: versionStr
+    version: config.versionStr
   };
 
   // Check for parameters
@@ -299,7 +300,7 @@ router.post('/Landscape', async (ctx) => {
 
 router.get('/Landscape/:id/general', async (ctx) => {
   const lsRet = {
-    version: versionStr
+    version: config.versionStr
   };
 
   const redis = new Redis();
@@ -322,7 +323,7 @@ router.get('/Landscape/:id/general', async (ctx) => {
 
 router.get('/Landscape/:id/status', async (ctx) => {
   const lsRet = {
-    version: versionStr,
+    version: config.versionStr,
     error: 'Status: Not implemented'
   };
   await new Promise(r => setTimeout(r, 2000));
@@ -331,7 +332,7 @@ router.get('/Landscape/:id/status', async (ctx) => {
 
 router.get('/Landscape/:id/internal', async (ctx) => {
   const lsRet = {
-    version: versionStr,
+    version: config.versionStr,
     error: 'Internal report list: Not implemented'
   };
   await new Promise(r => setTimeout(r, 2000));
@@ -343,7 +344,7 @@ router.get('/Landscape/:id/internal', async (ctx) => {
 // External list
 router.get('/Landscape/:id/external', async (ctx) => {
   const lsExtRet = {
-    version: versionStr
+    version: config.versionStr
   };
 
   try {
@@ -363,7 +364,7 @@ router.get('/Landscape/:id/external', async (ctx) => {
 // External get new
 router.get('/Landscape/:id/external/new', async (ctx) => {
   const lsRet = {
-    version: versionStr
+    version: config.versionStr
   };
 
   // Retrieve DB info
@@ -438,7 +439,7 @@ router.get('/Landscape/:id/external/new', async (ctx) => {
 // External save new
 router.post('/Landscape/:id/external/new', async (ctx) => {
   const lsRet = {
-    version: versionStr
+    version: config.versionStr
   };
 
   // Check for parameters
@@ -510,7 +511,7 @@ async function generateExternalPdf(external) {
 // 'Content-Disposition': 'inline; filename="report.pdf"',
 router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
   const lsRet = {
-    version: versionStr
+    version: config.versionStr
   };
 
   try {
@@ -531,7 +532,7 @@ router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
 
 router.post('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
   const lsRet = {
-    version: versionStr
+    version: config.versionStr
   };
 
   // Check for parameters
@@ -556,7 +557,7 @@ router.post('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
 router.get('/Landscape/:id/external/:reportId', async (ctx) => {
   // await send(ctx, 'External.json', { root: path.resolve(__dirname, 'content') });
   let lsRet = {
-    version: versionStr
+    version: config.versionStr
   };
 
   // Retrieve DB info
@@ -602,7 +603,7 @@ server.use(async (ctx, next) => {
   }
 });
 
-server.listen(port, () => {
+server.listen(config.port, () => {
   /* eslint-disable no-console */
-  console.log(`The server is running at http://${host}/`);
+  console.log(`The server is running at http://${config.host}/`);
 });

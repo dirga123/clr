@@ -1,18 +1,30 @@
-export const port = process.env.PORT || 5000;
-export const host = process.env.HOSTNAME || `localhost:${port}`;
+let _this = null;
 
-export const password = process.env.PASSWORD || 'nbusr123';
+class Config {
+  constructor() {
+    if (!_this) {
+      _this = this;
+    }
 
-export const redisUrl = process.env.REDIS_URL || 'localhost';
-export const redisPort = process.env.REDIS_PORT || 6379;
-export const redisPassword = process.env.REDIS_PASSWORD || 'nbusr123';
+    const data = require('./config.json');
 
-// 38
-// export const zabbixHost = 'http://mo-20f9056fd.dmzmo.sap.corp:1080/api_jsonrpc.php';
-// 39
-// export const zabbixHost = 'http://mo-c1c06a80c.dmzmo.sap.corp:1080/api_jsonrpc.php';
-export const zabbixHost = process.env.ZABBIX_HOST || 'http://localhost:1080/api_jsonrpc.php';
-export const zabbixUser = process.env.ZABBIX_USER || 'reader';
-export const zabbixPassword = process.env.ZABBIX_PASSWORD || 'nbusr123';
+    _this.port = process.env.PORT || data.port;
+    _this.host = process.env.HOSTNAME || `${data.host}:${_this.port}`;
 
-export const versionStr = '1.0.0';
+    _this.password = process.env.PASSWORD || data.password;
+
+    _this.redisUrl = process.env.REDIS_URL || data.redisUrl;
+    _this.redisPort = process.env.REDIS_PORT || data.redisPort;
+    _this.redisPassword = process.env.REDIS_PASSWORD || data.redisPassword;
+
+    _this.zabbixHost = process.env.ZABBIX_HOST || data.zabbixHost;
+    _this.zabbixUser = process.env.ZABBIX_USER || data.zabbixUser;
+    _this.zabbixPassword = process.env.ZABBIX_PASSWORD || data.zabbixPassword;
+
+    _this.versionStr = data.versionStr;
+
+    return _this;
+  }
+}
+
+export default Config;
