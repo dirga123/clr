@@ -1,14 +1,12 @@
 import GitRepo from 'git-repository';
 import run from './run';
-//import fetch from './lib/fetch';
+// import fetch from './lib/fetch';
 
 // TODO: Update deployment URL
 // For more information visit http://gitolite.com/deploy.html
 const getRemote = (slot) => ({
   name: slot !== null ? slot : 'production',
   url: `https://github.wdf.sap.corp/i038993/clr${slot ? `-${slot}` : ''}.git`,
-  // url: `https://example.scm.azurewebsites.net:443/example.git`,
-  // website: `http://example${slot ? `-${slot}` : ''}.azurewebsites.net`
   website: `https://github.wdf.sap.corp/i038993/clr${slot ? `-${slot}` : ''}`
 });
 
@@ -17,6 +15,8 @@ const getRemote = (slot) => ({
  * server via Git. Example: `npm run deploy -- production`
  */
 async function deploy() {
+  console.log(process.env.npm_package_version);
+
   // By default deploy to the staging deployment slot
   const remote = getRemote(process.argv.includes('--production') ? null : 'staging');
 
@@ -39,12 +39,12 @@ async function deploy() {
 
   // Push the contents of the build folder to the remote server via Git
   await repo.add('--all .');
-  await repo.commit('Update');
+  await repo.commit(`Version ${process.env.npm_package_version}`);
   await repo.push(remote.name, 'master');
 
   // Check if the site was successfully deployed
-  //const response = await fetch(remote.website);
-  //console.log(`${remote.website} -> ${response.statusCode}`);
+  // const response = await fetch(remote.website);
+  // console.log(`${remote.website} -> ${response.statusCode}`);
 }
 
 export default deploy;
