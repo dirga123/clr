@@ -1,6 +1,8 @@
 sap.ui.define([
-	'sap/clr/controller/BaseController'
-], function (BaseController) {
+	'sap/clr/controller/BaseController',
+	'sap/m/MessageToast',
+	'sap/ui/core/util/File',
+], function (BaseController, MessageToast, File) {
 	'use strict';
 
 	return BaseController.extend('sap.clr.controller.BaseReportController', {
@@ -47,22 +49,61 @@ sap.ui.define([
 			var id = oModel.getProperty('/id');
 			var reportId = oModel.getProperty('/reportId');
 			var oDate = oModel.getProperty('/date');
-			// var oCreateDate = oModel.getProperty('/date');
+
+			var sPdfName = id + '_' + oDate.getFullYear() + oDate.getMonth() + '.pdf';
 
 			if (reportId === undefined) {
-				sap.m.URLHelper.redirect(
-					'/Landscape/' + id + '/external/' + reportId + '/' + id + '_' +
-					oDate.getFullYear() + oDate.getMonth() + '.pdf',
-					true
-				);
+				this.getView().setBusy(true);
+				var oExternalModel = this.getModel('external');
+				jQuery.ajax('/Landscape/' + id + '/external/new/' + sPdfName, {
+					method: 'POST',
+					contentType: 'application/json',
+					//dataType: 'json',
+					data: JSON.stringify(oExternalModel.getProperty('/')),
+					error: jQuery.proxy(this.onExportError, this),
+					success: jQuery.proxy(this.onExportSuccess, this)
+					/*
+					,
+					success: function(resp) {
+						//this.getView().setBusy(false);
+						sap.ui.core.util.File.save(resp);
+						if (resp.error) {
+							MessageToast.show(resp.error);
+						} else {
+						}
+						console.log(resp);
+						var w = window.open('/Landscape/' + id + '/external/new/' + sPdfName);
+						w.document.write(resp);
+					}
+					*/
+				});
 			} else {
 				sap.m.URLHelper.redirect(
-					'/Landscape/' + id + '/external/' + reportId + '/' + id + '_' +
-					oDate.getFullYear() + oDate.getMonth() + '.pdf',
+					'/Landscape/' + id + '/external/' + reportId + '/' + sPdfName,
 					true
 				);
 			}
-		}
+		},
+
+		onExportError: function(resp, textStatus, errorThrown) {
+			this.getView().setBusy(false);
+			console.log('error'+textStatus);
+			MessageToast.show(errorThrown);
+		},
+
+		onExportSuccess: function(resp) {
+			this.getView().setBusy(false);
+			//sap.ui.core.util.File.save(oContent, this._sId, "zip", "application/zip");
+			console.log(resp);
+			File.save(resp, 'test', 'pdf', 'application/pdf');
+			if (resp.error) {
+				MessageToast.show(resp.error);
+			} else {
+				//var w = window.open('about:blank', 'windowname');
+				//console.log(w);
+				//win.document.write(resp);
+			}
+		},
 
 	});
 });

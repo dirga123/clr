@@ -506,6 +506,10 @@ async function generateExternalPdf(external) {
   return out.stream;
 }
 
+router.get('/Landscape/:id/external/new/:fileName.pdf', async (ctx) => {
+  ctx.body = '<html></html>';
+});
+
 // 'Content-Disposition': 'inline; filename="report.pdf"',
 router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
   const lsRet = {
@@ -528,7 +532,7 @@ router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
   }
 });
 
-router.post('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
+router.post('/Landscape/:id/external/new/:fileName.pdf', async (ctx) => {
   const lsRet = {
     version: config.versionStr
   };
@@ -541,8 +545,9 @@ router.post('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
   }
 
   try {
-    const externalObj = JSON.parse(ctx.request.body);
-    ctx.body = await generateExternalPdf(externalObj);
+    console.log(ctx.request.body);
+    console.log(await generateExternalPdf(ctx.request.body));
+    ctx.body = await generateExternalPdf(ctx.request.body);
   } catch (e) {
     console.log(e);
     lsRet.error = e;

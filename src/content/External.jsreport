@@ -1043,12 +1043,16 @@
       					<table class="horizontalTable">
       					<thead><th>Users</th><th>First</th><th>Last</th><th>Min</th><th>Max</th><th>Avg</th></thead>
       					<tbody>
+                  {{if users}}
       						<tr><td class="">Users</td><td class="">{{:users.first}}</td><td class="">{{:users.last}}</td><td class="">{{:users.min}}</td><td class="">{{:users.max}}</td><td class="">{{:users.avg}}</td></tr>
+                  {{/if}}
+                  {{if usersRDS}}
                   <tr><td class="">RDS users</td><td class="">{{:usersRDS.first}}</td><td class="">{{:usersRDS.last}}</td><td class="">{{:usersRDS.min}}</td><td class="">{{:usersRDS.max}}</td><td class="">{{:usersRDS.avg}}</td></tr>
+                  {{/if}}
       					</tbody></table>
       				</div>
               </td>
-            <tr>
+            </tr>
             <tr>
               <td colspan="2">
               <div class="result_content">
@@ -1062,7 +1066,7 @@
       					</tbody></table>
       				</div>
               </td>
-            <tr>
+            </tr>
           </tbody>
           </table>
         </div>
