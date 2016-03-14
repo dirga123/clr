@@ -76,6 +76,17 @@ sap.ui.define([
 			oModel.detachRequestCompleted(this._requestCompleted, this);
 
 			if (oEvent.getParameter('success')) {
+				var oViewModel = this.getModel();
+
+				var date = new Date();
+				date.setTime(oModel.getProperty('/date'));
+
+				oViewModel.setProperty('/date', date);
+
+				var createDate = new Date();
+				createDate.setTime(oModel.getProperty('/date'));
+				oViewModel.setProperty('/createDate', createDate);
+
 				var sError = oModel.getProperty('/error');
 				if (sError) {
 					MessageToast.show(sError);
@@ -101,7 +112,6 @@ sap.ui.define([
 		 */
 		_bindView: function (sPath) {
 			jQuery.sap.log.info('LandscapeExternal.controller:_bindView');
-
 			this.getView().bindElement({
 				path: sPath
 			});

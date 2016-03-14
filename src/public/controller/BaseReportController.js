@@ -42,10 +42,13 @@ sap.ui.define([
 
 		onPressExport: function() {
 			jQuery.sap.log.info('BaseReportController.controller:onPressExport');
+
 			var oModel = this.getModel();
 			var id = oModel.getProperty('/id');
-			var oDate = oModel.getProperty('/date');
 			var reportId = oModel.getProperty('/reportId');
+			var oDate = oModel.getProperty('/date');
+			// var oCreateDate = oModel.getProperty('/date');
+
 			if (reportId === undefined) {
 				sap.m.URLHelper.redirect(
 					'/Landscape/' + id + '/external/' + reportId + '/' + id + '_' +

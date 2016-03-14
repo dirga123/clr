@@ -2,6 +2,7 @@
     "version": "1.0.0",
     "name": "test",
     "date": 1457035692982,
+    "createDate": 1457035692982,
     "external": {
         "id": "partner_40",
         "zabbix": "http://mo-5064b8256.dmzmo.sap.corp:1080/zabbix/api_jsonrpc.php",

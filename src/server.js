@@ -471,6 +471,42 @@ router.post('/Landscape/:id/external/new', async (ctx) => {
   ctx.body = lsRet;
 });
 
+async function generateExternalPdf(external) {
+  const templateStr = await fs.readFileAsync(
+    path.resolve(__dirname, 'content/External.jsreport'),
+    'utf8'
+  );
+
+  const jsReport = new JsReport({
+    tasks: {
+      allowedModules: [ 'moment' ]
+    }
+  });
+
+  jsReport.use(require('jsreport-wkhtmltopdf')());
+  jsReport.use(require('jsreport-jsrender')());
+
+  await jsReport.init();
+  const out = await jsReport.render({
+    template: {
+      content: templateStr,
+      engine: 'jsrender',
+      recipe: 'wkhtmltopdf',
+      helpers: 'function dateDisp(date) { return moment(date).format("YYYY-MM-DD"); };' +
+        'function periodDisp(date) { return moment(date).format("YYYY-MM"); };' +
+        'function slaDisp(sla) { return parseFloat(sla).toFixed(4) };' +
+        'function secondsDisp(val) { var s = Math.floor(val); var d = Math.floor(s / 86400);' +
+        's -= d * 86400; var h = Math.floor(s / 3600); s -= h * 3600;' +
+        'var m = Math.floor(s / 60); s -= m * 60; return d+"d "+h+"h "+m+"m "+s+"s";}'
+    },
+    data: external
+  });
+
+  // console.log(out.headers);
+
+  return out.stream;
+}
+
 // 'Content-Disposition': 'inline; filename="report.pdf"',
 router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
   const lsRet = {
@@ -484,38 +520,7 @@ router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
     await redis.logout();
 
     const externalObj = JSON.parse(external);
-
-    const template = await fs.readFileAsync(
-      path.resolve(__dirname, 'content/External.jsreport'),
-      'utf8'
-    );
-
-    const jsReport = new JsReport({
-      tasks: {
-        allowedModules: [ 'moment' ]
-      }
-    });
-
-    jsReport.use(require('jsreport-wkhtmltopdf')());
-    jsReport.use(require('jsreport-jsrender')());
-
-    await jsReport.init();
-    const out = await jsReport.render({
-      template: {
-        content: template,
-        engine: 'jsrender',
-        recipe: 'wkhtmltopdf',
-        helpers: 'function dateDisp(date) { return moment(date).format("YYYY-MM-DD"); };' +
-          'function periodDisp(date) { return moment(date).format("YYYY-MM"); };' +
-          'function slaDisp(sla) { return parseFloat(sla).toFixed(4) };' +
-          'function secondsDisp(val) { var s = Math.floor(val); var d = Math.floor(s / 86400);' +
-          's -= d * 86400; var h = Math.floor(s / 3600); s -= h * 3600;' +
-          'var m = Math.floor(s / 60); s -= m * 60; return d+"d "+h+"h "+m+"m "+s+"s";}'
-      },
-      data: externalObj
-    });
-    // console.log(out.headers);
-    ctx.body = out.stream;
+    ctx.body = await generateExternalPdf(externalObj);
   } catch (e) {
     console.log(e);
     lsRet.error = e;
@@ -524,23 +529,32 @@ router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
   }
 });
 
-router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
-  /*
-  console.log(ctx.params.id);
-  console.log(ctx.params.reportId);
-  console.log(ctx.params.fileName);
-  */
-  const jsReport = new JsReport();
-  await jsReport.init();
-  const out = await jsReport.render('<h1>Hi there!</h1>');
-  // console.log(out.headers);
-  ctx.body = out.stream;
+router.post('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
+  const lsRet = {
+    version: versionStr
+  };
+
+  // Check for parameters
+  if (ctx.request.body === undefined) {
+    lsRet.error = 'Wrong input';
+    ctx.body = lsRet;
+    return;
+  }
+
+  try {
+    const externalObj = JSON.parse(ctx.request.body);
+    ctx.body = await generateExternalPdf(externalObj);
+  } catch (e) {
+    console.log(e);
+    lsRet.error = e;
+    ctx.body = lsRet;
+    return;
+  }
 });
 
 // External get report by id
 router.get('/Landscape/:id/external/:reportId', async (ctx) => {
-  await send(ctx, 'External.json', { root: path.resolve(__dirname, 'content') });
-  /*
+  // await send(ctx, 'External.json', { root: path.resolve(__dirname, 'content') });
   let lsRet = {
     version: versionStr
   };
@@ -559,7 +573,6 @@ router.get('/Landscape/:id/external/:reportId', async (ctx) => {
   }
 
   ctx.body = lsRet;
-  */
 });
 
 router.post('/Landscape.json', async (ctx) => {
