@@ -1,169 +1,170 @@
 sap.ui.define([
-	'sap/clr/controller/BaseController',
-	'sap/ui/model/json/JSONModel',
-	'sap/m/MessageToast',
-	'sap/ui/model/SimpleType'
+  'sap/clr/controller/BaseController',
+  'sap/ui/model/json/JSONModel',
+  'sap/m/MessageToast',
+  'sap/ui/model/SimpleType'
 ], function (BaseController, JSONModel, MessageToast, SimpleType) {
-	'use strict';
+  'use strict';
 
-	return BaseController.extend('sap.clr.controller.Landscapes', {
+  return BaseController.extend('sap.clr.controller.Landscapes', {
 
-		onInit: function () {
-			jQuery.sap.log.info('Landscapes.controller:onInit');
+    onInit: function () {
+      jQuery.sap.log.info('Landscapes.controller:onInit');
 
-			// attach handlers for validation errors
-			sap.ui.getCore().attachValidationError(function (evt) {
-				var control = evt.getParameter('element');
-				if (control && control.setValueState) {
-					control.setValueState('Error');
-				}
-			});
-			sap.ui.getCore().attachValidationSuccess(function (evt) {
-				var control = evt.getParameter('element');
-				if (control && control.setValueState) {
-					control.setValueState('None');
-				}
-			});
+      // attach handlers for validation errors
+      sap.ui.getCore().attachValidationError(function (evt) {
+        var control = evt.getParameter('element');
+        if (control && control.setValueState) {
+          control.setValueState('Error');
+        }
+      });
+      sap.ui.getCore().attachValidationSuccess(function (evt) {
+        var control = evt.getParameter('element');
+        if (control && control.setValueState) {
+          control.setValueState('None');
+        }
+      });
 
-			var oModel = new JSONModel();
-			this.setModel(oModel, 'landscapes');
+      var oModel = new JSONModel();
+      this.setModel(oModel, 'landscapes');
 
-			this.getRouter().getRoute('landscapes').attachPatternMatched(
-				this._onObjectMatched, this
-			);
-		},
+      this.getRouter().getRoute('landscapes').attachPatternMatched(
+        this._onObjectMatched, this
+      );
+    },
 
-		onPressAdd: function(oEvent) {
-			var oModel = this.getModel('landscapes');
+    onPressAdd: function(oEvent) {
+      var oModel = this.getModel('landscapes');
 
-			// Clear new node
-			oModel.setProperty('/new', {
-				id: '',
-				domain: '',
-				zabbix: ''
-			});
+      // Clear new node
+      oModel.setProperty('/new', {
+        id: '',
+        domain: '',
+        zabbix: ''
+      });
 
-			this._getAddDialog().open();
-		},
+      this._getAddDialog().open();
+    },
 
-		onPressAddAdd: function(oEvent) {
-			var oDialog = this._getAddDialog();
+    onPressAddAdd: function(oEvent) {
+      var oDialog = this._getAddDialog();
 
-			var inputs = [
-				sap.ui.getCore().byId('lsAddId'),
-				sap.ui.getCore().byId('lsAddDomain'),
-				sap.ui.getCore().byId('lsAddZabbix')
-			];
+      var inputs = [
+        sap.ui.getCore().byId('lsAddId'),
+        sap.ui.getCore().byId('lsAddDomain'),
+        sap.ui.getCore().byId('lsAddZabbix')
+      ];
 
-			// check that inputs are not empty
-			// this does not happen during data binding as this is only triggered by changes
-			jQuery.each(inputs, function (i, input) {
-				if (!input.getValue()) {
-					input.setValueState('Error');
-				}
-			});
+      // check that inputs are not empty
+      // this does not happen during data binding as this is only triggered by changes
+      jQuery.each(inputs, function (i, input) {
+        if (!input.getValue()) {
+          input.setValueState('Error');
+        }
+      });
 
-			// check states of inputs
-			var canContinue = true;
-			jQuery.each(inputs, function (i, input) {
-				if (input.getValueState() === 'Error') {
-					canContinue = false;
-					return false;
-				}
-				return true;
-			});
+    // check states of inputs
+      var canContinue = true;
+      jQuery.each(inputs, function (i, input) {
+        if (input.getValueState() === 'Error') {
+          canContinue = false;
+          return false;
+        }
+        return true;
+      });
 
-			if (canContinue) {
-				oDialog.close();
-				this.getView().setBusy(true);
-				setTimeout(this.addLandscape());
-			}
-		},
+      if (canContinue) {
+        oDialog.close();
+        this.getView().setBusy(true);
+        setTimeout(this.addLandscape());
+      }
+    },
 
-		addLandscape: function() {
-			var oModel = this.getModel('landscapes');
-			var oData = oModel.getProperty('/new');
+    addLandscape: function() {
+      var oModel = this.getModel('landscapes');
+      var oData = oModel.getProperty('/new');
 
-			jQuery.ajax('/Landscape', {
-				method: 'POST',
-				contentType: 'application/json',
-				dataType: 'json',
-				data: JSON.stringify(oData),
-				error: jQuery.proxy(this.onAddError, this),
-				success: jQuery.proxy(this.onAddSuccess, this)
-			});
-		},
+      jQuery.ajax('/Landscape', {
+        method: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify(oData),
+        error: jQuery.proxy(this.onAddError, this),
+        success: jQuery.proxy(this.onAddSuccess, this)
+      });
+    },
 
-		onAddError: function(resp, textStatus, errorThrown) {
-			this.getView().setBusy(false);
-			var sMsg = this.getResourceBundle().getText('loginFailed', [ errorThrown ]);
-			MessageToast.show(sMsg);
-		},
+    onAddError: function(resp, textStatus, errorThrown) {
+      this.getView().setBusy(false);
+      var sMsg = this.getResourceBundle().getText('landscapeAddFailed', [ errorThrown ]);
+      MessageToast.show(sMsg);
+    },
 
-		onAddSuccess: function(resp) {
-			if (resp.error) {
-				this.getView().setBusy(false);
-				MessageToast.show(resp.error);
-				return;
-			}
+    onAddSuccess: function(resp) {
+      if (resp.error) {
+        this.getView().setBusy(false);
+        MessageToast.show(resp.error);
+        return;
+      }
 
-			this._requestData();
-		},
+      this._requestData();
+    },
 
-		onPressDetail: function(oEvent) {
-			var oItem = oEvent.getSource();
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			var oBindingContext = oItem.getBindingContext('landscapes');
-			oRouter.navTo('landscape', {
-				id: oBindingContext.getProperty('id')
-			});
-		},
+    onPressDetail: function(oEvent) {
+      jQuery.sap.log.info('Landscapes.controller:onPressDetail');
+      var oItem = oEvent.getSource();
+      var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+      var oBindingContext = oItem.getBindingContext('landscapes');
+      oRouter.navTo('landscape', {
+        id: oBindingContext.getProperty('id')
+      });
+    },
 
-		_getAddDialog: function() {
-			if (!this._oAddDialog) {
-				this._oAddDialog = sap.ui.jsfragment('sap.clr.view.LandscapeAdd', this);
-				this.getView().addDependent(this._oAddDialog);
-			}
+    _getAddDialog: function() {
+      if (!this._oAddDialog) {
+        this._oAddDialog = sap.ui.jsfragment('sap.clr.view.LandscapeAdd', this);
+        this.getView().addDependent(this._oAddDialog);
+      }
 
-			return this._oAddDialog;
-		},
+      return this._oAddDialog;
+    },
 
-		_onObjectMatched: function (oEvent) {
-			jQuery.sap.log.info('Landscapes.controller:_onObjectMatched');
+    _onObjectMatched: function(oEvent) {
+      jQuery.sap.log.info('Landscapes.controller:_onObjectMatched');
 
-			this.getView().setBusy(true);
-			this._requestData();
-		},
+      this.getView().setBusy(true);
+      this._requestData();
+    },
 
-		_requestData: function() {
-			jQuery.sap.log.info('Landscapes.controller:_requestData');
+    _requestData: function() {
+      jQuery.sap.log.info('Landscapes.controller:_requestData');
 
-			var oModel = this.getModel('landscapes');
-			oModel.attachRequestCompleted(this._requestCompleted, this);
-			oModel.loadData('/Landscapes');
-		},
+      var oModel = this.getModel('landscapes');
+      oModel.attachRequestCompleted(this._requestCompleted, this);
+      oModel.loadData('/Landscapes');
+    },
 
-		_requestCompleted: function(oEvent) {
-			jQuery.sap.log.info('Landscapes.controller:_requestCompleted');
+    _requestCompleted: function(oEvent) {
+      jQuery.sap.log.info('Landscapes.controller:_requestCompleted');
 
-			var oModel = this.getModel('landscapes');
-			oModel.detachRequestCompleted(this._requestCompleted, this);
+      var oModel = this.getModel('landscapes');
+      oModel.detachRequestCompleted(this._requestCompleted, this);
 
-			if (oEvent.getParameter('success')) {
-				var sError = oModel.getProperty('/error');
-				if (sError) {
-					MessageToast.show(sError);
-				}
-			} else {
-				var oError = oEvent.getParameter('errorobject');
-				jQuery.sap.log.info(oError);
-				MessageToast.show(
-					'Error ' + oError.statusCode + ': ' +
-					oError.statusText + ' ' + oError.responseText
-				);
-			}
+      if (oEvent.getParameter('success')) {
+        var sError = oModel.getProperty('/error');
+        if (sError) {
+          MessageToast.show(sError);
+        }
+      } else {
+        var oError = oEvent.getParameter('errorobject');
+        jQuery.sap.log.info(oError);
+        MessageToast.show(
+          'Error ' + oError.statusCode + ': ' +
+          oError.statusText + ' ' + oError.responseText
+        );
+      }
 
-			this.getView().setBusy(false);
-		}
-	});
+      this.getView().setBusy(false);
+    }
+  });
 });

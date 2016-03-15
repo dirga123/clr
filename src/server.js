@@ -14,6 +14,7 @@ import Config from './config';
 import Zabbix from './lib/zabbix';
 import hosts from './zabbix/hosts';
 import { servicesAsMap } from './zabbix/services';
+import triggers from './zabbix/triggers';
 import * as ZK from './zabbix/keys';
 import items from './zabbix/items';
 import Redis from './lib/redis';
@@ -45,8 +46,10 @@ server.use(async (ctx, next) => {
   }
 });
 
+// Router
 const router = new Router();
 
+// path /Login
 router.post('/login', async (ctx) => {
   if (ctx.request.body === null || ctx.request.body.input === null) {
     ctx.body = {
@@ -93,65 +96,91 @@ router.post('/login', async (ctx) => {
   };
 });
 
+// path /Home
 router.get('/Home', async ctx => {
-  const redis = new Redis();
+  const lsRet = {
+    version: config.versionStr
+  };
 
   try {
+    const redis = new Redis();
     await redis.login();
-  } catch (e) {
-    ctx.body = {
-      error: e
-    };
-    return;
-  }
-
-  const ls = await redis.getLandscapes();
-
-  try {
+    const ls = await redis.getLandscapes();
+    lsRet.landscapes = ls.length;
     await redis.logout();
   } catch (e) {
-    ctx.body = {
-      error: e
-    };
+    debug('dev')(`Internal error catched ${e}`);
+    lsRet.error = e;
+    ctx.body = lsRet;
     return;
   }
 
-  ctx.body = {
-    version: config.versionStr,
-    landscapes: ls.length
-  };
+  ctx.body = lsRet;
 });
 
+// path /Landscapes
 router.get('/Landscapes', async ctx => {
-  const redis = new Redis();
+  const lsRet = {
+    version: config.versionStr
+  };
 
+  // Retrieve list of landscapes
   try {
+    const redis = new Redis();
     await redis.login();
-  } catch (e) {
-    ctx.body = {
-      error: e
-    };
-    return;
-  }
-
-  // Retrieve DB info
-  const ls = await redis.getLandscapes();
-
-  try {
+    lsRet.landscapes = await redis.getLandscapes();
     await redis.logout();
   } catch (e) {
-    ctx.body = {
-      error: e
-    };
+    debug('dev')(`Internal error catched ${e}`);
+    lsRet.error = e;
+    ctx.body = lsRet;
     return;
   }
 
-  ctx.body = {
-    version: config.versionStr,
-    landscapes: ls
-  };
+  // Retrieve Zabbix info
+  const today = moment();
+  const paramDate = Number.parseInt(ctx.query.date, 10) || +moment();
+
+  // Current month till today, cant use end of month explicitly
+  // (zabbix bug returns N days backwards - from prev month too)
+  let firstDay = moment(paramDate).startOf('month');
+  if (today < firstDay) {
+    firstDay = today.clone().startOf('month');
+  }
+  let lastDay = moment(paramDate).endOf('month');
+  if (today < lastDay) {
+    lastDay = today;
+  }
+
+  for (const ls of lsRet.landscapes) {
+    try {
+      const zabbixUrl = ls.zabbix;
+      const zabbix = new Zabbix();
+      await zabbix.login(zabbixUrl);
+
+      // Get services as map, so it can be spread to landscape root and serviceUnits
+      const servicesMap = await servicesAsMap(zabbix, firstDay.unix(), lastDay.unix());
+
+      // Create services array (will hold just 2 values)
+      ls.service = {
+        name: ZK.SLA_PRODUCTIVE,
+        ...servicesMap.get(ZK.SLA_PRODUCTIVE)
+      };
+
+      const triggersArr = await triggers(zabbix);
+      ls.triggers = triggersArr.length;
+
+      await zabbix.logout();
+    } catch (e) {
+      debug('dev')(`Internal error catched ${e}/`);
+      ls.error = e;
+    }
+  }
+
+  ctx.body = lsRet;
 });
 
+// path /Hosts
 router.get('/Hosts', async ctx => {
   const hostsRet = {
     version: config.versionStr
@@ -179,6 +208,7 @@ router.get('/Hosts', async ctx => {
   ctx.body = hostsRet;
 });
 
+// path /Landscape/:id
 router.get('/Landscape/:id', async (ctx) => {
   const lsRet = {
     version: config.versionStr

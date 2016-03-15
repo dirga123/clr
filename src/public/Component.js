@@ -1,7 +1,7 @@
 sap.ui.define([
-    'sap/ui/core/UIComponent',
-    'sap/ui/model/json/JSONModel'
-  ], function (UIComponent, JSONModel) {
+  'sap/ui/core/UIComponent',
+  'sap/ui/model/json/JSONModel'
+], function (UIComponent, JSONModel) {
     'use strict';
 
     return UIComponent.extend('sap.clr.Component', {
@@ -16,8 +16,8 @@ sap.ui.define([
           },
           logged: false
         });
-        oUserModel.setDefaultBindingMode("OneWay");
-        this.setModel(oUserModel, "user");
+        oUserModel.setDefaultBindingMode('OneWay');
+        this.setModel(oUserModel, 'user');
 
         // Set device model
         var oDeviceModel = new sap.ui.model.json.JSONModel({
@@ -25,11 +25,11 @@ sap.ui.define([
           isNoTouch: !sap.ui.Device.support.touch,
           isPhone: sap.ui.Device.system.phone,
           isNoPhone: !sap.ui.Device.system.phone,
-          listMode: sap.ui.Device.system.phone ? "None" : "SingleSelectMaster",
-          listItemType: sap.ui.Device.system.phone ? "Active" : "Inactive"
+          listMode: sap.ui.Device.system.phone ? 'None' : 'SingleSelectMaster',
+          listItemType: sap.ui.Device.system.phone ? 'Active' : 'Inactive'
         });
-        oDeviceModel.setDefaultBindingMode("OneWay");
-        this.setModel(oDeviceModel, "device");
+        oDeviceModel.setDefaultBindingMode('OneWay');
+        this.setModel(oDeviceModel, 'device');
 
         // call the init function of the parent
         UIComponent.prototype.init.apply(this, arguments);
@@ -44,17 +44,15 @@ sap.ui.define([
       },
 
       onRouteMatched: function(oEvent) {
-        /*
         var oParameters = oEvent.getParameters();
-        if (oParameters.name != "login") {
-          var oUserModel = this.getModel("user");
+        if (oParameters.name !== 'login') {
+          var oUserModel = this.getModel('user');
           if (oUserModel.getProperty('/logged') !== true) {
-          this.getRouter().getTargets().display("login", {
-          fromTarget: oParameters.name
-          });
+            this.getRouter().getTargets().display('login', {
+              fromTarget: oParameters.name
+            });
           }
         }
-        */
       }
     });
   }

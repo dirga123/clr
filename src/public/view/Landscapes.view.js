@@ -1,66 +1,67 @@
 sap.ui.define([
-	'sap/m/Page',
-	'sap/m/Button',
-	'sap/m/Toolbar',
-	'sap/m/ToolbarSpacer',
-	'sap/m/TileContainer',
-	'sap/m/StandardTile'
+  'sap/m/Page',
+  'sap/m/Button',
+  'sap/m/Toolbar',
+  'sap/m/ToolbarSpacer',
+  'sap/m/TileContainer',
+  'sap/m/StandardTile'
 ], function (Page, Button, Toolbar, ToolbarSpacer, TileContainer, StandardTile) {
-	'use strict';
+  'use strict';
 
-	sap.ui.jsview('sap.clr.view.Landscapes', {
-		getControllerName: function () {
-			return 'sap.clr.controller.Landscapes';
-		},
+  sap.ui.jsview('sap.clr.view.Landscapes', {
+    getControllerName: function () {
+      return 'sap.clr.controller.Landscapes';
+    },
 
-		createContent: function (oController) {
-			var oAddButton = new Button(this.createId('addButton'), {
-				text: '{i18n>landscapeAddButton}',
-				press: [ oController.onPressAdd, oController ]
-			});
+    createContent: function (oController) {
+      jQuery.sap.log.info('Landscapes.view:createContent');
 
-			var oBar = new Toolbar({
-				content: [
-					new ToolbarSpacer(),
-					oAddButton,
-					new ToolbarSpacer()
-				]
-			});
+      var oAddButton = new Button(this.createId('addButton'), {
+        text: '{i18n>landscapeAddButton}',
+        press: [ oController.onPressAdd, oController ]
+      });
 
-			var oTile = new StandardTile({
-				icon: 'sap-icon://overview-chart',
-				number: '0.99',
-				numberUnit: 'SLA',
-				title: '{landscapes>id} {landscapes>domain}',
-				info: '{landscapes>status}',
-				infoState: '{landscapes>infoState}',
-				press: [ oController.onPressDetail, oController ]
-			});
+      var oBar = new Toolbar({
+        content: [
+          new ToolbarSpacer(),
+          oAddButton
+        ]
+      });
 
-			var oTileContainer = new TileContainer(this.createId('tileContainer'), {
-				width: '100%',
-				height: '100%'
-			});
+      var oTile = new StandardTile({
+        icon: 'sap-icon://overview-chart',
+        number: '{landscapes>sla}',
+        numberUnit: '{i18n>landscapesSLA}',
+        title: '{landscapes>id} {landscapes>domain}',
+        info: '{landscapes>status}',
+        infoState: '{landscapes>infoState}',
+        press: [ oController.onPressDetail, oController ]
+      });
 
-			oTileContainer.bindAggregation('tiles', 'landscapes>/landscapes', oTile);
+      var oTileContainer = new TileContainer(this.createId('tileContainer'), {
+        width: '100%',
+        height: '100%'
+      });
 
-			var oPage = new Page(this.createId('landscapesPage'), {
-				title: '{i18n>landscapesTitle}',
-				showHeader: true,
-				showNavButton: true,
-				navButtonPress: [ oController.onNavBack, oController ],
-				enableScrolling: false,
-				content: [
-					oTileContainer
-				],
-				footer: [
-					oBar
-				]
-			});
+      oTileContainer.bindAggregation('tiles', 'landscapes>/landscapes', oTile);
 
-			this.setBusyIndicatorDelay(0);
+      var oPage = new Page(this.createId('landscapesPage'), {
+        title: '{i18n>landscapesTitle}',
+        showHeader: true,
+        showNavButton: true,
+        navButtonPress: [ oController.onNavBack, oController ],
+        enableScrolling: false,
+        content: [
+          oTileContainer
+        ],
+        footer: [
+          oBar
+        ]
+      });
 
-			return oPage;
-		}
-	});
+      this.setBusyIndicatorDelay(0);
+
+      return oPage;
+    }
+  });
 });

@@ -6,12 +6,12 @@ sap.ui.define([
 
   return BaseController.extend('sap.clr.controller.App', {
     onInit: function() {
-			var oModel = new JSONModel({
-				icon: jQuery.sap.getModulePath('sap.ui.core', '/')+'mimes/logo/sap_50x26.png'
-			});
+      var oModel = new JSONModel({
+        icon: jQuery.sap.getModulePath('sap.ui.core', '/') + 'mimes/logo/sap_50x26.png'
+      });
 
-			this.setModel(oModel);
-		},
+      this.setModel(oModel);
+    },
 
     onPressLogoff: function() {
       var oModel = this.getComponent().getModel('user');

@@ -7,8 +7,8 @@ sap.ui.define([
 	'use strict';
 
 	return BaseController.extend('sap.clr.controller.Login', {
-		onInit: function () {
-			console.log('Login.onInit');
+		onInit: function() {
+			jQuery.sap.log.info('Login.controller:onInit');
 
 			var oModel = new JSONModel({
 				input: ''

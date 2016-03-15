@@ -31,13 +31,13 @@ sap.ui.define([
 			});
 
 			var oButton = new Button(this.createId('loginButton'), {
-					text: '{i18n>loginButton}',
-					type: sap.m.ButtonType.Emphasized,
-					press: [ oController.onPressLogin, oController ]
+				text: '{i18n>loginButton}',
+				type: sap.m.ButtonType.Emphasized,
+				press: [ oController.onPressLogin, oController ]
 			});
 
 			var oBar = new Bar(this.createId('bar'), {
-				contentMiddle: [
+				contentRight: [
 					oButton
 				]
 			});
