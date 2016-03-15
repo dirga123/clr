@@ -1,7 +1,7 @@
 sap.ui.define([
 	'sap/clr/controller/BaseController',
 	'sap/m/MessageToast',
-	'sap/ui/core/util/File',
+	'sap/ui/core/util/File'
 ], function (BaseController, MessageToast, File) {
 	'use strict';
 
@@ -50,36 +50,41 @@ sap.ui.define([
 			var reportId = oModel.getProperty('/reportId');
 			var oDate = oModel.getProperty('/date');
 
-			var sPdfName = id + '_' + oDate.getFullYear() + oDate.getMonth() + '.pdf';
+			var sPdfName = id + '_' + oDate.getFullYear() + oDate.getMonth();
 
 			if (reportId === undefined) {
-				this.getView().setBusy(true);
+				//this.getView().setBusy(true);
 				var oExternalModel = this.getModel('external');
+				//var w = window.open('/Landscape/' + id + '/external/new/' + sPdfName);
 				jQuery.ajax('/Landscape/' + id + '/external/new/' + sPdfName, {
 					method: 'POST',
 					contentType: 'application/json',
 					//dataType: 'json',
 					data: JSON.stringify(oExternalModel.getProperty('/')),
 					error: jQuery.proxy(this.onExportError, this),
-					success: jQuery.proxy(this.onExportSuccess, this)
 					/*
-					,
+					success: jQuery.proxy(this.onExportSuccess, this)
+					*/
 					success: function(resp) {
+						var blob = new Blob([ resp ]);
+						var link = document.createElement('a');
+						link.href = window.URL.createObjectURL(blob);
+						link.download = sPdfName + '.pdf';
+						link.click();
+
 						//this.getView().setBusy(false);
-						sap.ui.core.util.File.save(resp);
+						//File.save(resp, sPdfName, 'pdf', 'application/pdf');
+						//sap.ui.core.util.File.save(resp);
 						if (resp.error) {
 							MessageToast.show(resp.error);
 						} else {
 						}
-						console.log(resp);
-						var w = window.open('/Landscape/' + id + '/external/new/' + sPdfName);
-						w.document.write(resp);
+						//w.document.write(resp);
 					}
-					*/
 				});
 			} else {
 				sap.m.URLHelper.redirect(
-					'/Landscape/' + id + '/external/' + reportId + '/' + sPdfName,
+					'/Landscape/' + id + '/external/' + reportId + '/' + sPdfName + '.pdf',
 					true
 				);
 			}

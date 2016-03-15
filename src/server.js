@@ -470,7 +470,7 @@ router.post('/Landscape/:id/external/new', async (ctx) => {
   ctx.body = lsRet;
 });
 
-async function generateExternalPdf(external) {
+async function generateExternalPdf(ctx, external) {
   const templateStr = await fs.readFileAsync(
     path.resolve(__dirname, 'content/External.jsreport'),
     'utf8'
@@ -501,9 +501,8 @@ async function generateExternalPdf(external) {
     data: external
   });
 
-  // console.log(out.headers);
-
-  return out.stream;
+  ctx.body = out.stream;
+  ctx.response.set(out.headers);
 }
 
 router.get('/Landscape/:id/external/new/:fileName.pdf', async (ctx) => {
@@ -523,9 +522,9 @@ router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
     await redis.logout();
 
     const externalObj = JSON.parse(external);
-    ctx.body = await generateExternalPdf(externalObj);
+    await generateExternalPdf(ctx, externalObj);
   } catch (e) {
-    console.log(e);
+    debug('dev')(`Catched error: ${e}`);
     lsRet.error = e;
     ctx.body = lsRet;
     return;
@@ -545,11 +544,9 @@ router.post('/Landscape/:id/external/new/:fileName.pdf', async (ctx) => {
   }
 
   try {
-    console.log(ctx.request.body);
-    console.log(await generateExternalPdf(ctx.request.body));
-    ctx.body = await generateExternalPdf(ctx.request.body);
+    await generateExternalPdf(ctx, ctx.request.body);
   } catch (e) {
-    console.log(e);
+    debug('dev')(`Catched error: ${e}`);
     lsRet.error = e;
     ctx.body = lsRet;
     return;
