@@ -389,7 +389,9 @@ router.get('/Landscape/:id/external', async (ctx) => {
 });
 
 // External get new
-router.get('/Landscape/:id/external/new', async (ctx) => {
+// path /Landscape/:id/external/new
+
+async function landscapeExternalNew(id, date) {
   const lsRet = {
     version: config.versionStr
   };
@@ -398,12 +400,11 @@ router.get('/Landscape/:id/external/new', async (ctx) => {
   try {
     const redis = new Redis();
     await redis.login();
-    lsRet.external = await redis.getLandscape(ctx.params.id);
+    lsRet.external = await redis.getLandscape(id);
     await redis.logout();
   } catch (e) {
     lsRet.error = e;
-    ctx.body = lsRet;
-    return;
+    return lsRet;
   }
 
   // Retrieve Zabbix info
@@ -413,7 +414,7 @@ router.get('/Landscape/:id/external/new', async (ctx) => {
     await zabbix.login(zabbixUrl);
 
     const today = moment();
-    const paramDate = Number.parseInt(ctx.query.date, 10) || +moment();
+    const paramDate = Number.parseInt(date, 10) || +moment();
 
     // Current month till today, cant use end of month explicitly
     // (zabbix bug returns N days backwards - from prev month too)
@@ -457,11 +458,14 @@ router.get('/Landscape/:id/external/new', async (ctx) => {
   } catch (e) {
     debug('dev')(`Internal error catched ${e}/`);
     lsRet.error = e;
-    ctx.body = lsRet;
-    return;
+    return lsRet;
   }
 
-  ctx.body = lsRet;
+  return lsRet;
+}
+
+router.get('/Landscape/:id/external/new', async (ctx) => {
+  ctx.body = await landscapeExternalNew(ctx.params.id, ctx.query.date);
 });
 
 // External save new
@@ -536,7 +540,21 @@ async function generateExternalPdf(ctx, external) {
 }
 
 router.get('/Landscape/:id/external/new/:fileName.pdf', async (ctx) => {
-  ctx.body = '<html></html>';
+  const lsRet = {
+    version: config.versionStr
+  };
+
+  console.log(ctx.params);
+
+  try {
+    const external = await landscapeExternalNew(ctx.params.id, ctx.query.date);
+    await generateExternalPdf(ctx, external);
+  } catch (e) {
+    debug('dev')(`Catched error: ${e}`);
+    lsRet.error = e;
+    ctx.body = lsRet;
+    return;
+  }
 });
 
 // 'Content-Disposition': 'inline; filename="report.pdf"',

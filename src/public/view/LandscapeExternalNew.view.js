@@ -1,66 +1,59 @@
 sap.ui.define([
-	'sap/m/Page',
-	'sap/m/Button',
-	'sap/m/Toolbar',
-	'sap/m/ToolbarSpacer',
-	'sap/m/Panel',
-	'sap/m/Title',
-	'sap/ui/layout/form/SimpleForm',
-	'sap/m/Label',
-	'sap/m/Text',
-	'sap/m/List',
-	'sap/m/ObjectListItem',
-	'sap/m/ObjectAttribute',
-	'sap/m/ObjectStatus',
-	'sap/clr/model/formatter',
-	'jquery.sap.global',
-	'sap/m/CustomListItem',
-	'sap/ui/layout/VerticalLayout',
-	'sap/m/FlexBox',
-	'sap/m/Table',
-	'sap/m/Column',
-	'sap/m/ColumnListItem',
-	'sap/m/ObjectIdentifier',
-	'sap/m/ObjectNumber'
+  'sap/m/Page',
+  'sap/m/Button',
+  'sap/m/Toolbar',
+  'sap/m/ToolbarSpacer',
+  'sap/m/Panel',
+  'sap/m/Title',
+  'sap/ui/layout/form/SimpleForm',
+  'sap/m/Label',
+  'sap/m/Text',
+  'sap/m/List',
+  'sap/m/ObjectListItem',
+  'sap/m/ObjectAttribute',
+  'sap/m/ObjectStatus',
+  'sap/clr/model/formatter',
+  'jquery.sap.global',
+  'sap/m/CustomListItem',
+  'sap/ui/layout/VerticalLayout',
+  'sap/m/FlexBox',
+  'sap/m/Table',
+  'sap/m/Column',
+  'sap/m/ColumnListItem',
+  'sap/m/ObjectIdentifier',
+  'sap/m/ObjectNumber'
 ], function (Page, Button, Toolbar,	ToolbarSpacer, Panel, Title, SimpleForm,
 	Label, Text, List, ObjectListItem, ObjectAttribute, ObjectStatus,
 	formatter, jQuery, CustomListItem, VerticalLayout, FlexBox,
 	Table, Column, ColumnListItem, ObjectIdentifier, ObjectNumber) {
-	'use strict';
+  'use strict';
 
-	sap.ui.jsview('sap.clr.view.LandscapeExternalNew', {
-		getControllerName: function () {
-			return 'sap.clr.controller.LandscapeExternalNew';
-		},
+  sap.ui.jsview('sap.clr.view.LandscapeExternalNew', {
+    getControllerName: function () {
+      return 'sap.clr.controller.LandscapeExternalNew';
+    },
 
-		createContent: function (oController) {
-			var oSaveButton = new Button(this.createId('saveButton'), {
-				icon: 'sap-icon://save',
-				text: '{i18n>landscapeSaveButton}',
-				type: sap.m.ButtonType.Emphasized,
-				press: [ oController.onPressSave, oController ]
-			});
+    createContent: function (oController) {
+      var oSaveButton = new Button(this.createId('saveButton'), {
+        icon: 'sap-icon://save',
+        text: '{i18n>landscapeSaveButton}',
+        type: sap.m.ButtonType.Emphasized,
+        press: [ oController.onPressSave, oController ]
+      });
 
-			var oPrintButton = new Button(this.createId('printButton'), {
-				icon: 'sap-icon://print',
-				text: '{i18n>landscapePrintButton}',
-				press: [ oController.onPressPrint, oController ]
-			});
+      var oExportButton = new Button(this.createId('exportButton'), {
+        icon: 'sap-icon://action',
+        text: '{i18n>landscapeExportButton}',
+        press: [ oController.onPressExport, oController ]
+      });
 
-			var oExportButton = new Button(this.createId('exportButton'), {
-				text: '{i18n>landscapeExportButton}',
-				press: [ oController.onPressExport, oController ]
-			});
-
-			var oBar = new Toolbar({
-				content: [
-					new ToolbarSpacer(),
-					oSaveButton,
-					oPrintButton,
-					oExportButton,
-					new ToolbarSpacer()
-				]
-			}).addStyleClass('uoNoPrint');
+      var oBar = new Toolbar({
+        content: [
+          new ToolbarSpacer(),
+          oSaveButton,
+          oExportButton
+        ]
+      }).addStyleClass('uoNoPrint');
 
 			var oGeneralPanel = new Panel({
 				headerToolbar: new Toolbar({
@@ -581,25 +574,25 @@ sap.ui.define([
 				]
 			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin');
 
-			var oPage = new Page(this.createId('landscapePage'), {
-				title: '{i18n>landscapeExternalNew}',
-				showHeader: true,
-				showNavButton: true,
-				navButtonPress: [ oController.onNavBack, oController ],
-				content: [
-					oGeneralPanel,
-					oSlaPanel,
-					oCustomersPanel,
-					oServiceUnitsPanel
-				],
-				footer: [
-					oBar
-				]
-			});
+      var oPage = new Page(this.createId('landscapePage'), {
+        title: '{i18n>landscapeExternalNew}',
+        showHeader: true,
+        showNavButton: true,
+        navButtonPress: [ oController.onNavBack, oController ],
+        content: [
+          oGeneralPanel,
+          oSlaPanel,
+          oCustomersPanel,
+          oServiceUnitsPanel
+        ],
+        footer: [
+          oBar
+        ]
+      });
 
-			this.setBusyIndicatorDelay(0);
+      this.setBusyIndicatorDelay(0);
 
-			return oPage;
-		}
-	});
+      return oPage;
+    }
+  });
 });

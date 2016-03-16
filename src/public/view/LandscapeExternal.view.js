@@ -34,13 +34,8 @@ sap.ui.define([
 		},
 
 		createContent: function (oController) {
-			var oPrintButton = new Button(this.createId('printButton'), {
-				icon: 'sap-icon://print',
-				text: '{i18n>landscapePrintButton}',
-				press: [ oController.onPressPrint, oController ]
-			});
-
 			var oExportButton = new Button(this.createId('exportButton'), {
+        icon: 'sap-icon://action',
 				text: '{i18n>landscapeExportButton}',
 				press: [ oController.onPressExport, oController ]
 			});
@@ -48,9 +43,7 @@ sap.ui.define([
 			var oBar = new Toolbar({
 				content: [
 					new ToolbarSpacer(),
-					oPrintButton,
-					oExportButton,
-					new ToolbarSpacer()
+					oExportButton
 				]
 			}).addStyleClass('uoNoPrint');
 
