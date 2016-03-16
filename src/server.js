@@ -162,13 +162,18 @@ router.get('/Landscapes', async ctx => {
       const servicesMap = await servicesAsMap(zabbix, firstDay.unix(), lastDay.unix());
 
       // Create services array (will hold just 2 values)
-      ls.service = {
-        name: ZK.SLA_PRODUCTIVE,
-        ...servicesMap.get(ZK.SLA_PRODUCTIVE)
-      };
+      const productive = servicesMap.get(ZK.SLA_PRODUCTIVE);
+      ls.currSla = productive.currSla;
+      ls.goodSla = productive.goodSla;
 
       const triggersArr = await triggers(zabbix);
-      ls.triggers = triggersArr.length;
+      ls.triggersCount = triggersArr.length;
+      ls.triggersPriority = triggersArr.reduce((prevVal, currVal) => {
+        if (currVal.priority > prevVal) {
+          prevVal = currVal.priority;
+        }
+        return prevVal;
+      }, new Number(0));
 
       await zabbix.logout();
     } catch (e) {

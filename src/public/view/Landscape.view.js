@@ -27,7 +27,33 @@ sap.ui.define([
 		createContent: function (oController) {
 			var oBar = new Toolbar({
 				content: [
-					new ToolbarSpacer()
+					new ToolbarSpacer(),
+          new Button(this.createId('toolbarEdit'), {
+            icon: 'sap-icon://edit',
+            text: '{i18n>landscapeEditButton}',
+            press: [ oController.onPressEdit, oController ]
+          }),
+          new Button(this.createId('toolbarSave'), {
+            icon: 'sap-icon://save',
+            text: '{i18n>landscapeSaveButton}',
+            press: [ oController.onPressSave, oController ]
+          }),
+          new Button(this.createId('toolbarCancel'), {
+            icon: 'sap-icon://sys-cancel',
+            text: '{i18n>landscapeCancelButton}',
+            press: [ oController.onPressCancel, oController ]
+          }),
+          new Button(this.createId('toolbarRefresh'), {
+            icon: 'sap-icon://refresh',
+            text: '{i18n>landscapeRefreshButton}',
+            press: [ oController.onPressRefresh, oController ]
+          }),
+          new Button(this.createId('toolbarDelete'), {
+            icon: 'sap-icon://delete',
+            text: '{i18n>landscapeDeleteButton}',
+            type: 'Reject',
+            press: [ oController.onPressDelete, oController ]
+          })
 				]
 			});
 
@@ -39,28 +65,7 @@ sap.ui.define([
 							text: '{i18n>landscapeGeneral}',
 							titleStyle: 'H3'
 						}),
-						new ToolbarSpacer(),
-						new Button(this.createId('toolbarEdit'), {
-							icon: 'sap-icon://edit',
-							press: [ oController.onPressEdit, oController ]
-						}),
-						new Button(this.createId('toolbarSave'), {
-							icon: 'sap-icon://save',
-							press: [ oController.onPressSave, oController ]
-						}),
-						new Button(this.createId('toolbarCancel'), {
-							icon: 'sap-icon://sys-cancel',
-							press: [ oController.onPressCancel, oController ]
-						}),
-						new Button(this.createId('toolbarRefresh'), {
-							icon: 'sap-icon://refresh',
-							press: [ oController.onPressRefresh, oController ]
-						}),
-						new Button(this.createId('toolbarDelete'), {
-							icon: 'sap-icon://delete',
-							type: 'Reject',
-							press: [ oController.onPressDelete, oController ]
-						})
+						new ToolbarSpacer()
 					]
 				})
 			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin');

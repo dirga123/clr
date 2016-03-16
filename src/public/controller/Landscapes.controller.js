@@ -33,7 +33,16 @@ sap.ui.define([
       );
     },
 
+    onPressRefresh: function() {
+      jQuery.sap.log.info('Landscapes.controller:onPressRefresh');
+
+      this.getView().setBusy(true);
+      this._requestData();
+    },
+
     onPressAdd: function(oEvent) {
+      jQuery.sap.log.info('Landscapes.controller:onPressAdd');
+
       var oModel = this.getModel('landscapes');
 
       // Clear new node
@@ -47,6 +56,8 @@ sap.ui.define([
     },
 
     onPressAddAdd: function(oEvent) {
+      jQuery.sap.log.info('Landscapes.controller:onPressAddAdd');
+
       var oDialog = this._getAddDialog();
 
       var inputs = [
@@ -81,6 +92,8 @@ sap.ui.define([
     },
 
     addLandscape: function() {
+      jQuery.sap.log.info('Landscapes.controller:addLandscape');
+
       var oModel = this.getModel('landscapes');
       var oData = oModel.getProperty('/new');
 
@@ -95,12 +108,16 @@ sap.ui.define([
     },
 
     onAddError: function(resp, textStatus, errorThrown) {
+      jQuery.sap.log.info('Landscapes.controller:onAddError');
+
       this.getView().setBusy(false);
       var sMsg = this.getResourceBundle().getText('landscapeAddFailed', [ errorThrown ]);
       MessageToast.show(sMsg);
     },
 
     onAddSuccess: function(resp) {
+      jQuery.sap.log.info('Landscapes.controller:onAddSuccess');
+
       if (resp.error) {
         this.getView().setBusy(false);
         MessageToast.show(resp.error);
@@ -112,6 +129,7 @@ sap.ui.define([
 
     onPressDetail: function(oEvent) {
       jQuery.sap.log.info('Landscapes.controller:onPressDetail');
+
       var oItem = oEvent.getSource();
       var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
       var oBindingContext = oItem.getBindingContext('landscapes');
@@ -121,6 +139,8 @@ sap.ui.define([
     },
 
     _getAddDialog: function() {
+      jQuery.sap.log.info('Landscapes.controller:_getAddDialog');
+
       if (!this._oAddDialog) {
         this._oAddDialog = sap.ui.jsfragment('sap.clr.view.LandscapeAdd', this);
         this.getView().addDependent(this._oAddDialog);
@@ -141,7 +161,14 @@ sap.ui.define([
 
       var oModel = this.getModel('landscapes');
       oModel.attachRequestCompleted(this._requestCompleted, this);
-      oModel.loadData('/Landscapes');
+      oModel.loadData(
+        '/Landscapes',
+        {},
+        true,
+        'GET',
+        false,
+        false
+      );
     },
 
     _requestCompleted: function(oEvent) {

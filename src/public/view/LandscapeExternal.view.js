@@ -11,21 +11,23 @@ sap.ui.define([
 	'sap/m/List',
 	'sap/m/ObjectListItem',
 	'sap/m/ObjectAttribute',
-	'sap/m/ObjectStatus',
 	'sap/clr/model/formatter',
 	'jquery.sap.global',
 	'sap/m/CustomListItem',
 	'sap/ui/layout/VerticalLayout',
-	'sap/m/FlexBox',
 	'sap/m/Table',
 	'sap/m/Column',
 	'sap/m/ColumnListItem',
 	'sap/m/ObjectIdentifier',
-	'sap/m/ObjectNumber'
+	'sap/m/ObjectNumber',
+  'sap/m/IconTabBar',
+	'sap/m/IconTabFilter',
+  'sap/m/ObjectHeader'
 ], function (Page, Button, Toolbar,	ToolbarSpacer, Panel, Title, SimpleForm,
-	Label, Text, List, ObjectListItem, ObjectAttribute, ObjectStatus,
-	formatter, jQuery, CustomListItem, VerticalLayout, FlexBox,
-	Table, Column, ColumnListItem, ObjectIdentifier, ObjectNumber) {
+	Label, Text, List, ObjectListItem, ObjectAttribute,
+	formatter, jQuery, CustomListItem, VerticalLayout,
+	Table, Column, ColumnListItem, ObjectIdentifier, ObjectNumber,
+  IconTabBar, IconTabFilter, ObjectHeader) {
 	'use strict';
 
 	sap.ui.jsview('sap.clr.view.LandscapeExternal', {
@@ -45,55 +47,9 @@ sap.ui.define([
 					new ToolbarSpacer(),
 					oExportButton
 				]
-			}).addStyleClass('uoNoPrint');
+			});
 
-			var oGeneralPanel = new Panel({
-				headerToolbar: new Toolbar({
-					content: [
-						new Title({
-							text: '{i18n>landscapeGeneral}',
-							titleStyle: 'H3'
-						}),
-						new ToolbarSpacer()
-					]
-				}),
-				content: [
-					new SimpleForm({
-						minWidth: 1024,
-						maxContainerCols: 2,
-						layout: 'ResponsiveGridLayout',
-						editable: false,
-						labelSpanL: 1,
-						labelSpanM: 1,
-						emptySpanL: 1,
-						emptySpanM: 1,
-						columnsL: 1,
-						columnsM: 1,
-						content: [
-							new Label({ text: '{i18n>landscapeID}' }),
-							new Text({ text: '{external>id}' }),
-							new Label({ text: '{i18n>landscapeZabbix}' }),
-							new Text({ text: '{external>zabbix}' }),
-							new Label({ text: '{i18n>landscapeDomain}' }),
-							new Text({ text: '{external>domain}' }),
-							new Label({ text: 'Period' }),
-							new Text({
-								text: {
-									parts: [ 'external>/date' ],
-									formatter: function(reportDate) {
-										var date = new Date();
-										date.setTime(reportDate);
-										return date.getMonth() + '/' + date.getFullYear();
-									}
-								}
-							})
-						]
-					})
-				]
-			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin');
-
-			var oSlaList = new List(this.createId('slaList'), {
-			}).addStyleClass('page-break');
+      // SLA
 
 			var oSlaItem = new ObjectListItem({
 				title: '{external>name}',
@@ -102,11 +58,11 @@ sap.ui.define([
 					parts: [ 'external>currSla', 'external>goodSla' ],
 					formatter: function(currSla, goodSla) {
 						var text = '';
-						if (currSla) {
+						if (currSla !== undefined) {
 							text = parseFloat(currSla).toFixed(4);
 						}
-						if (goodSla) {
-							text += ' / ' + parseFloat(goodSla).toFixed(4);
+						if (goodSla !== undefined) {
+							text += ' of ' + parseFloat(goodSla).toFixed(4);
 						}
 						return text;
 					}
@@ -137,18 +93,10 @@ sap.ui.define([
 							formatter: jQuery.proxy(formatter.secondsToString, this)
 						}
 					})
-				],
-				firstStatus: new ObjectStatus({
-					title: '{i18n>landscapeStatus}',
-					text: {
-						parts: [ 'external>status' ],
-						formatter: jQuery.proxy(formatter.statusToText, this)
-					},
-					state: {
-						parts: [ 'external>status' ],
-						formatter: jQuery.proxy(formatter.statusToState, this)
-					}
-				})
+				]
+			});
+
+      var oSlaList = new List(this.createId('slaList'), {
 			});
 
 			oSlaList.bindItems({
@@ -156,70 +104,7 @@ sap.ui.define([
 				template: oSlaItem
 			});
 
-			var oSlaPanel = new Panel(this.createId('slaPanel'), {
-				headerToolbar: new Toolbar({
-					content: [
-						new Title({
-							text: '{i18n>landscapeSla}',
-							titleStyle: 'H3'
-						}),
-						new ToolbarSpacer()
-					]
-				}),
-				content: [
-					oSlaList
-				]
-			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin');
-
-			var oHostList = new List(this.createId('hostList'), {
-				inset: true,
-				headerText: '{i18n>landscapeHosts}'
-			});
-
-			var oHostItem = new ObjectListItem({
-				title: '{external>name}',
-				type: 'Inactive',
-				number: {
-					parts: [ 'external>status' ],
-					formatter: jQuery.proxy(formatter.statusToText, this)
-				},
-				numberState: {
-					parts: [ 'external>status' ],
-					formatter: jQuery.proxy(formatter.statusToState, this)
-				},
-				attributes: [
-					new ObjectAttribute({
-						title: '{i18n>landscapeAgentStatus}',
-						text: {
-							parts: [ 'external>available' ],
-							formatter: function(available) {
-								var resourceBundle = this.getModel('i18n').getResourceBundle();
-
-								switch (available) {
-								case '1':
-									return resourceBundle.getText('landscapeAgentAvail');
-								case '2':
-									return resourceBundle.getText('landscapeAgentUnavail');
-								default:
-									return resourceBundle.getText('landscapeAgentNA');
-								}
-							}
-						}
-					})
-				],
-				firstStatus: new ObjectStatus({
-					text: '{external>error}',
-					state: 'Error'
-				})
-			});
-
-			oHostList.bindItems({
-				path: 'external>hosts',
-				template: oHostItem
-			});
-
-			var oCustomerList = new List(this.createId('custList'), {
-			});
+      // Customers
 
 			var oCustomerUsersTable = new Table({
 				columns: [
@@ -364,24 +249,9 @@ sap.ui.define([
 			var oCustomerItem = new CustomListItem({
 				type: 'Inactive',
 				content: [
-					new VerticalLayout({
+					new Panel({
+            headerText: '{i18n>landscapeExternalCustomer}: {external>id}',
 						content: [
-							new SimpleForm({
-								minWidth: 1024,
-								maxContainerCols: 2,
-								layout: 'ResponsiveGridLayout',
-								editable: false,
-								labelSpanL: 2,
-								labelSpanM: 2,
-								emptySpanL: 1,
-								emptySpanM: 1,
-								columnsL: 1,
-								columnsM: 1,
-								content: [
-									new Label({ text: 'Name' }),
-									new ObjectIdentifier({ title: 'Customer {external>id}' })
-								]
-							}),
 							oCustomerUsersTable,
 							oCustomerTenantsTable
 						]
@@ -389,37 +259,23 @@ sap.ui.define([
 				]
 			});
 
+      var oCustomerList = new List(this.createId('custList'), {
+        backgroundDesign: 'Transparent'
+			});
+
 			oCustomerList.bindItems({
 				path: 'external>items/customers',
 				template: oCustomerItem
 			});
 
-			var oCustomersPanel = new Panel(this.createId('customersPanel'), {
-				headerToolbar: new Toolbar({
-					content: [
-						new Title({
-							text: '{i18n>landscapeCustomers}',
-							titleStyle: 'H3'
-						}),
-						new Title({
-							text: '{external>items/customerCount/max}',
-							titleStyle: 'H1'
-						}),
-						new ToolbarSpacer()
-					]
-				}),
-				content: [
-					oCustomerList
-				]
-			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin');
-
-			var oServiceUnitsList = new List(this.createId('serviceUnitsList'), {
-			});
+      // Service Units
 
 			var oServiceUnitTenantsTable = new Table({
 				columns: [
 					new Column({
-						header: new Text({ text: 'Tenants' })
+						header: new ObjectIdentifier({
+							title: 'Tenants'
+						})
 					}),
 					new Column({
 						header: new Text({ text: 'First' })
@@ -499,42 +355,37 @@ sap.ui.define([
 								columnsM: 1,
 								content: [
 									new Label({ text: 'Name' }),
-									new FlexBox({
-										justifyContent: sap.m.FlexJustifyContent.Start,
-										alignItems: sap.m.FlexAlignItems.Center,
-										items: [
-											new ObjectIdentifier({
-												title: '{external>name/last}'
-											}).addStyleClass('sapUiTinyMarginEnd'),
-											new Text({ text: '(was {external>name/first})' })
-										]
+									new ObjectIdentifier({
+										title: '{external>name/last}'
 									}),
 									new Label({ text: 'Purpose' }),
 									new Text({
-										text: '{external>purpose/last} (was {external>purpose/first})'
+										text: '{external>purpose/last}'
 									}),
 									new Label({ text: 'B1 Version' }),
 									new Text({
-										text: '{external>version/last} (was {external>version/first})'
+										text: '{external>version/last}'
 									}),
 									new Label({ text: 'Hana Version' }),
 									new Text({
-										text: '{external>hanaVersion/last} (was {external>hanaVersion/first})'
+										text: '{external>hanaVersion/last}'
 									}),
 									new Label({ text: 'SLA' }),
-									new FlexBox({
-										justifyContent: sap.m.FlexJustifyContent.Start,
-										alignItems: sap.m.FlexAlignItems.Center,
-										items: [
-											new ObjectIdentifier({
-												title: {
-													parts: [ 'external>sla/currSla' ],
-													formatter: jQuery.proxy(formatter.slaToText, this)
-												}
-											}).addStyleClass('sapUiTinyMarginEnd'),
-											new Text({ text: '(of {external>sla/goodSla})' })
-										]
-									})
+                  new Text({
+                    text: {
+            					parts: [ 'external>sla/currSla', 'external>sla/goodSla' ],
+            					formatter: function(currSla, goodSla) {
+            						var text = '';
+            						if (currSla !== undefined) {
+            							text = parseFloat(currSla).toFixed(4);
+            						}
+            						if (goodSla !== undefined) {
+            							text += ' of ' + parseFloat(goodSla).toFixed(4);
+            						}
+            						return text;
+            					}
+            				}
+                  })
 								]
 							}),
 							oServiceUnitTenantsTable
@@ -543,43 +394,70 @@ sap.ui.define([
 				]
 			});
 
+      var oServiceUnitsList = new List(this.createId('serviceUnitsList'), {
+        backgroundDesign: 'Transparent'
+			});
+
 			oServiceUnitsList.bindItems({
 				path: 'external>items/serviceUnits',
 				template: oServiceUnitItem
 			});
 
-			var oServiceUnitsPanel = new Panel(this.createId('serviceUnitsPanel'), {
-				headerToolbar: new Toolbar({
-					content: [
-						new Title({
-							text: '{i18n>landscapeServiceUnits}',
-							titleStyle: 'H3'
-						}),
-						new Title({
-							text: '{external>items/serviceUnitCount/max}',
-							titleStyle: 'H1'
-						}),
-						new ToolbarSpacer()
-					]
-				}),
-				content: [
-					oServiceUnitsList
-				]
-			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin');
+      // Tabs
 
-			var oPage = new Page(this.createId('landscapePage'), {
-				title: '{i18n>landscapeExternal}',
+      var oTabs = new IconTabBar({
+				expanded: '{device>/isNoPhone}',
+        backgroundDesign: 'Transparent',
+				items: [
+					new IconTabFilter({
+						text: '{i18n>landscapeSla}',
+						content: oSlaList
+					}),
+					new IconTabFilter({
+						text: '{i18n>landscapeCustomers}',
+            count: '{external>items/customerCount/max}',
+						content: oCustomerList
+					}),
+					new IconTabFilter({
+						text: '{i18n>landscapeServiceUnits}',
+            count: '{external>items/serviceUnitCount/max}',
+						content: oServiceUnitsList
+					})
+				]
+			});
+
+      // General
+
+      var oGeneralPanel = new ObjectHeader({
+        title: '{i18n>landscapeID}: {external>id}',
+        attributes: [
+          new ObjectAttribute({
+            title: '{i18n>landscapeDomain}',
+            text: '{external>domain}'
+          }),
+          new ObjectAttribute({
+            title: '{i18n>landscapeExternalPeriod}',
+            text: {
+              parts: [ 'external>/date' ],
+              formatter: function(reportDate) {
+                var date = new Date();
+                date.setTime(reportDate);
+                return date.getMonth() + '/' + date.getFullYear();
+              }
+            }
+          })
+        ],
+        headerContainer: oTabs
+      });
+
+			var oPage = new Page(this.createId('landscapeExternalPage'), {
+				title: '{i18n>landscapeExternal}: {external>/name}',
 				showHeader: true,
 				showNavButton: true,
 				navButtonPress: [ oController.onNavBack, oController ],
-				// busy: '{landscapeView>/busy}',
-				// busyIndicatorDelay: '{landscapeView>/delay}',
 				content: [
 					oGeneralPanel,
-					oSlaPanel,
-					oCustomersPanel,
-					oServiceUnitsPanel
-					// oHostList
+          oTabs
 				],
 				footer: [
 					oBar

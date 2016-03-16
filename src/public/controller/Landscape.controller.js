@@ -18,11 +18,9 @@ sap.ui.define([
 			// between the busy indication for loading the view's meta data
 			var oDate = new Date();
 			var oViewModel = new JSONModel({
-				busy: false,
-				delay: 0,
 				date: oDate
 			});
-			this.setModel(oViewModel, 'landscapeView');
+			this.setModel(oViewModel);
 
 			// Create model and set it to view
 			var oModel = new JSONModel();
@@ -100,7 +98,7 @@ sap.ui.define([
 
 		// External tab
 		onAddExternal: function() {
-			var oViewModel = this.getModel('landscapeView');
+			var oViewModel = this.getModel();
 			var sLandscapeId = oViewModel.getProperty('/id');
 
 			var oRouter = this.getRouter();
@@ -110,7 +108,7 @@ sap.ui.define([
 		},
 
 		onDisplayExternal: function(oEvent) {
-			var oViewModel = this.getModel('landscapeView');
+			var oViewModel = this.getModel();
 			var sLandscapeId = oViewModel.getProperty('/id');
 
 			var oItem = oEvent.getSource();
@@ -208,7 +206,7 @@ sap.ui.define([
 			// Get Landscape id
 			var sLandscapeId = oEvent.getParameter('arguments').id;
 
-			var oViewModel = this.getModel('landscapeView');
+			var oViewModel = this.getModel();
 			oViewModel.setProperty('/id', sLandscapeId);
 
 			this._requestData();
@@ -216,30 +214,59 @@ sap.ui.define([
 
 		_requestData: function() {
 			jQuery.sap.log.info('Landscape.controller:_requestData');
-			var oViewModel = this.getModel('landscapeView');
+
+			var oViewModel = this.getModel();
 			var sLandscapeId = oViewModel.getProperty('/id');
 			var oDate = oViewModel.getProperty('/date');
 
 			// Load landscape model
 			var oModel = this.getModel('landscape');
 			oModel.attachRequestCompleted(this._requestCompletedGeneral, this);
-			oModel.loadData('/Landscape/' + sLandscapeId + '/general', {});
+			oModel.loadData(
+        '/Landscape/' + sLandscapeId + '/general',
+        null,
+        true,
+        'GET',
+        false,
+        false
+      );
 
 			// Load landscape status model
 			var oModelStatus = this.getModel('landscapeStatus');
 			oModelStatus.attachRequestCompleted(this._requestCompletedStatus, this);
-			oModelStatus.loadData('/Landscape/' + sLandscapeId + '/status', {
-				date: oDate.getTime()
-			});
+			oModelStatus.loadData(
+        '/Landscape/' + sLandscapeId + '/status',
+        {
+          date: oDate.getTime()
+        },
+        true,
+        'GET',
+        false,
+        false
+      );
 
 			// Load landscape status model
 			var oModelInternal = this.getModel('landscapeInternal');
 			oModelInternal.attachRequestCompleted(this._requestCompletedInternal, this);
-			oModelInternal.loadData('/Landscape/' + sLandscapeId + '/internal', {});
+			oModelInternal.loadData(
+        '/Landscape/' + sLandscapeId + '/internal',
+        null,
+        true,
+        'GET',
+        false,
+        false
+      );
 
 			var oModelExternal = this.getModel('landscapeExternal');
 			oModelExternal.attachRequestCompleted(this._requestCompletedExternal, this);
-			oModelExternal.loadData('/Landscape/' + sLandscapeId + '/external', {});
+			oModelExternal.loadData(
+        '/Landscape/' + sLandscapeId + '/external',
+        null,
+        true,
+        'GET',
+        false,
+        false
+      );
 		},
 
 		_requestCompletedGeneral: function(oEvent) {
@@ -319,15 +346,8 @@ sap.ui.define([
 			jQuery.sap.log.info('Landscape.controller:_bindElement');
 
 			this.getView().byId(sId).bindElement({
-				path: sPath,
-				events: {
-					change: this._onBindingChange.bind(this)
-				}
+				path: sPath
 			});
-		},
-
-		_onBindingChange: function () {
-			jQuery.sap.log.info('Landscape.controller:_onBindingChange');
 		}
 
 	});

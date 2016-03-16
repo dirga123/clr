@@ -20,6 +20,13 @@ sap.ui.define([
       this.getRouter().navTo('landscapes');
     },
 
+    onPressRefresh: function() {
+      jQuery.sap.log.info('Home.controller:onPressRefresh');
+
+      this.getView().byId('landscapesTile').setBusy(true);
+      this._requestData();
+    },
+
     _onObjectMatched: function(oEvent) {
       jQuery.sap.log.info('Home.controller:_onObjectMatched');
 
@@ -32,12 +39,18 @@ sap.ui.define([
 
       var oModel = this.getModel('home');
       oModel.attachRequestCompleted(this._requestCompleted, this);
-      oModel.loadData('/Home');
+      oModel.loadData(
+        '/Home',
+        null,
+        true,
+        'GET',
+        false,
+        false
+      );
     },
 
     _requestCompleted: function(oEvent) {
       jQuery.sap.log.info('Home.controller:_requestCompleted');
-
       var oModel = this.getModel('home');
       oModel.detachRequestCompleted(this._requestCompleted, this);
 

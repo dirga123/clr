@@ -15,7 +15,6 @@ sap.ui.define([
 
 			var oShell = new Shell(this.createId('appShell'), {
         icon: '{/icon}',
-
         headItems: [
    				new sap.ui.unified.ShellHeadItem(this.createId('appHome'), {
    					icon: "sap-icon://home",
@@ -23,7 +22,6 @@ sap.ui.define([
             visible: '{user>/logged}',
    					press: [ oController.onPressHome, oController ]
    			})],
-
         headEndItems: [
    				new sap.ui.unified.ShellHeadItem(this.createId('appLogoff'), {
    					icon: "sap-icon://log",
@@ -31,13 +29,7 @@ sap.ui.define([
             visible: '{user>/logged}',
    					press: [ oController.onPressLogoff, oController ]
    			})],
-
         content: new App("App", {
-          /*
-          afterDetailNavigate: function () {
-  					this.hideMaster();
-  				}
-          */
   			})
       });
 

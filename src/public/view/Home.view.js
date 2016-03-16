@@ -19,7 +19,12 @@ sap.ui.define([
     createContent: function (oController) {
       var oBar = new Toolbar({
         content: [
-          new ToolbarSpacer()
+          new ToolbarSpacer(),
+          new Button({
+            icon: 'sap-icon://refresh',
+            text: '{i18n>homeRefreshButton}',
+            press: [ oController.onPressRefresh, oController ]
+          }).addStyleClass('uoNoPrint')
         ]
       });
 

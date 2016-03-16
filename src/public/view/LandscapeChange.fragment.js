@@ -45,16 +45,6 @@ sap.ui.define([
 								fields: [
 									new Input({ value: '{landscape>domain}' })
 								]
-							}),
-							new FormElement({
-								label: new Label({ text: '' }),
-								fields: [
-									new Button({
-										type: sap.m.ButtonType.Reject,
-										text: 'Delete',
-										press: [ oController.onPressDelete, oController ]
-									})
-								]
 							})
 						]
 					})

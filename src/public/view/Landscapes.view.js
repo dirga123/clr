@@ -17,6 +17,7 @@ sap.ui.define([
       jQuery.sap.log.info('Landscapes.view:createContent');
 
       var oAddButton = new Button(this.createId('addButton'), {
+        icon: 'sap-icon://add',
         text: '{i18n>landscapeAddButton}',
         press: [ oController.onPressAdd, oController ]
       });
@@ -24,17 +25,60 @@ sap.ui.define([
       var oBar = new Toolbar({
         content: [
           new ToolbarSpacer(),
-          oAddButton
+          oAddButton,
+          new Button({
+            icon: 'sap-icon://refresh',
+            text: '{i18n>landscapeRefreshButton}',
+            press: [ oController.onPressRefresh, oController ]
+          }).addStyleClass('uoNoPrint')
         ]
       });
 
       var oTile = new StandardTile({
         icon: 'sap-icon://overview-chart',
-        number: '{landscapes>sla}',
+        number: {
+					parts: [ 'landscapes>currSla', 'landscapes>/services/goodSla' ],
+					formatter: function(currSla, goodSla) {
+						var text = '';
+						if (currSla !== undefined) {
+							text = parseFloat(currSla).toFixed(4);
+						}
+						return text;
+					}
+				},
         numberUnit: '{i18n>landscapesSLA}',
         title: '{landscapes>id} {landscapes>domain}',
-        info: '{landscapes>status}',
-        infoState: '{landscapes>infoState}',
+        info: {
+          parts: [ 'landscapes>triggersCount', 'landscapes>error' ],
+          formatter: function(count, error) {
+            if (error !== undefined || count === undefined) {
+              return oController.getResourceBundle().getText('landscapeError');
+            } else {
+              return count.toString() + ' problems';
+            }
+          }
+        },
+        infoState: {
+					parts: [ 'landscapes>triggersPriority', 'landscapes>error' ],
+					formatter: function(priority, error) {
+            if (error !== undefined) {
+              return 'Error';
+            }
+
+            switch (priority) {
+              case 2:
+              case 3:
+                return 'Warning';
+              case 4:
+              case 5:
+                return 'Error';
+              case 0:
+              case 1:
+              default:
+                return 'Success';
+            }
+					}
+        },
         press: [ oController.onPressDetail, oController ]
       });
 
