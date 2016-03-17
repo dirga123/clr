@@ -120,6 +120,8 @@ sap.ui.define([
       if (resp.error) {
         MessageToast.show(resp.error);
         return;
+      } else {
+        this.onNavBack();
       }
     },
 
@@ -164,9 +166,16 @@ sap.ui.define([
       // Load model
       var oModel = this.getModel('external');
       oModel.attachRequestCompleted(this._requestCompleted, this);
-      oModel.loadData('/Landscape/' + sLandscapeId + '/external/new', {
-        date: oDate.getTime()
-      });
+      oModel.loadData(
+        '/Landscape/' + sLandscapeId + '/external/new',
+        {
+          date: oDate.getTime()
+        },
+        true,
+        'GET',
+        false,
+        false
+      );
     },
 
     _requestCompleted: function(oEvent) {

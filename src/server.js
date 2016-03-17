@@ -349,7 +349,6 @@ router.get('/Landscape/:id/general', async (ctx) => {
     ctx.body = lsRet;
     return;
   }
-
   ctx.body = lsRet;
 });
 
@@ -548,8 +547,6 @@ router.get('/Landscape/:id/external/new/:fileName.pdf', async (ctx) => {
   const lsRet = {
     version: config.versionStr
   };
-
-  console.log(ctx.params);
 
   try {
     const external = await landscapeExternalNew(ctx.params.id, ctx.query.date);

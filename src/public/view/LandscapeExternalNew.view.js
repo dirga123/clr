@@ -21,11 +21,15 @@ sap.ui.define([
   'sap/m/Column',
   'sap/m/ColumnListItem',
   'sap/m/ObjectIdentifier',
-  'sap/m/ObjectNumber'
+  'sap/m/ObjectNumber',
+  'sap/m/IconTabBar',
+  'sap/m/IconTabFilter',
+  'sap/m/ObjectHeader'
 ], function (Page, Button, Toolbar,	ToolbarSpacer, Panel, Title, SimpleForm,
 	Label, Text, List, ObjectListItem, ObjectAttribute, ObjectStatus,
 	formatter, jQuery, CustomListItem, VerticalLayout, FlexBox,
-	Table, Column, ColumnListItem, ObjectIdentifier, ObjectNumber) {
+	Table, Column, ColumnListItem, ObjectIdentifier, ObjectNumber,
+  IconTabBar, IconTabFilter, ObjectHeader) {
   'use strict';
 
   sap.ui.jsview('sap.clr.view.LandscapeExternalNew', {
@@ -50,540 +54,414 @@ sap.ui.define([
       var oBar = new Toolbar({
         content: [
           new ToolbarSpacer(),
+          new sap.m.DateTimeInput(this.createId('pickMonth'), {
+            width: '15em',
+            displayFormat: 'MM/yyyy',
+            dateValue: '{/date}',
+            change: [ oController.onPressRefresh, oController ]
+          }),
+          new Button({
+            icon: 'sap-icon://refresh',
+            text: '{i18n>landscapeRefreshButton}',
+            press: [ oController.onPressRefresh, oController ]
+          }),
           oSaveButton,
           oExportButton
         ]
-      }).addStyleClass('uoNoPrint');
+      });
 
-			var oGeneralPanel = new Panel({
-				headerToolbar: new Toolbar({
-					content: [
-						new Title({
-							text: '{i18n>landscapeGeneral}',
-							titleStyle: 'H3'
-						}),
-						new ToolbarSpacer(),
-						new sap.m.DateTimeInput(this.createId('pickMonth'), {
-							width: '15em',
-							displayFormat: 'MM/yyyy',
-							dateValue: '{/date}',
-							change: [ oController.onPressRefresh, oController ]
-						}),
-						new Button({
-							icon: 'sap-icon://refresh',
-							press: [ oController.onPressRefresh, oController ]
-						}).addStyleClass('uoNoPrint')
-					]
-				}),
-				content: [
-					new SimpleForm({
-						minWidth: 1024,
-						maxContainerCols: 2,
-						layout: 'ResponsiveGridLayout',
-						editable: false,
-						labelSpanL: 1,
-						labelSpanM: 1,
-						emptySpanL: 1,
-						emptySpanM: 1,
-						columnsL: 1,
-						columnsM: 1,
-						content: [
-							new Label({ text: '{i18n>landscapeID}' }),
-							new Text({ text: '{external>id}' }),
-							new Label({ text: '{i18n>landscapeZabbix}' }),
-							new Text({ text: '{external>zabbix}' }),
-							new Label({ text: '{i18n>landscapeDomain}' }),
-							new Text({ text: '{external>domain}' })
-						]
-					})
-				]
-			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin');
+      // SLA
 
-			var oSlaList = new List(this.createId('slaList'), {
-			}).addStyleClass('page-break');
+      var oSlaItem = new ObjectListItem({
+        title: '{external>name}',
+        type: 'Inactive',
+        number: {
+          parts: [ 'external>currSla', 'external>goodSla' ],
+          formatter: jQuery.proxy(formatter.slaBothToText, this)
+        },
+        numberState: {
+          parts: [ 'external>status' ],
+          formatter: jQuery.proxy(formatter.statusToState, this)
+        },
+        attributes: [
+          new ObjectAttribute({
+            title: '{i18n>landscapeOkTime}',
+            text: {
+              parts: [ 'external>okTime' ],
+              formatter: jQuery.proxy(formatter.secondsToString, this)
+            }
+          }),
+          new ObjectAttribute({
+            title: '{i18n>landscapeProblemTime}',
+            text: {
+              parts: [ 'external>problemTime' ],
+              formatter: jQuery.proxy(formatter.secondsToString, this)
+            }
+          }),
+          new ObjectAttribute({
+            title: '{i18n>landscapeDowntime}',
+            text: {
+              parts: [ 'external>downtimeTime' ],
+              formatter: jQuery.proxy(formatter.secondsToString, this)
+            }
+          })
+        ]
+      });
 
-			var oSlaItem = new ObjectListItem({
-				title: '{external>name}',
-				type: 'Inactive',
-				number: {
-					parts: [ 'external>currSla', 'external>goodSla' ],
-					formatter: function(currSla, goodSla) {
-						var text = '';
-						if (currSla) {
-							text = parseFloat(currSla).toFixed(4);
-						}
-						if (goodSla) {
-							text += ' / ' + parseFloat(goodSla).toFixed(4);
-						}
-						return text;
-					}
-				},
-				numberState: {
-					parts: [ 'external>status' ],
-					formatter: jQuery.proxy(formatter.statusToState, this)
-				},
-				attributes: [
-					new ObjectAttribute({
-						title: '{i18n>landscapeOkTime}',
-						text: {
-							parts: [ 'external>okTime' ],
-							formatter: jQuery.proxy(formatter.secondsToString, this)
-						}
-					}),
-					new ObjectAttribute({
-						title: '{i18n>landscapeProblemTime}',
-						text: {
-							parts: [ 'external>problemTime' ],
-							formatter: jQuery.proxy(formatter.secondsToString, this)
-						}
-					}),
-					new ObjectAttribute({
-						title: '{i18n>landscapeDowntime}',
-						text: {
-							parts: [ 'external>downtimeTime' ],
-							formatter: jQuery.proxy(formatter.secondsToString, this)
-						}
-					})
-				],
-				firstStatus: new ObjectStatus({
-					title: '{i18n>landscapeStatus}',
-					text: {
-						parts: [ 'external>status' ],
-						formatter: jQuery.proxy(formatter.statusToText, this)
-					},
-					state: {
-						parts: [ 'external>status' ],
-						formatter: jQuery.proxy(formatter.statusToState, this)
-					}
-				})
-			});
+      var oSlaList = new List(this.createId('slaList'), {
+      });
 
-			oSlaList.bindItems({
-				path: 'external>services',
-				template: oSlaItem
-			});
+      oSlaList.bindItems({
+        path: 'external>services',
+        template: oSlaItem
+      });
 
-			var oSlaPanel = new Panel(this.createId('slaPanel'), {
-				headerToolbar: new Toolbar({
-					content: [
-						new Title({
-							text: '{i18n>landscapeSla}',
-							titleStyle: 'H3'
-						}),
-						new ToolbarSpacer()
-					]
-				}),
-				content: [
-					oSlaList
-				]
-			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin');
+      // Customers
 
-			var oHostList = new List(this.createId('hostList'), {
-				inset: true,
-				headerText: '{i18n>landscapeHosts}'
-			});
+      var oCustomerUsersTable = new Table({
+        columns: [
+          new Column({
+            header: new ObjectIdentifier({ title: '{i18n>landscapeExternalAlloc}' })
+          }),
+          new Column({
+            header: new Text({ text: '{i18n>landscapeExternalFirst}' })
+          }),
+          new Column({
+            header: new Text({ text: '{i18n>landscapeExternalMin}' })
+          }),
+          new Column({
+            header: new Text({ text: '{i18n>landscapeExternalAvg}' })
+          }),
+          new Column({
+            header: new Text({ text: '{i18n>landscapeExternalLast}' })
+          }),
+          new Column({
+            header: new Text({ text: '{i18n>landscapeExternalMax}' })
+          })
+        ],
+        items: [
+          new ColumnListItem({
+            cells: [
+              new ObjectIdentifier({ title: '{i18n>landscapeExternalUsers}' }),
+              new ObjectNumber({ number: '{external>users/first}' }),
+              new ObjectNumber({ number: '{external>users/min}' }),
+              new ObjectNumber({
+                number: {
+                  parts: [ 'external>users/avg' ],
+                  formatter: jQuery.proxy(formatter.avgToText, this)
+                }
+              }),
+              new ObjectNumber({ number: '{external>users/last}' }),
+              new ObjectNumber({ number: '{external>users/max}' })
+            ]
+          }),
+          new ColumnListItem({
+            cells: [
+              new ObjectIdentifier({ title: '{i18n>landscapeExternalRDSUsers}' }),
+              new ObjectNumber({ number: '{external>usersRDS/first}' }),
+              new ObjectNumber({ number: '{external>usersRDS/min}' }),
+              new ObjectNumber({
+                number: {
+                  parts: [ 'external>usersRDS/avg' ],
+                  formatter: jQuery.proxy(formatter.avgToText, this)
+                }
+              }),
+              new ObjectNumber({ number: '{external>usersRDS/last}' }),
+              new ObjectNumber({ number: '{external>usersRDS/max}' })
+            ]
+          })
+        ]
+      });
 
-			var oHostItem = new ObjectListItem({
-				title: '{external>name}',
-				type: 'Inactive',
-				number: {
-					parts: [ 'external>status' ],
-					formatter: jQuery.proxy(formatter.statusToText, this)
-				},
-				numberState: {
-					parts: [ 'external>status' ],
-					formatter: jQuery.proxy(formatter.statusToState, this)
-				},
-				attributes: [
-					new ObjectAttribute({
-						title: '{i18n>landscapeAgentStatus}',
-						text: {
-							parts: [ 'external>available' ],
-							formatter: function(available) {
-								var resourceBundle = this.getModel('i18n').getResourceBundle();
+      var oCustomerTenantsTable = new Table({
+        columns: [
+          new Column({
+            header: new ObjectIdentifier({ title: '{i18n>landscapeExternalTenants}' })
+          }),
+          new Column({
+            header: new Text({ text: '{i18n>landscapeExternalFirst}' })
+          }),
+          new Column({
+            header: new Text({ text: '{i18n>landscapeExternalMin}' })
+          }),
+          new Column({
+            header: new Text({ text: '{i18n>landscapeExternalAvg}' })
+          }),
+          new Column({
+            header: new Text({ text: '{i18n>landscapeExternalLast}' })
+          }),
+          new Column({
+            header: new Text({ text: '{i18n>landscapeExternalMax}' })
+          })
+        ],
+        items: [
+          new ColumnListItem({
+            cells: [
+              new ObjectIdentifier({ title: '{i18n>landscapeExternalTenantsDemo}' }),
+              new ObjectNumber({ number: '{external>tenantsDemo/first}' }),
+              new ObjectNumber({ number: '{external>tenantsDemo/min}' }),
+              new ObjectNumber({
+                number: {
+                  parts: [ 'external>tenantsDemo/avg' ],
+                  formatter: jQuery.proxy(formatter.avgToText, this)
+                }
+              }),
+              new ObjectNumber({ number: '{external>tenantsDemo/last}' }),
+              new ObjectNumber({ number: '{external>tenantsDemo/max}' })
+            ]
+          }),
+          new ColumnListItem({
+            cells: [
+              new ObjectIdentifier({ title: '{i18n>landscapeExternalTenantsProductive}' }),
+              new ObjectNumber({ number: '{external>tenantsProductive/first}' }),
+              new ObjectNumber({ number: '{external>tenantsProductive/min}' }),
+              new ObjectNumber({
+                number: {
+                  parts: [ 'external>tenantsProductive/avg' ],
+                  formatter: jQuery.proxy(formatter.avgToText, this)
+                }
+              }),
+              new ObjectNumber({ number: '{external>tenantsProductive/last}' }),
+              new ObjectNumber({ number: '{external>tenantsProductive/max}' })
+            ]
+          }),
+          new ColumnListItem({
+            cells: [
+              new ObjectIdentifier({ title: '{i18n>landscapeExternalTenantsTesting}' }),
+              new ObjectNumber({ number: '{external>tenantsTesting/first}' }),
+              new ObjectNumber({ number: '{external>tenantsTesting/min}' }),
+              new ObjectNumber({
+                number: {
+                  parts: [ 'external>tenantsTesting/avg' ],
+                  formatter: jQuery.proxy(formatter.avgToText, this)
+                }
+              }),
+              new ObjectNumber({ number: '{external>tenantsTesting/last}' }),
+              new ObjectNumber({ number: '{external>tenantsTesting/max}' })
+            ]
+          }),
+          new ColumnListItem({
+            cells: [
+              new ObjectIdentifier({ title: '{i18n>landscapeExternalTenantsTrial}' }),
+              new ObjectNumber({ number: '{external>tenantsTrial/first}' }),
+              new ObjectNumber({ number: '{external>tenantsTrial/min}' }),
+              new ObjectNumber({
+                number: {
+                  parts: [ 'external>tenantsTrial/avg' ],
+                  formatter: jQuery.proxy(formatter.avgToText, this)
+                }
+              }),
+              new ObjectNumber({ number: '{external>tenantsTrial/last}' }),
+              new ObjectNumber({ number: '{external>tenantsTrial/max}' })
+            ]
+          })
+        ]
+      });
 
-								switch (available) {
-								case '1':
-									return resourceBundle.getText('landscapeAgentAvail');
-								case '2':
-									return resourceBundle.getText('landscapeAgentUnavail');
-								default:
-									return resourceBundle.getText('landscapeAgentNA');
-								}
-							}
-						}
-					})
-				],
-				firstStatus: new ObjectStatus({
-					text: '{external>error}',
-					state: 'Error'
-				})
-			});
+      var oCustomerItem = new CustomListItem({
+        type: 'Inactive',
+        content: [
+          new Panel({
+            headerText: '{i18n>landscapeExternalCustomer}: {external>id}',
+            content: [
+              oCustomerUsersTable,
+              oCustomerTenantsTable
+            ]
+          })
+        ]
+      });
 
-			oHostList.bindItems({
-				path: 'external>hosts',
-				template: oHostItem
-			});
+      var oCustomerList = new List(this.createId('custList'), {
+        backgroundDesign: 'Transparent'
+      });
 
-			var oCustomerList = new List(this.createId('custList'), {
-			});
+      oCustomerList.bindItems({
+        path: 'external>items/customers',
+        template: oCustomerItem
+      });
 
-			var oCustomerUsersTable = new Table({
-				columns: [
-					new Column({
-						header: new Text({ text: 'Users' })
-					}),
-					new Column({
-						header: new Text({ text: 'First' })
-					}),
-					new Column({
-						header: new Text({ text: 'Last' })
-					}),
-					new Column({
-						header: new Text({ text: 'Min' })
-					}),
-					new Column({
-						header: new Text({ text: 'Max' })
-					}),
-					new Column({
-						header: new Text({ text: 'Avg' })
-					})
-				],
-				items: [
-					new ColumnListItem({
-						cells: [
-							new ObjectIdentifier({ title: 'Users' }),
-							new ObjectNumber({ number: '{external>users/first}' }),
-							new ObjectNumber({ number: '{external>users/last}' }),
-							new ObjectNumber({ number: '{external>users/min}' }),
-							new ObjectNumber({ number: '{external>users/max}' }),
-							new ObjectNumber({
-								number: {
-									parts: [ 'external>users/avg' ],
-									formatter: jQuery.proxy(formatter.avgToText, this)
-								}
-							})
-						]
-					}),
-					new ColumnListItem({
-						cells: [
-							new ObjectIdentifier({ title: 'RDS users' }),
-							new ObjectNumber({ number: '{external>usersRDS/first}' }),
-							new ObjectNumber({ number: '{external>usersRDS/last}' }),
-							new ObjectNumber({ number: '{external>usersRDS/min}' }),
-							new ObjectNumber({ number: '{external>usersRDS/max}' }),
-							new ObjectNumber({
-								number: {
-									parts: [ 'external>usersRDS/avg' ],
-									formatter: jQuery.proxy(formatter.avgToText, this)
-								}
-							})
-						]
-					})
-				]
-			});
+      // Service Units
 
-			var oCustomerTenantsTable = new Table({
-				columns: [
-					new Column({
-						header: new Text({ text: 'Tenants' })
-					}),
-					new Column({
-						header: new Text({ text: 'First' })
-					}),
-					new Column({
-						header: new Text({ text: 'Last' })
-					}),
-					new Column({
-						header: new Text({ text: 'Min' })
-					}),
-					new Column({
-						header: new Text({ text: 'Max' })
-					}),
-					new Column({
-						header: new Text({ text: 'Avg' })
-					})
-				],
-				items: [
-					new ColumnListItem({
-						cells: [
-							new ObjectIdentifier({ title: 'Demo' }),
-							new ObjectNumber({ number: '{external>tenantsDemo/first}' }),
-							new ObjectNumber({ number: '{external>tenantsDemo/last}' }),
-							new ObjectNumber({ number: '{external>tenantsDemo/min}' }),
-							new ObjectNumber({ number: '{external>tenantsDemo/max}' }),
-							new ObjectNumber({
-								number: {
-									parts: [ 'external>tenantsDemo/avg' ],
-									formatter: jQuery.proxy(formatter.avgToText, this)
-								}
-							})
-						]
-					}),
-					new ColumnListItem({
-						cells: [
-							new ObjectIdentifier({ title: 'Productive' }),
-							new ObjectNumber({ number: '{external>tenantsProductive/first}' }),
-							new ObjectNumber({ number: '{external>tenantsProductive/last}' }),
-							new ObjectNumber({ number: '{external>tenantsProductive/min}' }),
-							new ObjectNumber({ number: '{external>tenantsProductive/max}' }),
-							new ObjectNumber({
-								number: {
-									parts: [ 'external>tenantsProductive/avg' ],
-									formatter: jQuery.proxy(formatter.avgToText, this)
-								}
-							})
-						]
-					}),
-					new ColumnListItem({
-						cells: [
-							new ObjectIdentifier({ title: 'Testing' }),
-							new ObjectNumber({ number: '{external>tenantsTesting/first}' }),
-							new ObjectNumber({ number: '{external>tenantsTesting/last}' }),
-							new ObjectNumber({ number: '{external>tenantsTesting/min}' }),
-							new ObjectNumber({ number: '{external>tenantsTesting/max}' }),
-							new ObjectNumber({
-								number: {
-									parts: [ 'external>tenantsTesting/avg' ],
-									formatter: jQuery.proxy(formatter.avgToText, this)
-								}
-							})
-						]
-					}),
-					new ColumnListItem({
-						cells: [
-							new ObjectIdentifier({ title: 'Trial' }),
-							new ObjectNumber({ number: '{external>tenantsTrial/first}' }),
-							new ObjectNumber({ number: '{external>tenantsTrial/last}' }),
-							new ObjectNumber({ number: '{external>tenantsTrial/min}' }),
-							new ObjectNumber({ number: '{external>tenantsTrial/max}' }),
-							new ObjectNumber({
-								number: {
-									parts: [ 'external>tenantsTrial/avg' ],
-									formatter: jQuery.proxy(formatter.avgToText, this)
-								}
-							})
-						]
-					})
-				]
-			});
+      var oServiceUnitTenantsTable = new Table({
+        columns: [
+          new Column({
+            header: new ObjectIdentifier({ title: '{i18n>landscapeExternalTenants}' })
+          }),
+          new Column({
+            header: new Text({ text: '{i18n>landscapeExternalFirst}' })
+          }),
+          new Column({
+            header: new Text({ text: '{i18n>landscapeExternalMin}' })
+          }),
+          new Column({
+            header: new Text({ text: '{i18n>landscapeExternalAvg}' })
+          }),
+          new Column({
+            header: new Text({ text: '{i18n>landscapeExternalLast}' })
+          }),
+          new Column({
+            header: new Text({ text: '{i18n>landscapeExternalMax}' })
+          })
+        ],
+        items: [
+          new ColumnListItem({
+            cells: [
+              new ObjectIdentifier({ title: '{i18n>landscapeExternalTenantsDemo}' }),
+              new ObjectNumber({ number: '{external>tenantsDemo/first}' }),
+              new ObjectNumber({ number: '{external>tenantsDemo/min}' }),
+              new ObjectNumber({
+                number: {
+                  parts: [ 'external>tenantsDemo/avg' ],
+                  formatter: jQuery.proxy(formatter.avgToText, this)
+                }
+              }),
+              new ObjectNumber({ number: '{external>tenantsDemo/last}' }),
+              new ObjectNumber({ number: '{external>tenantsDemo/max}' })
+            ]
+          }),
+          new ColumnListItem({
+            cells: [
+              new ObjectIdentifier({ title: '{i18n>landscapeExternalTenantsProductive}' }),
+              new ObjectNumber({ number: '{external>tenantsProductive/first}' }),
+              new ObjectNumber({ number: '{external>tenantsProductive/min}' }),
+              new ObjectNumber({
+                number: {
+                  parts: [ 'external>tenantsProductive/avg' ],
+                  formatter: jQuery.proxy(formatter.avgToText, this)
+                }
+              }),
+              new ObjectNumber({ number: '{external>tenantsProductive/last}' }),
+              new ObjectNumber({ number: '{external>tenantsProductive/max}' })
+            ]
+          }),
+          new ColumnListItem({
+            cells: [
+              new ObjectIdentifier({ title: '{i18n>landscapeExternalTenantsTesting}' }),
+              new ObjectNumber({ number: '{external>tenantsTesting/first}' }),
+              new ObjectNumber({ number: '{external>tenantsTesting/min}' }),
+              new ObjectNumber({
+                number: {
+                  parts: [ 'external>tenantsTesting/avg' ],
+                  formatter: jQuery.proxy(formatter.avgToText, this)
+                }
+              }),
+              new ObjectNumber({ number: '{external>tenantsTesting/last}' }),
+              new ObjectNumber({ number: '{external>tenantsTesting/max}' })
+            ]
+          }),
+          new ColumnListItem({
+            cells: [
+              new ObjectIdentifier({ title: '{i18n>landscapeExternalTenantsTrial}' }),
+              new ObjectNumber({ number: '{external>tenantsTrial/first}' }),
+              new ObjectNumber({ number: '{external>tenantsTrial/min}' }),
+              new ObjectNumber({
+                number: {
+                  parts: [ 'external>tenantsTrial/avg' ],
+                  formatter: jQuery.proxy(formatter.avgToText, this)
+                }
+              }),
+              new ObjectNumber({ number: '{external>tenantsTrial/last}' }),
+              new ObjectNumber({ number: '{external>tenantsTrial/max}' })
+            ]
+          })
+        ]
+      });
 
-			var oCustomerItem = new CustomListItem({
-				type: 'Inactive',
-				content: [
-					new VerticalLayout({
-						content: [
-							new SimpleForm({
-								minWidth: 1024,
-								maxContainerCols: 2,
-								layout: 'ResponsiveGridLayout',
-								editable: false,
-								labelSpanL: 2,
-								labelSpanM: 2,
-								emptySpanL: 1,
-								emptySpanM: 1,
-								columnsL: 1,
-								columnsM: 1,
-								content: [
-									new Label({ text: 'Name' }),
-									new ObjectIdentifier({ title: 'Customer {external>id}' })
-								]
-							}),
-							oCustomerUsersTable,
-							oCustomerTenantsTable
-						]
-					})
-				]
-			});
+      var oServiceUnitItem = new CustomListItem({
+        type: 'Inactive',
+        content: [
+          new VerticalLayout({
+            content: [
+              new SimpleForm({
+                minWidth: 1024,
+                maxContainerCols: 2,
+                layout: 'ResponsiveGridLayout',
+                editable: false,
+                labelSpanL: 3,
+                labelSpanM: 3,
+                emptySpanL: 4,
+                emptySpanM: 4,
+                columnsL: 1,
+                columnsM: 1,
+                content: [
+                  new Label({ text: '{i18n>landscapeExternalServiceUnitName}' }),
+                  new ObjectIdentifier({
+                    title: '{external>name/last}'
+                  }),
+                  new Label({ text: '{i18n>landscapeExternalServiceUnitPurpose}' }),
+                  new Text({ text: '{external>purpose/last}' }),
+                  new Label({ text: '{i18n>landscapeExternalServiceUnitB1Version}' }),
+                  new Text({ text: '{external>version/last}' }),
+                  new Label({ text: '{i18n>landscapeExternalServiceUnitHanaVersion}' }),
+                  new Text({ text: '{external>hanaVersion/last}' }),
+                  new Label({ text: '{i18n>landscapeExternalServiceUnitSLA}' }),
+                  new Text({
+                    text: {
+                      parts: [ 'external>sla/currSla', 'external>sla/goodSla' ],
+                      formatter: jQuery.proxy(formatter.slaBothToText, this)
+                    }
+                  })
+                ]
+              }),
+              oServiceUnitTenantsTable
+            ]
+          })
+        ]
+      });
 
-			oCustomerList.bindItems({
-				path: 'external>items/customers',
-				template: oCustomerItem
-			});
+      var oServiceUnitsList = new List(this.createId('serviceUnitsList'), {
+        backgroundDesign: 'Transparent'
+      });
 
-			var oCustomersPanel = new Panel(this.createId('customersPanel'), {
-				headerToolbar: new Toolbar({
-					content: [
-						new Title({
-							text: '{i18n>landscapeCustomers}',
-							titleStyle: 'H3'
-						}),
-						new Title({
-							text: '{external>items/customerCount/max}',
-							titleStyle: 'H1'
-						}),
-						new ToolbarSpacer()
-					]
-				}),
-				content: [
-					oCustomerList
-				]
-			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin');
+      oServiceUnitsList.bindItems({
+        path: 'external>items/serviceUnits',
+        template: oServiceUnitItem
+      });
 
-			var oServiceUnitsList = new List(this.createId('serviceUnitsList'), {
-			});
 
-			var oServiceUnitTenantsTable = new Table({
-				columns: [
-					new Column({
-						header: new Text({ text: 'Tenants' })
-					}),
-					new Column({
-						header: new Text({ text: 'First' })
-					}),
-					new Column({
-						header: new Text({ text: 'Last' })
-					}),
-					new Column({
-						header: new Text({ text: 'Min' })
-					}),
-					new Column({
-						header: new Text({ text: 'Max' })
-					}),
-					new Column({
-						header: new Text({ text: 'Avg' })
-					})
-				],
-				items: [
-					new ColumnListItem({
-						cells: [
-							new ObjectIdentifier({ title: 'Demo' }),
-							new ObjectNumber({ number: '{external>tenantsDemo/first}' }),
-							new ObjectNumber({ number: '{external>tenantsDemo/last}' }),
-							new ObjectNumber({ number: '{external>tenantsDemo/min}' }),
-							new ObjectNumber({ number: '{external>tenantsDemo/max}' }),
-							new ObjectNumber({ number: '{external>tenantsDemo/avg}' })
-						]
-					}),
-					new ColumnListItem({
-						cells: [
-							new ObjectIdentifier({ title: 'Productive' }),
-							new ObjectNumber({ number: '{external>tenantsProductive/first}' }),
-							new ObjectNumber({ number: '{external>tenantsProductive/last}' }),
-							new ObjectNumber({ number: '{external>tenantsProductive/min}' }),
-							new ObjectNumber({ number: '{external>tenantsProductive/max}' }),
-							new ObjectNumber({ number: '{external>tenantsProductive/avg}' })
-						]
-					}),
-					new ColumnListItem({
-						cells: [
-							new ObjectIdentifier({ title: 'Testing' }),
-							new ObjectNumber({ number: '{external>tenantsTesting/first}' }),
-							new ObjectNumber({ number: '{external>tenantsTesting/last}' }),
-							new ObjectNumber({ number: '{external>tenantsTesting/min}' }),
-							new ObjectNumber({ number: '{external>tenantsTesting/max}' }),
-							new ObjectNumber({ number: '{external>tenantsTesting/avg}' })
-						]
-					}),
-					new ColumnListItem({
-						cells: [
-							new ObjectIdentifier({ title: 'Trial' }),
-							new ObjectNumber({ number: '{external>tenantsTrial/first}' }),
-							new ObjectNumber({ number: '{external>tenantsTrial/last}' }),
-							new ObjectNumber({ number: '{external>tenantsTrial/min}' }),
-							new ObjectNumber({ number: '{external>tenantsTrial/max}' }),
-							new ObjectNumber({ number: '{external>tenantsTrial/avg}' })
-						]
-					})
-				]
-			});
+      // Tabs
 
-			var oServiceUnitItem = new CustomListItem({
-				type: 'Inactive',
-				content: [
-					new VerticalLayout({
-						content: [
-							new SimpleForm({
-								minWidth: 1024,
-								maxContainerCols: 2,
-								layout: 'ResponsiveGridLayout',
-								editable: false,
-								labelSpanL: 2,
-								labelSpanM: 2,
-								emptySpanL: 1,
-								emptySpanM: 1,
-								columnsL: 1,
-								columnsM: 1,
-								content: [
-									new Label({ text: 'Name' }),
-									new FlexBox({
-										justifyContent: sap.m.FlexJustifyContent.Start,
-										alignItems: sap.m.FlexAlignItems.Center,
-										items: [
-											new ObjectIdentifier({
-												title: '{external>name/last}'
-											}).addStyleClass('sapUiTinyMarginEnd'),
-											new Text({ text: '(was {external>name/first})' })
-										]
-									}),
-									new Label({ text: 'Purpose' }),
-									new Text({
-										text: '{external>purpose/last} (was {external>purpose/first})'
-									}),
-									new Label({ text: 'B1 Version' }),
-									new Text({
-										text: '{external>version/last} (was {external>version/first})'
-									}),
-									new Label({ text: 'Hana Version' }),
-									new Text({
-										text: '{external>hanaVersion/last} (was {external>hanaVersion/first})'
-									}),
-									new Label({ text: 'SLA' }),
-									new FlexBox({
-										justifyContent: sap.m.FlexJustifyContent.Start,
-										alignItems: sap.m.FlexAlignItems.Center,
-										items: [
-											new ObjectIdentifier({
-												title: {
-													parts: [ 'external>sla/currSla' ],
-													formatter: jQuery.proxy(formatter.slaToText, this)
-												}
-											}).addStyleClass('sapUiTinyMarginEnd'),
-											new Text({ text: '(of {external>sla/goodSla})' })
-										]
-									})
-								]
-							}),
-							oServiceUnitTenantsTable
-						]
-					})
-				]
-			});
+      var oTabs = new IconTabBar({
+        expanded: '{device>/isNoPhone}',
+        backgroundDesign: 'Transparent',
+        items: [
+          new IconTabFilter({
+            text: '{i18n>landscapeSla}',
+            content: oSlaList
+          }),
+          new IconTabFilter({
+            text: '{i18n>landscapeServiceUnits}',
+            count: '{external>items/serviceUnitCount/max}',
+            content: oServiceUnitsList
+          }),
+          new IconTabFilter({
+            text: '{i18n>landscapeCustomers}',
+            count: '{external>items/customerCount/max}',
+            content: oCustomerList
+          })
+        ]
+      });
 
-			oServiceUnitsList.bindItems({
-				path: 'external>items/serviceUnits',
-				template: oServiceUnitItem
-			});
+      // General
 
-			var oServiceUnitsPanel = new Panel(this.createId('serviceUnitsPanel'), {
-				headerToolbar: new Toolbar({
-					content: [
-						new Title({
-							text: '{i18n>landscapeServiceUnits}',
-							titleStyle: 'H3'
-						}),
-						new Title({
-							text: '{external>items/serviceUnitCount/max}',
-							titleStyle: 'H1'
-						}),
-						new ToolbarSpacer()
-					]
-				}),
-				content: [
-					oServiceUnitsList
-				]
-			}).addStyleClass('sapUiForceWidthAuto sapUiResponsiveMargin');
+      var oGeneralPanel = new ObjectHeader({
+        title: '{i18n>landscapeID}: {external>id}',
+        attributes: [
+          new ObjectAttribute({
+            title: '{i18n>landscapeDomain}',
+            text: '{external>domain}'
+          })
+        ]
+      });
 
-      var oPage = new Page(this.createId('landscapePage'), {
+      var oPage = new Page(this.createId('landscapeNewExternalPage'), {
         title: '{i18n>landscapeExternalNew}',
         showHeader: true,
         showNavButton: true,
         navButtonPress: [ oController.onNavBack, oController ],
         content: [
           oGeneralPanel,
-          oSlaPanel,
-          oCustomersPanel,
-          oServiceUnitsPanel
+          oTabs
         ],
         footer: [
           oBar
