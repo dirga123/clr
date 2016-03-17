@@ -228,10 +228,32 @@
         page-break-inside: avoid  !important;
       }
 
+      .logo {
+  			float: left;
+      }
+
+      .header {
+  			float: right;
+      }
+
+      .header-name {
+        font-family:"HelveticaNeue-CondensedBlack", "Helvetica Neue";
+        font-size:14px;
+        color:#999999;
+        text-align:left;
+      }
     </style>
   </head>
 
   <body>
+    <div>
+      <div class="logo">
+          <img src="6DBB7670-586D-4BA5-A79C-CE4E123C0D7F@1x.png" />
+      </div>
+      <div class="header">
+          <span class="header-name">Cloud report</span>
+      </div>
+    </div>
     <div class="mainReportHeader">
   		<h1 class="style1" id="reportTitleID">
     		<span class="b1">SAP Business One</span> Cloud Report

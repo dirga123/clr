@@ -13,6 +13,7 @@ async function copy({ watch } = {}) {
   await Promise.all([
     ncp('src/public', 'build/public'),
     ncp('src/content', 'build/content'),
+    ncp('src/pdf', 'build/pdf'),
     ncp('package.json', 'build/package.json')
   ]);
 

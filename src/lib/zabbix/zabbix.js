@@ -17,8 +17,6 @@ export default class Zabbix {
     if (NODE_ENV === 'development') {
       debug.enable('zabbix');
     }
-
-    this.time = new Date();
   }
 
   async getApiVersion() {

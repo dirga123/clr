@@ -14,6 +14,16 @@ sap.ui.define([
       this._toggleButtonsAndView(false);
 
       var oDate = new Date();
+      var oDateUTC = new Date();
+      oDateUTC.setTime(Date.UTC(oDate.getFullYear(), oDate.getMonth(), oDate.getDate()));
+      var utcDate = new Date(Date.UTC(96, 11, 1, 0, 0, 0));
+      console.log(oDate.getFullYear());
+      console.log(oDate.getMonth());
+      console.log(oDate.getDate());
+      console.log(oDate.getTime());
+      console.log(oDateUTC.getTime());
+      console.log(utcDate.getTime());
+
       var oViewModel = new JSONModel({
         date: oDate
       });

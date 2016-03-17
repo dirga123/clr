@@ -173,7 +173,7 @@ router.get('/Landscapes', async ctx => {
           prevVal = currVal.priority;
         }
         return prevVal;
-      }, new Number(0));
+      }, Number(0));
 
       await zabbix.logout();
     } catch (e) {
@@ -509,38 +509,53 @@ router.post('/Landscape/:id/external/new', async (ctx) => {
 });
 
 async function generateExternalPdf(ctx, external) {
-  const templateStr = await fs.readFileAsync(
-    path.resolve(__dirname, 'content/External.jsreport'),
-    'utf8'
-  );
+  try {
+    const templateStr = await fs.readFileAsync(
+      path.resolve(__dirname, 'content/External.jsreport'),
+      'utf8'
+    );
 
-  const jsReport = new JsReport({
-    tasks: {
-      allowedModules: [ 'moment' ]
+    const jsReport = new JsReport({
+      wkhtmltopdf: {
+        allowLocalFilesAccess: true
+      },
+      rootDirectory: __dirname,
+      dataDirectory: path.join(__dirname, 'pdf'),
+      tempDirectory: path.join(__dirname, 'pdf'),
+      tasks: {
+        allowedModules: [ 'moment' ]
+      }
+    });
+
+    jsReport.use(require('jsreport-wkhtmltopdf')());
+    jsReport.use(require('jsreport-jsrender')());
+
+    await jsReport.init();
+    const out = await jsReport.render({
+      template: {
+        content: templateStr,
+        engine: 'jsrender',
+        recipe: 'wkhtmltopdf',
+        helpers: 'function dateDisp(date) { return moment(date).format("YYYY-MM-DD"); };' +
+          'function periodDisp(date) { return moment(date).format("YYYY-MM"); };' +
+          'function slaDisp(sla) { return parseFloat(sla).toFixed(4) };' +
+          'function secondsDisp(val) { var s = Math.floor(val); var d = Math.floor(s / 86400);' +
+          's -= d * 86400; var h = Math.floor(s / 3600); s -= h * 3600;' +
+          'var m = Math.floor(s / 60); s -= m * 60; return d+"d "+h+"h "+m+"m "+s+"s";}'
+      },
+      data: external
+    });
+
+    ctx.body = out.stream;
+    ctx.response.set(out.headers);
+  } catch (e) {
+    console.log(typeof e);
+    if (typeof e === 'object') {
+      throw e.toString();
+    } else {
+      throw 'Failed to create report';
     }
-  });
-
-  jsReport.use(require('jsreport-wkhtmltopdf')());
-  jsReport.use(require('jsreport-jsrender')());
-
-  await jsReport.init();
-  const out = await jsReport.render({
-    template: {
-      content: templateStr,
-      engine: 'jsrender',
-      recipe: 'wkhtmltopdf',
-      helpers: 'function dateDisp(date) { return moment(date).format("YYYY-MM-DD"); };' +
-        'function periodDisp(date) { return moment(date).format("YYYY-MM"); };' +
-        'function slaDisp(sla) { return parseFloat(sla).toFixed(4) };' +
-        'function secondsDisp(val) { var s = Math.floor(val); var d = Math.floor(s / 86400);' +
-        's -= d * 86400; var h = Math.floor(s / 3600); s -= h * 3600;' +
-        'var m = Math.floor(s / 60); s -= m * 60; return d+"d "+h+"h "+m+"m "+s+"s";}'
-    },
-    data: external
-  });
-
-  ctx.body = out.stream;
-  ctx.response.set(out.headers);
+  }
 }
 
 router.get('/Landscape/:id/external/new/:fileName.pdf', async (ctx) => {
@@ -573,28 +588,6 @@ router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
 
     const externalObj = JSON.parse(external);
     await generateExternalPdf(ctx, externalObj);
-  } catch (e) {
-    debug('dev')(`Catched error: ${e}`);
-    lsRet.error = e;
-    ctx.body = lsRet;
-    return;
-  }
-});
-
-router.post('/Landscape/:id/external/new/:fileName.pdf', async (ctx) => {
-  const lsRet = {
-    version: config.versionStr
-  };
-
-  // Check for parameters
-  if (ctx.request.body === undefined) {
-    lsRet.error = 'Wrong input';
-    ctx.body = lsRet;
-    return;
-  }
-
-  try {
-    await generateExternalPdf(ctx, ctx.request.body);
   } catch (e) {
     debug('dev')(`Catched error: ${e}`);
     lsRet.error = e;
