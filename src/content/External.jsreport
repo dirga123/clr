@@ -5,440 +5,638 @@
     <meta content="System status report provides a detailed overview and status analyzis of SAP Business One installation" name="description">
     <title>SAP Business One System Status Report</title>
     <style type="text/css">
-      body, table{
-  			width:800px;
-  			font-family: Tahoma;
-  			font-size:13px;
-  			text-align: center;
-  			margin: 0px auto;
-  			margin-top: 50px;
-  		}
+		body {
+			font-family:Arial;
+			margin: 45px;
+		}
 
-      .style1 {
-  			font-size: 20px;
-  			color: #0D3371;
-  		}
+		.header {
+			width: 100%;
+			margin-bottom: 50px;
+		}
 
-      .subtitle {
-  			color: #666666;
-  			font-family: Tahoma;
-  			font-size: 10pt;
-  		}
+		.header-logo {
+			float: left;
+			width: 200px;
+			height: 46px;
+		}
 
-      .chapter {
-  			margin-bottom: 30px;
-  		}
+		.header-info {
+			float: right;
+		}
 
-      div.chapterBody {
-  			text-align: left;
-  			margin: 0px 0px 0px 0px;
-  		}
+		.header-info-line {
+			float: right;
+		}
 
-      .chapterHeading {
-  			color: #f0ab00;
-  			font-family: Tahoma;
-  			font-size: 11pt;
-  			font-weight: bold;
-  			height:20px;
-  			width: 100%;
-  			margin-top: 10px;
-  			margin-bottom: 10px;
-  			text-align: left;
-  		}
+		.icon-big {
+			float: none;
+			width: 60px;
+			height: 60px;
+		}
 
-      .chapterRatingNotRated{
-  			line-height: 17px; //hack for ie6
-  			display: inline-block;
-  			float: left;
-  			background-color: #666666;
-  			width: 80px;
-  			height: 20px;
-  			font-size: 8pt;
-  			color: white;
-  			text-align: center;
-  			border-bottom: 1px solid #888888;
-  			border-right: 1px solid #888888;
-  			padding: 2px;
-  		}
+    .icon-big {
+			float: none;
+			width: 34px;
+			height: 34px;
+		}
 
-      .chapterName {
-  			line-height: 17px;
-  			text-align: left;
-  			ccolor: #f0ab00;
-  			color: white;
-  			font-family: Tahoma;
-  			font-size: 11pt;
-  			font-weight: bold;
-  			bbackground-color: #8c6557;
-  			background-color: #666666;
-  			background-color: #5781AE;
-  			bbackground-color: #f0ab00;
-  			height: 20px;
-  			padding: 2px 2px 2px 10px;
-        margin-left: 90px;
-  		}
+		.clearfix:after {
+			visibility: hidden;
+			display: block;
+			font-size: 0;
+			content: " ";
+			clear: both;
+			height: 0;
+			}
+		* html .clearfix             { zoom: 1; } /* IE6 */
+		*:first-child+html .clearfix { zoom: 1; } /* IE7 */
 
-      h5.chapterName {
-        line-height: 17px;
-        text-align: left;
-        ccolor: #f0ab00;
-        color: white;
-        font-family: Tahoma;
-        font-size: 11pt;
-        font-weight: bold;
-        bbackground-color: #8c6557;
-        background-color: #666666;
-        background-color: #5781AE;
-        bbackground-color: #f0ab00;
-        margin-left: 5px;
-        height: 20px;
-        padding: 2px 2px 2px 10px;
-      }
+		.header-name {
+			font-size:14px;
+			color:#999999;
+			text-align:right;
+		}
 
-      div.mainReportHeader
-  		{
-  			width:800px;
-  			border: 1px dashed #888888;
-  			padding: 5px;
-  			text-align: center;
-  			margin-bottom: 10px;
-  			background-color: #999999;
-  			background-color: white;
-  			vertical-align: middle;
-  		}
+		.header-created-label {
+			font-size:9px;
+			color:#808080;
+			text-align:right;
+		}
 
-  		div.mainReport
-  		{
-  			width:800px;
-  			border: 1px dashed #888888;
-  			padding: 5px;
-  			background-color: white;
-  			position: relative;
-  		}
+		.header-created-value {
+			font-size:11px;
+			color:#4a4a4a;
+			text-align:left;
+		}
 
-      .page-break {
-        display: block;
-        page-break-before: always;
-      }
+		.header-period-label {
+			font-size:12px;
+			color:#808080;
+			text-align:right;
+		}
 
-      .page-keep {
-        page-break-inside: avoid;
-      }
+		.header-period-value {
+			font-weight: bold;
+			font-size:14px;
+			color:#4a4a4a;
+			text-align:left;
+		}
 
-      table {
-  			width: 580px;
-  			margin-left:4px;
-  		}
+		.section-header {
+			background:#f2f2f2;
+			width:100%;
+			height:21px;
+			display:table;
+			padding-left: 10px;
+			margin-bottom: 50px;
+		}
 
-  		td {
-  			padding:4px;
-  			border: 1px solid white;
-  		}
+		.section {
+			margin-bottom: 50px;
+		}
 
-      table.verticalTable {
-  			margin-top: 5px;
-  			margin-bottom: 10px;
-  			margin-left: 25px;
-  			border-width: 1px 1px 1px 1px;
-  			border-spacing: 2px;
-  			border-style: none none none none;
-  			border-color: gray gray gray gray;
-  			border-collapse: collapse;
-  			background-color: white;
-  			width: 740px;
-  		}
+		.section-header h1 {
+			font-size:14px;
+			color:#4d4d4d;
+			display:table-cell;
+			text-align:left;
+			vertical-align: middle;
+		}
 
-  		table.verticalTable th {
-  			border-width: 1px;
-  			padding: 3px;
-  			border-style: solid solid solid solid;
-  			border-color: #f0f0f0;
-  			background-color: white;
-  		}
+    .summary-name {
+      font-weight:bold;
+      font-size:18px;
+      color:#4d4d4d;
+      text-align:left;
+      margin-bottom: 20px;
+    }
 
-  		table.verticalTable td {
-  			border-width: 1px 1px 1px 1px;
-  			padding: 5px 3px 3px 3px;
-  			border-style: dashed dashed dashed dashed;
-  			border-color: #e0e0e0;
-  			background-color: white;
-  			font-size: 8pt;
-  			width: 360;
-  			text-align: left;
-  		}
+    .summary-label {
+      font-weight:bold;
+      font-size:12px;
+      color:#808080;
+      text-align:left;
+    }
 
-      table td div {
-        color: #000;
-      }
+    .summary-value {
+      font-weight:bold;
+      font-size:14px;
+      color:#4a4a4a;
+      text-align:left;
+    }
 
-      table.verticalTable td.title{
-  			background-color: #F0F0F0;
-  			text-align: right;
-  			width: 240px;
-  		}
+    .sla-name {
+      font-weight:bold;
+      font-size:12px;
+      color:#808080;
+      text-align:left;
+      margin-bottom: 10px;
+    }
 
-      table.horizontalTable {
-  			margin-top: 5px;
-  			margin-bottom: 10px;
-  			margin-left: 25px;
-  			border-width: 1px 1px 1px 1px;
-  			border-spacing: 2px;
-  			border-style: none none none none;
-  			border-color: gray gray gray gray;
-  			border-collapse: collapse;
-  			background-color: white;
-  			width: 740px;
-  		}
+    .sla-value {
+      font-weight:bold;
+      font-size:14px;
+      color:#4a4a4a;
+      text-align:left;
+      margin-bottom: 10px;
+    }
 
-  		table.horizontalTable th {
-  			border-width: 1px 1px 1px 1px;
-  			padding: 5px 3px 3px 3px;
-  			border-style: dashed dashed dashed dashed;
-  			border-color: #e0e0e0;
-  			font-size: 8pt;
-  			background-color: #E0E0E0;
-  			text-align: center;
-  		}
+    .sla-partial-label {
+      font-size:9px;
+      color:#808080;
+      text-align:right;
+      padding-right: 10px;
+    }
 
-  		table.horizontalTable td {
-  			border-width: 1px 1px 1px 1px;
-  			padding: 5px 3px 3px 3px;
-  			border-style: dashed dashed dashed dashed;
-  			border-color: #e0e0e0;
-  			background-color: white;
-  			font-size: 8pt;
-  			text-align: center;
-  		}
+    .sla-partial-value {
+      font-size:11px;
+      color:#4a4a4a;
+      text-align:left;
+    }
 
-      table.horizontalTable td.title{
-  			font-size: 8pt;
-  			background-color: #FBFBFB;
-  			text-align: left;
-  		}
+    .su-prefix {
+      background:#4a90e2;
+      width:4px;
+      height:17px;
+    }
 
-      .b1 {
-  			color: #F0AB00;
-  		}
+    .su-name {
+      font-weight:bold;
+      font-size:14px;
+      color:#4a4a4a;
+      text-align:left;
+    }
 
-      table {
-        page-break-inside: avoid !important;
-  		}
+    .su-label {
+      font-size:9px;
+      color:#808080;
+      text-align:right;
+    }
 
-      tr {
-        page-break-inside: avoid  !important;
-      }
+    .su-value {
+      font-size:11px;
+      color:#4a4a4a;
+      text-align:left;
+      padding-left: 10px;
+    }
 
-      .logo {
-  			float: left;
-      }
+    .table {
+      display: table;
+      border:1px solid #f2f2f2;
+    }
 
-      .header {
-  			float: right;
-      }
+    .table-cell-first {
+      width: 95px;
+      text-align:left;
+      padding-left:10px;
+    }
 
-      .header-name {
-        /*font-family:HelveticaNeue-CondensedBlack;*/
-        font-family:Helvetica Neue;
-        font-size:24px;
-        color:#999999;
-        text-align:left;
-      }
+    .table-cell-rest {
+      width: 77px;
+      text-align:center;
+    }
+
+    .table-cell {
+      height: 23px;
+      display: table-cell;
+      border-width:0px 1px 1px 0px;
+      border-style: solid;
+      border-color: #f2f2f2;
+      vertical-align: middle;
+    }
+
+    .table-cell-last {
+      height: 23px;
+      display: table-cell;
+      border-width:0px 0px 1px 0px;
+      border-style: solid;
+      border-color: #f2f2f2;
+      vertical-align: middle;
+    }
+
+    .table-header-col {
+      font-size:9.1px;
+      color:#e4e4e4;
+      background-color:#808080;
+    }
+
+    .table-label-col {
+      font-weight:bold;
+      font-size:9.1px;
+      color:#4a4a4a;
+    }
+
+    .table-value-col {
+      font-weight:bold;
+      font-size:9.1px;
+      color:#4a4a4a;
+    }
+
+    .page-break {
+      display: block;
+      page-break-before: always;
+    }
+
+    .page-keep {
+      page-break-inside: avoid !important;
+    }
     </style>
   </head>
 
-  <body>
-    <div>
-      <div class="logo">
-          <img src="../6DBB7670-586D-4BA5-A79C-CE4E123C0D7F@2x.png" />
-      </div>
-      <div class="header">
-          <div class="header-name">Cloud report</div>
-      </div>
-    </div>
-    <div class="mainReportHeader">
-  		<h1 class="style1" id="reportTitleID">
-    		<span class="b1">SAP Business One</span> Cloud Report
-      </h1>
-      <div class="style1">
-        Landscape {{:external.id}}<span>, </span>{{:external.domain}}
-        <br>
-        <span>Period </span>{{:~periodDisp(date)}}
-        <br><br>
-      </div>
-      <div class="subtitle">
-  			<span>Created on  </span>{{:~dateDisp(date)}}
-        <br>
-        <span>Version  </span>{{:version}}
-  		</div>
-  	</div>
+	<body>
+		<div class="header clearfix">
+			<div class="header-logo">
+				<img src="../6DBB7670-586D-4BA5-A79C-CE4E123C0D7F@2x.png" />
+			</div>
+			<div class="header-info">
+				<div class="header-info-line"><span class="header-name">Cloud report</span></div>
+				<div class="clearfix"></div>
+				<div class="header-info-line"><span class="header-created-label">Created: </span><span class="header-created-value">{{:~dateDisp(date)}}</span></div>
+				<div class="clearfix"></div>
+				<div class="header-info-line"><span class="header-created-label">Version: </span><span class="header-created-value">{{:version}}</span></div>
+				<div class="clearfix"></div>
+				<div class="header-info-line"><span class="header-created-label">Period: </span><span class="header-period-value">{{:~periodDisp(date)}} - 2016/03/01</span></div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
 
-    <div class="mainReport">
-      <div class="chapter" id="sla">
-        <div class="chapterHeading">
-          <div class="chapterRatingNotRated"></div>
-          <h5><div class="chapterName">SLA</div></h5>
-        </div>
-      	<div class="chapterBody">
-      		<table class="verticalTable" width="100%">
-          <tbody>
-            {{for external.services}}
-            <tr>
-              <td class="title">{{:name}}</td>
-              <td>
-                {{:~slaDisp(currSla)}} / {{:~slaDisp(goodSla)}}
-                <br>
-                OK time: {{:~secondsDisp(okTime)}} Problem time: {{:~secondsDisp(problemTime)}} Downtime: {{:~secondsDisp(downtimeTime)}}
-              </td>
-            </tr>
-            {{/for}}
-          </tbody>
-          </table>
-      	</div>
-      </div>
+		<div class="section-header">
+			<h1>SUMMARY</h1>
+		</div>
+
+		<div style="display: flex; align-items: center; width: 100%; margin-bottom: 20px;">
+			<div class="summary-name" style="display: table; margin: auto;"><span>LANDSCAPE {{:external.id}} {{:external.domain}}</span></div>
     </div>
 
-    <div class='page-break'></div>
-
-    <div class="mainReport">
-      <div class="chapter" id="serviceUnits">
-        <div class="chapterHeading">
-          <div class="chapterRatingNotRated"></div>
-          <h5><div class="chapterName">Service Units</div></h5>
-        </div>
-      	<div class="chapterBody">
-          {{if external.items}}
-      		<table class="verticalTable" width="100%">
-          <tbody>
-            <tr>
-              <td class="title">Service Units count</td>
-              <td colspan="2">
-                  {{:external.items.serviceUnitCount.max}}
-              </td>
-            </tr>
-          </tbody>
-          </table>
-          {{/if}}
-
-          {{if external.items && external.items.serviceUnits}}
-          {{for external.items.serviceUnits}}
-          <table class="verticalTable" width="100%">
-          <thead><th></th><th>First</th><th>Last</th></thead>
-          <tbody>
-            <tr>
-              <td class="title">Name</td>
-              <td>{{:name.first}}</td>
-              <td><h8>{{:name.last}}</h8></td>
-            </tr>
-            <tr>
-              <td class="title">Purpose</td>
-              <td>{{:purpose.first}}</td>
-              <td>{{:purpose.last}}</td>
-            </tr>
-            <tr>
-              <td class="title">B1 version</td>
-              <td>{{:version.first}}</td>
-              <td>{{:version.last}}</td>
-            </tr>
-            <tr>
-              <td class="title">HANA version</td>
-              <td>{{:hanaVersion.first}}</td>
-              <td>{{:hanaVersion.last}}</td>
-            </tr>
-            <tr>
-              <td class="title">SLA</td>
-              <td colspan="2">
-                {{:~slaDisp(sla.currSla)}} / {{:~slaDisp(sla.goodSla)}}
+    <div style="display: flex; align-items: center; width: 100%">
+			<section class="section" style="display: table; margin: auto;">
+				<div style="display: table-row;">
+          <div style="display: table-cell;">
+						<div class="icon-big" style="display: table-cell; vertical-align: middle; padding-right: 20px; padding-left: 20px;">
+							<img src="../C03495F1-DE68-43D0-81B8-0779CE2B78A7@2x.png" />
+						</div>
+            <div style="display: table-cell; vertical-align: middle; height: 80px;">
+              <div>
+                <span class="summary-label">Service Units</span>
                 <br>
-                OK time: {{:~secondsDisp(sla.okTime)}} Problem time: {{:~secondsDisp(sla.problemTime)}} Downtime: {{:~secondsDisp(sla.downtimeTime)}}
-              </td>
-            </tr>
-            <tr>
-              <td colspan="3">
-                <div class="result_content">
-                  <table class="horizontalTable">
-                    <thead><th>Tenants</th><th>First</th><th>Last</th><th>Min</th><th>Max</th><th>Avg</th></thead>
-                    <tbody>
-                      <tr><td class="">Demo</td><td class="">{{:tenantsDemo.first}}</td><td class="">{{:tenantsDemo.last}}</td><td class="">{{:tenantsDemo.min}}</td><td class="">{{:tenantsDemo.max}}</td><td class="">{{:~slaDisp(tenantsDemo.avg)}}</td></tr>
-                      <tr><td class="">Productive</td><td class="">{{:tenantsProductive.first}}</td><td class="">{{:tenantsProductive.last}}</td><td class="">{{:tenantsProductive.min}}</td><td class="">{{:tenantsProductive.max}}</td><td class="">{{:~slaDisp(tenantsProductive.avg)}}</td></tr>
-                      <tr><td class="">Testing</td><td class="">{{:tenantsTesting.first}}</td><td class="">{{:tenantsTesting.last}}</td><td class="">{{:tenantsTesting.min}}</td><td class="">{{:tenantsTesting.max}}</td><td class="">{{:~slaDisp(tenantsTesting.avg)}}</td></tr>
-                      <tr><td class="">Trial</td><td class="">{{:tenantsTrial.first}}</td><td class="">{{:tenantsTrial.last}}</td><td class="">{{:tenantsTrial.min}}</td><td class="">{{:tenantsTrial.max}}</td><td class="">{{:~slaDisp(tenantsTrial.avg)}}</td></tr>
-                    </tbody>
-                  </table>
+                {{if external.items && external.items.customerCount}}
+                <span class="summary-value">{{:external.items.serviceUnitCount.max}}</span>
+                {{else}}
+                <span class="summary-value">0</span>
+                {{/if}}
+              </div>
+            </div>
+					</div>
+					<div style="display: table-cell;">
+            <div style="display: table;">
+  						<div class="icon-big" style="display: table-cell; vertical-align: middle; padding-right: 20px; padding-left: 20px;">
+  							<img src="../D89C6900-6DAF-4E14-9BF9-D2C812410821@2x.png" />
+  						</div>
+  						<div style="display: table-cell; vertical-align: middle; height: 80px;">
+                <div>
+    							<span class="summary-label">Customers</span>
+                  <br>
+                  {{if external.items && external.items.customerCount}}
+    							<span class="summary-value">{{:external.items.customerCount.max}}</span>
+                  {{else}}
+                  <span class="summary-value">0</span>
+                  {{/if}}
                 </div>
-              </td>
-            </tr>
-          </tbody>
-          </table>
+  						</div>
+            </div>
+					</div>
+				</div>
+				<div style="display: table-row;">
+					<div style="display: table-cell;">
+            <div style="display: table;">
+  						<div class="icon-big" style="display: table-cell; vertical-align: middle; padding-right: 20px; padding-left: 20px;">
+							  <img src="../24B41414-FB28-42F6-89E6-6C73943C07CF@2x.png" />
+						  </div>
+              <div style="display: table-cell; vertical-align: middle; height: 80px;">
+                <div>
+    							<span class="summary-label">Tenants</span>
+                  <br>
+                  {{if external.items && external.items.tenantsCount}}
+    							<span class="summary-value">{{:external.items.tenantsCount.max}}</span>
+                  {{else}}
+                  <span class="summary-value">0</span>
+                  {{/if}}
+                </div>
+  						</div>
+  					</div>
+          </div>
+				</div>
+			</section>
+		</div>
+
+    <div class="section"> </div>
+
+		<div class="section-header">
+			<h1>SLA</h1>
+		</div>
+
+    {{if external.services}}
+		<div style="display: flex; align-items: center; width: 100%">
+  		<section class="section" style="display: table; margin: auto;">
+        <div style="display: table-row;">
+          {{for external.services}}
+          <div style="display: table-cell;">
+            <section class="section" style="display: table; margin: auto;  margin-right: 20px;">
+
+              <div style="display: table-row;">
+                <div style="display: table-cell;">
+                </div>
+                <div style="display: table-cell;">
+                  <div class="sla-name"><span>{{:name}}</span></div>
+                  <div class="sla-value"><span>{{:~slaDisp(currSla)}} / {{:~slaDisp(goodSla)}}</span></div>
+                </div>
+              </div>
+
+              <div style="display: table-row;">
+                <div style="display: table-cell;">
+                  <div class="sla-partial-label"><span>Up Time:</span></div>
+                </div>
+                <div style="display: table-cell;">
+                  <div class="sla-partial-value"><span>{{:~secondsDisp(okTime)}}</span></div>
+                </div>
+              </div>
+
+              <div style="display: table-row;">
+                <div style="display: table-cell;">
+                  <div class="sla-partial-label"><span>Problem Time:</span></div>
+                </div>
+                <div style="display: table-cell;">
+                  <div class="sla-partial-value"><span>{{:~secondsDisp(problemTime)}}</span></div>
+                </div>
+              </div>
+
+              <div style="display: table-row;">
+                <div style="display: table-cell;">
+                  <div class="sla-partial-label"><span>Down Time:</span></div>
+                </div>
+                <div style="display: table-cell;">
+                  <div class="sla-partial-value"><span>{{:~secondsDisp(downtimeTime)}}</span></div>
+                </div>
+              </div>
+            </section>
+          </div>
+          {{/for}}
         </div>
-        {{/for}}
-        {{/if}}
-      </div>
+      </section>
     </div>
+    {{/if}}
 
     <div class='page-break'></div>
 
-    <div class="mainReport">
-      <div class="chapter" id="customers">
-        <div class="chapterHeading">
-          <div class="chapterRatingNotRated"></div>
-          <h5><div class="chapterName">Customers</div></h5>
-        </div>
-      	<div class="chapterBody">
-          {{if external.items}}
-      		<table class="verticalTable" width="100%">
-          <tbody>
-            <tr>
-              <td class="title">Customer count</td>
-              <td>
-                  {{:external.items.customerCount.max}}
-              </td>
-            </tr>
-          </tbody>
-          </table>
-          {{/if}}
+		<div class="section-header">
+			<h1>SERVICE UNITS</h1>
+		</div>
 
-          {{if external.items && external.items.customers}}
-          {{for external.items.customers}}
-          <table class="verticalTable" width="100%">
-          <tbody>
-            <tr>
-              <td class="title">Name</td>
-              <td><h8>{{:id}}</h8></td>
-            </tr>
-            <tr>
-              <td colspan="2">
-      					<table class="horizontalTable">
-        					<thead><th>Users</th><th>First</th><th>Last</th><th>Min</th><th>Max</th><th>Avg</th></thead>
-        					<tbody>
-                    {{if users}}
-        						<tr><td class="">Users</td><td class="">{{:users.first}}</td><td class="">{{:users.last}}</td><td class="">{{:users.min}}</td><td class="">{{:users.max}}</td><td class="">{{:users.avg}}</td></tr>
-                    {{/if}}
-                    {{if usersRDS}}
-                    <tr><td class="">RDS users</td><td class="">{{:usersRDS.first}}</td><td class="">{{:usersRDS.last}}</td><td class="">{{:usersRDS.min}}</td><td class="">{{:usersRDS.max}}</td><td class="">{{:usersRDS.avg}}</td></tr>
-                    {{/if}}
-        					</tbody>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-      					<table class="horizontalTable">
-        					<thead><th>Tenants2</th><th>First</th><th>Last</th><th>Min</th><th>Max</th><th>Avg</th></thead>
-        					<tbody>
-        						<tr><td class="">Demo</td><td class="">{{:tenantsDemo.first}}</td><td class="">{{:tenantsDemo.last}}</td><td class="">{{:tenantsDemo.min}}</td><td class="">{{:tenantsDemo.max}}</td><td class="">{{:~slaDisp(tenantsDemo.avg)}}</td></tr>
-                    <tr><td class="">Productive</td><td class="">{{:tenantsProductive.first}}</td><td class="">{{:tenantsProductive.last}}</td><td class="">{{:tenantsProductive.min}}</td><td class="">{{:tenantsProductive.max}}</td><td class="">{{:~slaDisp(tenantsProductive.avg)}}</td></tr>
-                    <tr><td class="">Testing</td><td class="">{{:tenantsTesting.first}}</td><td class="">{{:tenantsTesting.last}}</td><td class="">{{:tenantsTesting.min}}</td><td class="">{{:tenantsTesting.max}}</td><td class="">{{:~slaDisp(tenantsTesting.avg)}}</td></tr>
-                    <tr><td class="">Trial</td><td class="">{{:tenantsTrial.first}}</td><td class="">{{:tenantsTrial.last}}</td><td class="">{{:tenantsTrial.min}}</td><td class="">{{:tenantsTrial.max}}</td><td class="">{{:~slaDisp(tenantsTrial.avg)}}</td></tr>
-        					</tbody>
-                </table>
-              </td>
-            </tr>
-          </tbody>
-          </table>
-          {{/for}}
-          {{/if}}
-      	</div>
+    {{if external.items && external.items.serviceUnits}}
+      {{for external.items.serviceUnits}}
+      <div class="page-keep">
+        <div style="display: table; margin-bottom: 20px;">
+          <div class="su-prefix" style="display: table-cell; vertical-align: middle;"></div>
+          <div class="su-name" style="display: table-cell; vertical-align: middle; padding-left: 10px;">
+            Service Unit {{if name}}{{:name.last}} {{/if}}
+          </div>
+        </div>
+
+        <div style="display: table; margin-bottom: 20px;">
+          <div style="display: table-row;">
+            <div style="display: table-cell;" class="su-label">Purpose:</div>
+            <div style="display: table-cell;" class="su-value">
+              {{if purpose}}
+                {{:purpose.last}}
+              {{/if}}
+            </div>
+          </div>
+          <div style="display: table-row;">
+            <div style="display: table-cell;" class="su-label">B1 version:</div>
+            <div style="display: table-cell;" class="su-value">
+              {{if version}}
+                {{:version.last}}
+              {{/if}}
+            </div>
+          </div>
+          <div style="display: table-row;">
+            <div style="display: table-cell;" class="su-label">HANA version:</div>
+            <div style="display: table-cell;" class="su-value">
+              {{if hanaVersion}}
+                {{:hanaVersion.last}}
+              {{/if}}
+            </div>
+          </div>
+        </div>
+
+        <div style="display: table; margin-bottom: 10px;">
+          <div class="icon-small" style="display: table-cell; vertical-align: middle;">
+            <img src="../1DF66D23-ED0C-4159-8BA7-EE68E8C9AA08@2x.png" />
+          </div>
+          <div class="su-name" style="display: table-cell; vertical-align: middle; padding-left: 10px;">
+            SLA
+          </div>
+        </div>
+
+        <section class="section" style="display: table;">
+          <div style="display: table-row;">
+            <div style="display: table-cell;">
+            </div>
+            <div style="display: table-cell;">
+              <div class="sla-value"><span>{{:~slaDisp(sla.currSla)}} / {{:~slaDisp(sla.goodSla)}}</span></div>
+            </div>
+          </div>
+
+          <div style="display: table-row;">
+            <div style="display: table-cell;">
+              <div class="sla-partial-label"><span>Up Time:</span></div>
+            </div>
+            <div style="display: table-cell;">
+              <div class="sla-partial-value"><span>{{:~secondsDisp(sla.okTime)}}</span></div>
+            </div>
+          </div>
+
+          <div style="display: table-row;">
+            <div style="display: table-cell;">
+              <div class="sla-partial-label"><span>Problem Time:</span></div>
+            </div>
+            <div style="display: table-cell;">
+              <div class="sla-partial-value"><span>{{:~secondsDisp(sla.problemTime)}}</span></div>
+            </div>
+          </div>
+
+          <div style="display: table-row;">
+            <div style="display: table-cell;">
+              <div class="sla-partial-label"><span>Down Time:</span></div>
+            </div>
+            <div style="display: table-cell;">
+              <div class="sla-partial-value"><span>{{:~secondsDisp(sla.downtimeTime)}}</span></div>
+            </div>
+          </div>
+        </section>
+
+        <div style="display: table; margin-bottom: 20px;">
+          <div class="icon-big" style="display: table-cell; vertical-align: middle;">
+            <img src="../1DF66D23-ED0C-4159-8BA7-EE68E8C9AA08@2x.png" />
+          </div>
+          <div class="su-name" style="display: table-cell; vertical-align: middle; padding-left: 10px;">
+            Tenants
+          </div>
+        </div>
+
+        <section class="section table" style="margin-bottom: 20px;">
+          <header style="display: table-row;">
+            <div class="table-cell table-cell-first table-header-col">Type</div>
+            <div class="table-cell table-cell-rest table-header-col">First</div>
+            <div class="table-cell table-cell-rest table-header-col">Min</div>
+            <div class="table-cell table-cell-rest table-header-col">Avg</div>
+            <div class="table-cell table-cell-rest table-header-col">Last</div>
+            <div class="table-cell-last table-cell-rest table-header-col">Max</div>
+          </header>
+          <div style="display: table-row;">
+            <div class="table-cell table-cell-first table-label-col">Demo</div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.first}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.min}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:~slaDisp(tenantsDemo.avg)}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.last}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.max}}{{/if}}</span></div>
+          </div>
+          <div style="display: table-row;">
+            <div class="table-cell table-cell-first table-label-col">Productive</div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.first}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.min}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:~slaDisp(tenantsProductive.avg)}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.last}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.max}}{{/if}}</span></div>
+          </div>
+          <div style="display: table-row;">
+            <div class="table-cell table-cell-first table-label-col">Testing</div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.first}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.min}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:~slaDisp(tenantsTesting.avg)}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.last}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.max}}{{/if}}</span></div>
+          </div>
+          <div style="display: table-row;">
+            <div class="table-cell table-cell-first table-label-col">Trial</div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.first}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.min}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:~slaDisp(tenantsTrial.avg)}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.last}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.max}}{{/if}}</span></div>
+          </div>
+        </section>
       </div>
-    </div>
+      {{/for}}
+    {{/if}}
+
+    <div class='page-break'></div>
+
+		<div class="section-header">
+			<h1>CUSTOMERS</h1>
+		</div>
+
+    {{if external.items && external.items.serviceUnits}}
+      {{for external.items.customers}}
+      <div class="page-keep">
+        <div style="display: table; margin-bottom: 20px;">
+          <div class="su-prefix" style="display: table-cell; vertical-align: middle;"></div>
+          <div class="su-name" style="display: table-cell; vertical-align: middle; padding-left: 10px;">
+            Customer ID {{if id}}{{:id}}{{/if}}
+          </div>
+        </div>
+
+        <div style="display: table; margin-bottom: 20px;">
+          <div class="icon-big" style="display: table-cell; vertical-align: middle;">
+            <img src="../883D6AFE-B720-40A1-8231-44489B386F80@2x.png" />
+          </div>
+          <div class="su-name" style="display: table-cell; vertical-align: middle; padding-left: 10px;">
+            Allocation
+          </div>
+        </div>
+
+        <section class="section table" style="margin-bottom: 20px;">
+          <header style="display: table-row;">
+            <div class="table-cell table-cell-first table-header-col">Type</div>
+            <div class="table-cell table-cell-rest table-header-col">First</div>
+            <div class="table-cell table-cell-rest table-header-col">Min</div>
+            <div class="table-cell table-cell-rest table-header-col">Avg</div>
+            <div class="table-cell table-cell-rest table-header-col">Last</div>
+            <div class="table-cell-last table-cell-rest table-header-col">Max</div>
+          </header>
+          <div style="display: table-row;">
+            <div class="table-cell table-cell-first table-label-col">Regular User</div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if users}}{{:users.first}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if users}}{{:users.min}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if users}}{{:~slaDisp(users.avg)}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if users}}{{:users.last}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if users}}{{:users.max}}{{/if}}</span></div>
+          </div>
+          <div style="display: table-row;">
+            <div class="table-cell table-cell-first table-label-col">MS RDS User</div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if usersRDS}}{{:usersRDS.first}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if usersRDS}}{{:usersRDS.min}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if usersRDS}}{{:~slaDisp(usersRDS.avg)}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if usersRDS}}{{:usersRDS.last}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if usersRDS}}{{:usersRDS.max}}{{/if}}</span></div>
+          </div>
+        </section>
+
+        <div style="display: table; margin-bottom: 20px;">
+          <div class="icon-big" style="display: table-cell; vertical-align: middle;">
+            <img src="../B12DCE1D-C454-487D-AEC1-8221BBBEFC44@2x.png" />
+          </div>
+          <div class="su-name" style="display: table-cell; vertical-align: middle; padding-left: 10px;">
+            Tenants
+          </div>
+        </div>
+
+        <section class="section table" style="margin-bottom: 20px;">
+          <header style="display: table-row;">
+            <div class="table-cell table-cell-first table-header-col">Type</div>
+            <div class="table-cell table-cell-rest table-header-col">First</div>
+            <div class="table-cell table-cell-rest table-header-col">Min</div>
+            <div class="table-cell table-cell-rest table-header-col">Avg</div>
+            <div class="table-cell table-cell-rest table-header-col">Last</div>
+            <div class="table-cell-last table-cell-rest table-header-col">Max</div>
+          </header>
+          <div style="display: table-row;">
+            <div class="table-cell table-cell-first table-label-col">Demo</div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.first}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.min}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:~slaDisp(tenantsDemo.avg)}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.last}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.max}}{{/if}}</span></div>
+          </div>
+          <div style="display: table-row;">
+            <div class="table-cell table-cell-first table-label-col">Productive</div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.first}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.min}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:~slaDisp(tenantsProductive.avg)}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.last}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.max}}{{/if}}</span></div>
+          </div>
+          <div style="display: table-row;">
+            <div class="table-cell table-cell-first table-label-col">Testing</div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.first}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.min}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:~slaDisp(tenantsTesting.avg)}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.last}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.max}}{{/if}}</span></div>
+          </div>
+          <div style="display: table-row;">
+            <div class="table-cell table-cell-first table-label-col">Trial</div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.first}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.min}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:~slaDisp(tenantsTrial.avg)}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.last}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.max}}{{/if}}</span></div>
+          </div>
+        </section>
+      </div>
+      {{/for}}
+    {{/if}}
+
   </body>
 </html>
