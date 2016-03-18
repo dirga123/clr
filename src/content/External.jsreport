@@ -237,8 +237,9 @@
       }
 
       .header-name {
-        font-family:"HelveticaNeue-CondensedBlack", "Helvetica Neue";
-        font-size:14px;
+        /*font-family:HelveticaNeue-CondensedBlack;*/
+        font-family:Helvetica Neue;
+        font-size:24px;
         color:#999999;
         text-align:left;
       }
@@ -248,10 +249,10 @@
   <body>
     <div>
       <div class="logo">
-          <img src="6DBB7670-586D-4BA5-A79C-CE4E123C0D7F@1x.png" />
+          <img src="../6DBB7670-586D-4BA5-A79C-CE4E123C0D7F@2x.png" />
       </div>
       <div class="header">
-          <span class="header-name">Cloud report</span>
+          <div class="header-name">Cloud report</div>
       </div>
     </div>
     <div class="mainReportHeader">

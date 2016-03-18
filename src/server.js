@@ -521,7 +521,7 @@ async function generateExternalPdf(ctx, external) {
       },
       rootDirectory: __dirname,
       dataDirectory: path.join(__dirname, 'pdf'),
-      tempDirectory: path.join(__dirname, 'pdf'),
+      tempDirectory: path.join(__dirname, 'pdf/temp'),
       tasks: {
         allowedModules: [ 'moment' ]
       }
