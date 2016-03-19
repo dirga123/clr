@@ -152,6 +152,30 @@ export default class Redis {
     }
   }
 
+  async deleteLandscape(lsId) {
+    try {
+      debug('redis')(`deleteLandscape(${lsId})`);
+
+      const lskeysId = `ls:${lsId}*`;
+
+      const keys = await this.client.keysAsync(lskeysId);
+      const promises = keys.map((key) => this.client.delAsync(key));
+      const results = await Promise.all(promises);
+
+      let deleted = results.reduce((prevVal, currVal) => {
+        prevVal += currVal;
+        return prevVal;
+      }, Number(0));
+
+      deleted += await this.client.sremAsync('ls', lsId);
+
+      return deleted;
+    } catch (e) {
+      debug('redis')(`deleteLandscape error: ${e.message}`);
+      throw e.message;
+    }
+  }
+
   async getExternalList(lsId) {
     try {
       debug('redis')(`getExternalList(${lsId})`);

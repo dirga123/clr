@@ -6,7 +6,7 @@ sap.ui.define([
   return BaseController.extend('sap.clr.controller.NotFound', {
 
     onInit: function () {
-	  }
+    }
 
   });
 });

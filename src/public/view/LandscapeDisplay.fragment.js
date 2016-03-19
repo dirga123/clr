@@ -14,9 +14,8 @@ sap.ui.define([
 
   sap.ui.jsfragment('sap.clr.view.LandscapeDisplay', {
     createContent: function(oController) {
-      var oGeneral = new ObjectHeader(this.createId('generalPanel'), {
+      var oGeneral = new ObjectHeader(this.createId('general'), {
         title: '{i18n>landscapeID}: {landscape>id}',
-        busyIndicatorDelay: 0,
         attributes: [
           new ObjectAttribute({
             title: '{i18n>landscapeDomain}',
@@ -27,6 +26,12 @@ sap.ui.define([
             text: '{landscape>zabbix}'
           })
         ]
+      }).addStyleClass('sapUiNoMargin');
+
+      var oGeneralPanel = new Panel(this.createId('generalPanel'), {
+        busyIndicatorDelay: 0,
+        backgroundDesign: 'Transparent',
+        content: oGeneral
       });
 
       var oStatusPanel = new Panel(this.createId('statusPanel'), {
@@ -102,7 +107,7 @@ sap.ui.define([
       return new VerticalLayout({
         width: '100%',
         content: [
-          oGeneral,
+          oGeneralPanel,
           oTabs
         ]
       });

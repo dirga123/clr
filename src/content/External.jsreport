@@ -444,7 +444,7 @@
             <div style="display: table-cell;">
             </div>
             <div style="display: table-cell;">
-              <div class="sla-value"><span>{{:~slaDisp(sla.currSla)}} / {{:~slaDisp(sla.goodSla)}}</span></div>
+              <div class="sla-value"><span>{{if sla}}{{:~slaDisp(sla.currSla)}} / {{:~slaDisp(sla.goodSla)}}{{/if}}</span></div>
             </div>
           </div>
 
@@ -453,7 +453,7 @@
               <div class="sla-partial-label"><span>Up Time:</span></div>
             </div>
             <div style="display: table-cell;">
-              <div class="sla-partial-value"><span>{{:~secondsDisp(sla.okTime)}}</span></div>
+              <div class="sla-partial-value"><span>{{if sla}}{{:~secondsDisp(sla.okTime)}}{{/if}}</span></div>
             </div>
           </div>
 
@@ -462,7 +462,7 @@
               <div class="sla-partial-label"><span>Problem Time:</span></div>
             </div>
             <div style="display: table-cell;">
-              <div class="sla-partial-value"><span>{{:~secondsDisp(sla.problemTime)}}</span></div>
+              <div class="sla-partial-value"><span>{{if sla}}{{:~secondsDisp(sla.problemTime)}}{{/if}}</span></div>
             </div>
           </div>
 
@@ -471,7 +471,7 @@
               <div class="sla-partial-label"><span>Down Time:</span></div>
             </div>
             <div style="display: table-cell;">
-              <div class="sla-partial-value"><span>{{:~secondsDisp(sla.downtimeTime)}}</span></div>
+              <div class="sla-partial-value"><span>{{if sla}}{{:~secondsDisp(sla.downtimeTime)}}{{/if}}</span></div>
             </div>
           </div>
         </section>

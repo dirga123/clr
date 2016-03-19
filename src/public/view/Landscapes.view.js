@@ -37,15 +37,15 @@ sap.ui.define([
       var oTile = new StandardTile({
         icon: 'sap-icon://overview-chart',
         number: {
-					parts: [ 'landscapes>currSla', 'landscapes>/services/goodSla' ],
-					formatter: function(currSla, goodSla) {
-						var text = '';
-						if (currSla !== undefined) {
-							text = parseFloat(currSla).toFixed(4);
-						}
-						return text;
-					}
-				},
+          parts: [ 'landscapes>currSla', 'landscapes>/services/goodSla' ],
+          formatter: function(currSla, goodSla) {
+            var text = '';
+            if (currSla !== undefined) {
+              text = parseFloat(currSla).toFixed(4);
+            }
+            return text;
+          }
+        },
         numberUnit: '{i18n>landscapesSLA}',
         title: '{landscapes>id} {landscapes>domain}',
         info: {
@@ -59,25 +59,25 @@ sap.ui.define([
           }
         },
         infoState: {
-					parts: [ 'landscapes>triggersPriority', 'landscapes>error' ],
-					formatter: function(priority, error) {
+          parts: [ 'landscapes>triggersPriority', 'landscapes>error' ],
+          formatter: function(priority, error) {
             if (error !== undefined) {
               return 'Error';
             }
 
             switch (priority) {
-              case 2:
-              case 3:
-                return 'Warning';
-              case 4:
-              case 5:
-                return 'Error';
-              case 0:
-              case 1:
-              default:
-                return 'Success';
+            case 2:
+            case 3:
+              return 'Warning';
+            case 4:
+            case 5:
+              return 'Error';
+            case 0:
+            case 1:
+            default:
+              return 'Success';
             }
-					}
+          }
         },
         press: [ oController.onPressDetail, oController ]
       });

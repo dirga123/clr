@@ -2,7 +2,7 @@ import 'babel-polyfill';
 import path from 'path';
 import moment from 'moment';
 import Koa from 'koa';
-import send from 'koa-send';
+// import send from 'koa-send';
 import logger from 'koa-logger';
 import Router from 'koa-router';
 import koaStatic from 'koa-static';
@@ -49,6 +49,13 @@ server.use(async (ctx, next) => {
 // Router
 const router = new Router();
 
+function getErrorString(e) {
+  if (typeof e === 'object') {
+    e.toString();
+  }
+  return e;
+}
+
 // path /Login
 router.post('/login', async (ctx) => {
   if (ctx.request.body === null || ctx.request.body.input === null) {
@@ -58,31 +65,23 @@ router.post('/login', async (ctx) => {
     return;
   }
 
-  const redis = new Redis();
-
   try {
+    const redis = new Redis();
     await redis.login();
-  } catch (e) {
-    ctx.body = {
-      error: e
-    };
-    return;
-  }
 
-  const pass = await redis.getPassword();
+    const pass = await redis.getPassword();
 
-  if (ctx.request.body.input !== pass) {
-    ctx.body = {
-      error: 'Wrong password'
-    };
-    return;
-  }
+    if (ctx.request.body.input !== pass) {
+      ctx.body = {
+        error: 'Wrong password'
+      };
+      return;
+    }
 
-  try {
     await redis.logout();
   } catch (e) {
     ctx.body = {
-      error: e
+      error: getErrorString(e)
     };
     return;
   }
@@ -109,8 +108,7 @@ router.get('/Home', async ctx => {
     lsRet.landscapes = ls.length;
     await redis.logout();
   } catch (e) {
-    debug('dev')(`Internal error catched ${e}`);
-    lsRet.error = e;
+    lsRet.error = getErrorString(e);
     ctx.body = lsRet;
     return;
   }
@@ -131,8 +129,7 @@ router.get('/Landscapes', async ctx => {
     lsRet.landscapes = await redis.getLandscapes();
     await redis.logout();
   } catch (e) {
-    debug('dev')(`Internal error catched ${e}`);
-    lsRet.error = e;
+    lsRet.error = getErrorString(e);
     ctx.body = lsRet;
     return;
   }
@@ -205,7 +202,7 @@ router.get('/Hosts', async ctx => {
 
     await zabbix.logout();
   } catch (e) {
-    hostsRet.error = e;
+    hostsRet.error = getErrorString(e);
     ctx.body = hostsRet;
     return;
   }
@@ -219,9 +216,8 @@ router.get('/Landscape/:id', async (ctx) => {
     version: config.versionStr
   };
 
-  const redis = new Redis();
-
   try {
+    const redis = new Redis();
     await redis.login();
 
     // Retrieve DB info
@@ -229,7 +225,7 @@ router.get('/Landscape/:id', async (ctx) => {
 
     await redis.logout();
   } catch (e) {
-    lsRet.error = e;
+    lsRet.error = getErrorString(e);
     ctx.body = lsRet;
     return;
   }
@@ -283,8 +279,7 @@ router.get('/Landscape/:id', async (ctx) => {
 
     await zabbix.logout();
   } catch (e) {
-    debug('dev')(`Internal error catched ${e}/`);
-    lsRet.error = e;
+    lsRet.error = getErrorString(e);
     ctx.body = lsRet;
     return;
   }
@@ -323,13 +318,71 @@ router.post('/Landscape', async (ctx) => {
 
     await redis.logout();
   } catch (e) {
-    lsRet.error = e;
+    lsRet.error = getErrorString(e);
     ctx.body = lsRet;
     return;
   }
   ctx.body = lsRet;
 });
 
+// Landscape add
+router.put('/Landscape/:id', async (ctx) => {
+  const lsRet = {
+    version: config.versionStr
+  };
+
+  // Check for parameters
+  if (ctx.request.body === undefined ||
+    ctx.request.body.id === undefined ||
+    ctx.request.body.domain === undefined ||
+    ctx.request.body.zabbix === undefined) {
+    lsRet.error = 'Wrong input';
+    ctx.body = lsRet;
+    return;
+  }
+
+  try {
+    const redis = new Redis();
+    await redis.login();
+
+    const lsId = ctx.request.body.id;
+
+    if (await redis.existsLandscape(lsId) === false) {
+      throw `Landscape ${lsId} doesnt exists.`;
+    }
+
+    lsRet.updated = await redis.updateLandscape(ctx.request.body);
+
+    await redis.logout();
+  } catch (e) {
+    lsRet.error = getErrorString(e);
+    ctx.body = lsRet;
+    return;
+  }
+  ctx.body = lsRet;
+});
+
+// path /Landscape/:id
+router.del('/Landscape/:id', async (ctx) => {
+  const lsRet = {
+    version: config.versionStr
+  };
+
+  try {
+    const redis = new Redis();
+    await redis.login();
+    lsRet.deleted = await redis.deleteLandscape(ctx.params.id);
+    await redis.logout();
+  } catch (e) {
+    lsRet.error = getErrorString(e);
+    ctx.body = lsRet;
+    return;
+  }
+
+  ctx.body = lsRet;
+});
+
+// path /Landscape/:id/general
 router.get('/Landscape/:id/general', async (ctx) => {
   const lsRet = {
     version: config.versionStr
@@ -345,7 +398,7 @@ router.get('/Landscape/:id/general', async (ctx) => {
 
     await redis.logout();
   } catch (e) {
-    lsRet.error = e;
+    lsRet.error = getErrorString(e);
     ctx.body = lsRet;
     return;
   }
@@ -357,7 +410,7 @@ router.get('/Landscape/:id/status', async (ctx) => {
     version: config.versionStr,
     error: 'Status: Not implemented'
   };
-  await new Promise(r => setTimeout(r, 2000));
+  // await new Promise(r => setTimeout(r, 2000));
   ctx.body = lsRet;
 });
 
@@ -366,7 +419,7 @@ router.get('/Landscape/:id/internal', async (ctx) => {
     version: config.versionStr,
     error: 'Internal report list: Not implemented'
   };
-  await new Promise(r => setTimeout(r, 2000));
+  // await new Promise(r => setTimeout(r, 2000));
   ctx.body = lsRet;
 });
 
@@ -384,7 +437,7 @@ router.get('/Landscape/:id/external', async (ctx) => {
     lsExtRet.externals = await redis.getExternalList(ctx.params.id);
     await redis.logout();
   } catch (e) {
-    lsExtRet.error = e;
+    lsExtRet.error = getErrorString(e);
     ctx.body = lsExtRet;
     return;
   }
@@ -407,7 +460,7 @@ async function landscapeExternalNew(id, date) {
     lsRet.external = await redis.getLandscape(id);
     await redis.logout();
   } catch (e) {
-    lsRet.error = e;
+    lsRet.error = getErrorString(e);
     return lsRet;
   }
 
@@ -460,8 +513,7 @@ async function landscapeExternalNew(id, date) {
 
     await zabbix.logout();
   } catch (e) {
-    debug('dev')(`Internal error catched ${e}/`);
-    lsRet.error = e;
+    lsRet.error = getErrorString(e);
     return lsRet;
   }
 
@@ -500,7 +552,7 @@ router.post('/Landscape/:id/external/new', async (ctx) => {
 
     await redis.logout();
   } catch (e) {
-    lsRet.error = e;
+    lsRet.error = getErrorString(e);
     ctx.body = lsRet;
     return;
   }
@@ -549,12 +601,7 @@ async function generateExternalPdf(ctx, external) {
     ctx.body = out.stream;
     ctx.response.set(out.headers);
   } catch (e) {
-    console.log(typeof e);
-    if (typeof e === 'object') {
-      throw e.toString();
-    } else {
-      throw 'Failed to create report';
-    }
+    throw getErrorString(e);
   }
 }
 
@@ -567,8 +614,7 @@ router.get('/Landscape/:id/external/new/:fileName.pdf', async (ctx) => {
     const external = await landscapeExternalNew(ctx.params.id, ctx.query.date);
     await generateExternalPdf(ctx, external);
   } catch (e) {
-    debug('dev')(`Catched error: ${e}`);
-    lsRet.error = e;
+    lsRet.error = getErrorString(e);
     ctx.body = lsRet;
     return;
   }
@@ -589,8 +635,7 @@ router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
     const externalObj = JSON.parse(external);
     await generateExternalPdf(ctx, externalObj);
   } catch (e) {
-    debug('dev')(`Catched error: ${e}`);
-    lsRet.error = e;
+    lsRet.error = getErrorString(e);
     ctx.body = lsRet;
     return;
   }
@@ -611,7 +656,7 @@ router.get('/Landscape/:id/external/:reportId', async (ctx) => {
     lsRet = await redis.getExternal(ctx.params.id, ctx.params.reportId);
     await redis.logout();
   } catch (e) {
-    lsRet.error = e;
+    lsRet.error = getErrorString(e);
     ctx.body = lsRet;
     return;
   }
@@ -619,6 +664,7 @@ router.get('/Landscape/:id/external/:reportId', async (ctx) => {
   ctx.body = lsRet;
 });
 
+/*
 router.post('/Landscape.json', async (ctx) => {
   await new Promise(r => setTimeout(r, 2000));
   await send(ctx, ctx.path, { root: path.resolve(__dirname, 'content') });
@@ -628,6 +674,7 @@ router.get('/Hosts.json', async (ctx) => {
   await new Promise(r => setTimeout(r, 2000));
   await send(ctx, ctx.path, { root: path.resolve(__dirname, 'content') });
 });
+*/
 
 server.use(convert(koaMount('/', koaStatic(path.join(__dirname, 'public')))));
 
