@@ -46,7 +46,7 @@ sap.ui.define([
           }
         },
         numberUnit: '{i18n>landscapesSLA}',
-        title: '{landscapes>id} {landscapes>domain}',
+        title: '{landscapes>project} {landscapes>domain}',
         info: {
           parts: [ 'landscapes>triggersCount', 'landscapes>error' ],
           formatter: function(count, error) {

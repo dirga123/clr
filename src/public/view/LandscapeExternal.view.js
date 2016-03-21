@@ -430,7 +430,7 @@ sap.ui.define([
       // General
 
       var oGeneralPanel = new ObjectHeader({
-        title: '{i18n>landscapeID}: {external>id}',
+        title: '{i18n>landscapeID}: {external>project}',
         attributes: [
           new ObjectAttribute({
             title: '{i18n>landscapeDomain}',

@@ -293,7 +293,7 @@
 		</div>
 
 		<div style="display: flex; align-items: center; width: 100%; margin-bottom: 20px;">
-			<div class="summary-name" style="display: table; margin: auto;"><span>LANDSCAPE {{:external.id}} {{:external.domain}}</span></div>
+			<div class="summary-name" style="display: table; margin: auto;"><span>LANDSCAPE {{:external.project}} {{:external.domain}}</span></div>
     </div>
 
     <div style="display: flex; align-items: center; width: 100%">

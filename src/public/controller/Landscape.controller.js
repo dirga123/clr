@@ -54,10 +54,6 @@ sap.ui.define([
       }
     },
 
-    onBeforeRendering: function() {
-      jQuery.sap.log.info('Landscape.controller:onBeforeRendering');
-    },
-
 		// General tab
 
     onPressEdit: function() {
@@ -71,18 +67,59 @@ sap.ui.define([
 
     onPressCancel: function() {
       jQuery.sap.log.info('Landscape.controller:onPressCancel');
+
       // Restore the data
       var oModel = this.getView().getModel('landscape');
       var oData = oModel.getData();
-
       oData.landscape = this._oLandscape;
-
       oModel.setData(oData);
+
       this._toggleButtonsAndView(false);
     },
 
     onPressSave: function() {
       jQuery.sap.log.info('Landscape.controller:onPressSave');
+
+      setTimeout(jQuery.proxy(this._saveLandscape(), this));
+    },
+
+    _saveLandscape: function() {
+      jQuery.sap.log.info('Landscapes.controller:_saveLandscape');
+
+      var oViewModel = this.getModel();
+      var sLandscapeId = oViewModel.getProperty('/id');
+
+      var oModel = this.getModel('landscape');
+      var oData = oModel.getProperty('/landscape');
+
+      jQuery.ajax('/Landscape/' + sLandscapeId, {
+        method: 'PUT',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify(oData),
+        error: jQuery.proxy(this.onSaveError, this),
+        success: jQuery.proxy(this.onSaveSuccess, this)
+      });
+    },
+
+    onSaveError: function(resp, textStatus, errorThrown) {
+      jQuery.sap.log.info('Landscapes.controller:onSaveError');
+
+      this.getView().setBusy(false);
+      var sMsg = this.getResourceBundle().getText('landscapeSaveFailed', [ errorThrown ]);
+      MessageToast.show(sMsg);
+    },
+
+    onSaveSuccess: function(resp) {
+      jQuery.sap.log.info('Landscapes.controller:onSaveSuccess');
+
+      if (resp.error) {
+        this.getView().setBusy(false);
+        MessageToast.show(resp.error);
+        return;
+      }
+
+      this._oLandscape = null;
       this._toggleButtonsAndView(false);
     },
 

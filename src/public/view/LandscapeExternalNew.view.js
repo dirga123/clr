@@ -435,7 +435,7 @@ sap.ui.define([
       // General
 
       var oGeneralPanel = new ObjectHeader({
-        title: '{i18n>landscapeID}: {external>id}',
+        title: '{i18n>landscapeID}: {external>project}',
         attributes: [
           new ObjectAttribute({
             title: '{i18n>landscapeDomain}',
@@ -445,7 +445,6 @@ sap.ui.define([
       });
 
       var oSelectionPanel = new Panel(this.createId('selection'), {
-        title: '{i18n>landscapeID}: {external>id}',
         backgroundDesign: 'Transparent',
         content: [
           new sap.m.DateTimeInput(this.createId('pickMonth'), {

@@ -17,10 +17,10 @@ sap.ui.define([
           layout: 'ResponsiveGridLayout',
           content: [
             new Label({ text: '{i18n>landscapeAddId}', required: true }),
-            new Input(this.createId('lsAddId'), {
+            new Input(this.createId('lsAddProject'), {
               valueLiveUpdate: true,
               value: {
-                path: 'landscapes>/new/id',
+                path: 'landscapes>/new/project',
                 type: 'sap.ui.model.type.String',
                 constraints: {
                   minLength: 1

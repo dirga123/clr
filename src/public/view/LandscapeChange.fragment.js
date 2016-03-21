@@ -32,7 +32,7 @@ sap.ui.define([
               new FormElement({
                 label: new Label({ text: '{i18n>landscapeID}' }),
                 fields: [
-                  new Input({ value: '{landscape>id}' })
+                  new Input({ value: '{landscape>project}' })
                 ]
               }),
               new FormElement({

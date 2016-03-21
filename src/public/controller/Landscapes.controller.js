@@ -51,7 +51,7 @@ sap.ui.define([
 
       // Clear new node
       oModel.setProperty('/new', {
-        id: '',
+        project: '',
         domain: '',
         zabbix: ''
       });
@@ -65,7 +65,7 @@ sap.ui.define([
       var oDialog = this._getAddDialog();
 
       var inputs = [
-        sap.ui.getCore().byId('lsAddId'),
+        sap.ui.getCore().byId('lsAddProject'),
         sap.ui.getCore().byId('lsAddDomain'),
         sap.ui.getCore().byId('lsAddZabbix')
       ];

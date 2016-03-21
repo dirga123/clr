@@ -15,7 +15,7 @@ sap.ui.define([
   sap.ui.jsfragment('sap.clr.view.LandscapeDisplay', {
     createContent: function(oController) {
       var oGeneral = new ObjectHeader(this.createId('general'), {
-        title: '{i18n>landscapeID}: {landscape>id}',
+        title: '{i18n>landscapeID}: {landscape>project}',
         attributes: [
           new ObjectAttribute({
             title: '{i18n>landscapeDomain}',

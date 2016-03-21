@@ -51,7 +51,7 @@ const router = new Router();
 
 function getErrorString(e) {
   if (typeof e === 'object') {
-    e.toString();
+    return e.toString();
   }
   return e;
 }
@@ -291,7 +291,7 @@ router.post('/Landscape', async (ctx) => {
 
   // Check for parameters
   if (ctx.request.body === undefined ||
-    ctx.request.body.id === undefined ||
+    ctx.request.body.project === undefined ||
     ctx.request.body.domain === undefined ||
     ctx.request.body.zabbix === undefined) {
     lsRet.error = 'Wrong input';
@@ -301,14 +301,7 @@ router.post('/Landscape', async (ctx) => {
 
   try {
     const redis = new Redis();
-
     await redis.login();
-
-    const lsId = ctx.request.body.id;
-
-    if (await redis.existsLandscape(lsId)) {
-      throw `Landscape ${lsId} already exists.`;
-    }
 
     lsRet.added = await redis.addLandscape(ctx.request.body);
 
@@ -329,7 +322,7 @@ router.put('/Landscape/:id', async (ctx) => {
 
   // Check for parameters
   if (ctx.request.body === undefined ||
-    ctx.request.body.id === undefined ||
+    ctx.request.body.project === undefined ||
     ctx.request.body.domain === undefined ||
     ctx.request.body.zabbix === undefined) {
     lsRet.error = 'Wrong input';
@@ -341,13 +334,12 @@ router.put('/Landscape/:id', async (ctx) => {
     const redis = new Redis();
     await redis.login();
 
-    const lsId = ctx.request.body.id;
-
+    const lsId = ctx.params.id;
     if (await redis.existsLandscape(lsId) === false) {
       throw `Landscape ${lsId} doesnt exists.`;
     }
 
-    lsRet.updated = await redis.updateLandscape(ctx.request.body);
+    lsRet.updated = await redis.updateLandscape(lsId, ctx.request.body);
 
     await redis.logout();
   } catch (e) {

@@ -73,10 +73,12 @@ export default class Redis {
       const lsArr = [];
       for (const lsId of lsSet) {
         const lsMapId = `ls:${lsId}`;
+        const projectVal = await this.client.hgetAsync(lsMapId, 'project');
         const zabbixVal = await this.client.hgetAsync(lsMapId, 'zabbix');
         const domainVal = await this.client.hgetAsync(lsMapId, 'domain');
         lsArr.push({
           id: lsId,
+          project: projectVal,
           zabbix: zabbixVal,
           domain: domainVal
         });
@@ -103,11 +105,13 @@ export default class Redis {
         throw { message: `Landscape ${lsId} doesnt exists.` };
       }
 
+      const projectVal = await this.client.hgetAsync(`ls:${lsId}`, 'project');
       const zabbixVal = await this.client.hgetAsync(`ls:${lsId}`, 'zabbix');
       const domainVal = await this.client.hgetAsync(`ls:${lsId}`, 'domain');
 
       return {
         id: lsId,
+        project: projectVal,
         zabbix: zabbixVal,
         domain: domainVal
       };
@@ -134,20 +138,44 @@ export default class Redis {
 
   async addLandscape(ls) {
     try {
-      debug('redis')(`addLandscape(${ls.id})`);
+      debug('redis')(`addLandscape(${ls.project})`);
 
-      const addedCount = await this.client.saddAsync('ls', ls.id);
+      const nextLsId = await this.client.incrAsync('ls:nextid');
+
+      const addedCount = await this.client.saddAsync('ls', nextLsId);
       if (addedCount !== 1) {
-        throw { message: `Adding of Landscape ${ls.id} failed.` };
+        throw { message: `Adding of Landscape ${nextLsId} failed.` };
       }
 
-      const lsMapId = `ls:${ls.id}`;
+      const lsMapId = `ls:${nextLsId}`;
+      await this.client.hmsetAsync(lsMapId, 'project', ls.project);
       await this.client.hmsetAsync(lsMapId, 'zabbix', ls.zabbix);
       await this.client.hmsetAsync(lsMapId, 'domain', ls.domain);
 
       return addedCount;
     } catch (e) {
       debug('redis')(`addLandscape error: ${e.message}`);
+      throw e.message;
+    }
+  }
+
+  async updateLandscape(lsId, ls) {
+    try {
+      debug('redis')(`updateLandscape(${lsId})`);
+
+      const isInSet = await this.client.sismemberAsync('ls', lsId);
+      if (isInSet === 0) {
+        return 0;
+      }
+
+      const lsMapId = `ls:${lsId}`;
+      await this.client.hmsetAsync(lsMapId, 'project', ls.project);
+      await this.client.hmsetAsync(lsMapId, 'zabbix', ls.zabbix);
+      await this.client.hmsetAsync(lsMapId, 'domain', ls.domain);
+
+      return 1;
+    } catch (e) {
+      debug('redis')(`updateLandscape error: ${e.message}`);
       throw e.message;
     }
   }
