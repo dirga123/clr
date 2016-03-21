@@ -162,6 +162,32 @@ sap.ui.define([
     onAddInternal: function() {
     },
 
+    onLinkZabbixPress: function(oEvent) {
+      jQuery.sap.log.info('Landscape.controller:onLinkZabbixPress');
+      var oModel = this.getModel('landscape');
+      var sZabbix = oModel.getProperty('/landscape/zabbix');
+      sZabbix = sZabbix.replace('api_jsonrpc.php', '');
+      sap.m.URLHelper.redirect(sZabbix, true);
+    },
+
+    onLinkDomainPress: function(oEvent) {
+      jQuery.sap.log.info('Landscape.controller:onLinkDomainPress');
+      var oModel = this.getModel('landscape');
+      var sDomain = oModel.getProperty('/landscape/domain');
+      if (sDomain !== undefined && sDomain !== null) {
+        sap.m.URLHelper.redirect('https://portal.' + sDomain + '/RDWeb/', true);
+      }
+    },
+
+    onLinkDomainBAPress: function(oEvent) {
+      jQuery.sap.log.info('Landscape.controller:onLinkDomainPress');
+      var oModel = this.getModel('landscape');
+      var sDomain = oModel.getProperty('/landscape/domain');
+      if (sDomain !== undefined && sDomain !== null) {
+        sap.m.URLHelper.redirect('https://portal.' + sDomain + '/BrowserAccess/', true);
+      }
+    },
+
 		/* =========================================================== */
 		/* begin: internal methods                                     */
 		/* =========================================================== */

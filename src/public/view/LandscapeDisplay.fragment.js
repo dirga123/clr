@@ -19,11 +19,29 @@ sap.ui.define([
         attributes: [
           new ObjectAttribute({
             title: '{i18n>landscapeDomain}',
-            text: '{landscape>domain}'
+            active: true,
+            text: '{landscape>domain}',
+            press: [ oController.onLinkDomainPress, oController ]
+          }),
+          new ObjectAttribute({
+            title: '{i18n>landscapeDomainBA}',
+            active: true,
+            text: '{landscape>domain}',
+            press: [ oController.onLinkDomainBAPress, oController ]
           }),
           new ObjectAttribute({
             title: '{i18n>landscapeZabbix}',
-            text: '{landscape>zabbix}'
+            active: true,
+            text: {
+              parts: [ 'landscape>zabbix' ],
+              formatter: function(url) {
+                if (url === undefined || url === null) {
+                  return '';
+                }
+                return url.replace('api_jsonrpc.php', '');
+              }
+            },
+            press: [ oController.onLinkZabbixPress, oController ]
           })
         ]
       }).addStyleClass('sapUiNoMargin');
