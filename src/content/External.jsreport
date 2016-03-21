@@ -520,43 +520,43 @@
         <section class="section table" style="margin-bottom: 20px;">
           <header style="display: table-row;">
             <div class="table-cell table-cell-first table-header-col">Type</div>
-            <div class="table-cell table-cell-rest table-header-col">First</div>
+            <div class="table-cell table-cell-rest table-header-col">Period start</div>
             <div class="table-cell table-cell-rest table-header-col">Min</div>
             <div class="table-cell table-cell-rest table-header-col">Avg</div>
-            <div class="table-cell table-cell-rest table-header-col">Last</div>
-            <div class="table-cell-last table-cell-rest table-header-col">Max</div>
+            <div class="table-cell table-cell-rest table-header-col">Max</div>
+            <div class="table-cell-last table-cell-rest table-header-col">Period end</div>
           </header>
           <div style="display: table-row;">
             <div class="table-cell table-cell-first table-label-col">Demo</div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.first}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.min}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:~slaDisp(tenantsDemo.avg)}}{{/if}}</span></div>
-            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.last}}{{/if}}</span></div>
-            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.max}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.max}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.last}}{{/if}}</span></div>
           </div>
           <div style="display: table-row;">
             <div class="table-cell table-cell-first table-label-col">Productive</div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.first}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.min}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:~slaDisp(tenantsProductive.avg)}}{{/if}}</span></div>
-            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.last}}{{/if}}</span></div>
-            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.max}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.max}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.last}}{{/if}}</span></div>
           </div>
           <div style="display: table-row;">
             <div class="table-cell table-cell-first table-label-col">Testing</div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.first}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.min}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:~slaDisp(tenantsTesting.avg)}}{{/if}}</span></div>
-            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.last}}{{/if}}</span></div>
-            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.max}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.max}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.last}}{{/if}}</span></div>
           </div>
           <div style="display: table-row;">
             <div class="table-cell table-cell-first table-label-col">Trial</div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.first}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.min}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:~slaDisp(tenantsTrial.avg)}}{{/if}}</span></div>
-            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.last}}{{/if}}</span></div>
-            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.max}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.max}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.last}}{{/if}}</span></div>
           </div>
         </section>
       </div>
@@ -591,27 +591,27 @@
         <section class="section table" style="margin-bottom: 20px;">
           <header style="display: table-row;">
             <div class="table-cell table-cell-first table-header-col">Type</div>
-            <div class="table-cell table-cell-rest table-header-col">First</div>
+            <div class="table-cell table-cell-rest table-header-col">Period start</div>
             <div class="table-cell table-cell-rest table-header-col">Min</div>
             <div class="table-cell table-cell-rest table-header-col">Avg</div>
-            <div class="table-cell table-cell-rest table-header-col">Last</div>
-            <div class="table-cell-last table-cell-rest table-header-col">Max</div>
+            <div class="table-cell table-cell-rest table-header-col">Max</div>
+            <div class="table-cell-last table-cell-rest table-header-col">Period end</div>
           </header>
           <div style="display: table-row;">
             <div class="table-cell table-cell-first table-label-col">Regular User</div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if users}}{{:users.first}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if users}}{{:users.min}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if users}}{{:~slaDisp(users.avg)}}{{/if}}</span></div>
-            <div class="table-cell table-cell-rest table-value-col"><span>{{if users}}{{:users.last}}{{/if}}</span></div>
-            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if users}}{{:users.max}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if users}}{{:users.max}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if users}}{{:users.last}}{{/if}}</span></div>
           </div>
           <div style="display: table-row;">
             <div class="table-cell table-cell-first table-label-col">MS RDS User</div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if usersRDS}}{{:usersRDS.first}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if usersRDS}}{{:usersRDS.min}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if usersRDS}}{{:~slaDisp(usersRDS.avg)}}{{/if}}</span></div>
-            <div class="table-cell table-cell-rest table-value-col"><span>{{if usersRDS}}{{:usersRDS.last}}{{/if}}</span></div>
-            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if usersRDS}}{{:usersRDS.max}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if usersRDS}}{{:usersRDS.max}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if usersRDS}}{{:usersRDS.last}}{{/if}}</span></div>
           </div>
         </section>
 
@@ -627,43 +627,43 @@
         <section class="section table" style="margin-bottom: 20px;">
           <header style="display: table-row;">
             <div class="table-cell table-cell-first table-header-col">Type</div>
-            <div class="table-cell table-cell-rest table-header-col">First</div>
+            <div class="table-cell table-cell-rest table-header-col">Period start</div>
             <div class="table-cell table-cell-rest table-header-col">Min</div>
             <div class="table-cell table-cell-rest table-header-col">Avg</div>
-            <div class="table-cell table-cell-rest table-header-col">Last</div>
-            <div class="table-cell-last table-cell-rest table-header-col">Max</div>
+            <div class="table-cell table-cell-rest table-header-col">Max</div>
+            <div class="table-cell-last table-cell-rest table-header-col">Period end</div>
           </header>
           <div style="display: table-row;">
             <div class="table-cell table-cell-first table-label-col">Demo</div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.first}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.min}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:~slaDisp(tenantsDemo.avg)}}{{/if}}</span></div>
-            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.last}}{{/if}}</span></div>
-            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.max}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.max}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsDemo}}{{:tenantsDemo.last}}{{/if}}</span></div>
           </div>
           <div style="display: table-row;">
             <div class="table-cell table-cell-first table-label-col">Productive</div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.first}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.min}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:~slaDisp(tenantsProductive.avg)}}{{/if}}</span></div>
-            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.last}}{{/if}}</span></div>
-            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.max}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.max}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsProductive}}{{:tenantsProductive.last}}{{/if}}</span></div>
           </div>
           <div style="display: table-row;">
             <div class="table-cell table-cell-first table-label-col">Testing</div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.first}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.min}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:~slaDisp(tenantsTesting.avg)}}{{/if}}</span></div>
-            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.last}}{{/if}}</span></div>
-            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.max}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.max}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsTesting}}{{:tenantsTesting.last}}{{/if}}</span></div>
           </div>
           <div style="display: table-row;">
             <div class="table-cell table-cell-first table-label-col">Trial</div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.first}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.min}}{{/if}}</span></div>
             <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:~slaDisp(tenantsTrial.avg)}}{{/if}}</span></div>
-            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.last}}{{/if}}</span></div>
-            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.max}}{{/if}}</span></div>
+            <div class="table-cell table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.max}}{{/if}}</span></div>
+            <div class="table-cell-last table-cell-rest table-value-col"><span>{{if tenantsTrial}}{{:tenantsTrial.last}}{{/if}}</span></div>
           </div>
         </section>
       </div>

@@ -123,10 +123,10 @@ sap.ui.define([
             header: new Text({ text: '{i18n>landscapeExternalAvg}' })
           }),
           new Column({
-            header: new Text({ text: '{i18n>landscapeExternalLast}' })
+            header: new Text({ text: '{i18n>landscapeExternalMax}' })
           }),
           new Column({
-            header: new Text({ text: '{i18n>landscapeExternalMax}' })
+            header: new Text({ text: '{i18n>landscapeExternalLast}' })
           })
         ],
         items: [
@@ -141,8 +141,8 @@ sap.ui.define([
                   formatter: jQuery.proxy(formatter.avgToText, this)
                 }
               }),
-              new ObjectNumber({ number: '{external>users/last}' }),
-              new ObjectNumber({ number: '{external>users/max}' })
+              new ObjectNumber({ number: '{external>users/max}' }),
+              new ObjectNumber({ number: '{external>users/last}' })
             ]
           }),
           new ColumnListItem({
@@ -156,8 +156,8 @@ sap.ui.define([
                   formatter: jQuery.proxy(formatter.avgToText, this)
                 }
               }),
-              new ObjectNumber({ number: '{external>usersRDS/last}' }),
-              new ObjectNumber({ number: '{external>usersRDS/max}' })
+              new ObjectNumber({ number: '{external>usersRDS/max}' }),
+              new ObjectNumber({ number: '{external>usersRDS/last}' })
             ]
           })
         ]
@@ -178,10 +178,10 @@ sap.ui.define([
             header: new Text({ text: '{i18n>landscapeExternalAvg}' })
           }),
           new Column({
-            header: new Text({ text: '{i18n>landscapeExternalLast}' })
+            header: new Text({ text: '{i18n>landscapeExternalMax}' })
           }),
           new Column({
-            header: new Text({ text: '{i18n>landscapeExternalMax}' })
+            header: new Text({ text: '{i18n>landscapeExternalLast}' })
           })
         ],
         items: [
@@ -196,8 +196,8 @@ sap.ui.define([
                   formatter: jQuery.proxy(formatter.avgToText, this)
                 }
               }),
-              new ObjectNumber({ number: '{external>tenantsDemo/last}' }),
-              new ObjectNumber({ number: '{external>tenantsDemo/max}' })
+              new ObjectNumber({ number: '{external>tenantsDemo/max}' }),
+              new ObjectNumber({ number: '{external>tenantsDemo/last}' })
             ]
           }),
           new ColumnListItem({
@@ -211,8 +211,8 @@ sap.ui.define([
                   formatter: jQuery.proxy(formatter.avgToText, this)
                 }
               }),
-              new ObjectNumber({ number: '{external>tenantsProductive/last}' }),
-              new ObjectNumber({ number: '{external>tenantsProductive/max}' })
+              new ObjectNumber({ number: '{external>tenantsProductive/max}' }),
+              new ObjectNumber({ number: '{external>tenantsProductive/last}' })
             ]
           }),
           new ColumnListItem({
@@ -226,8 +226,8 @@ sap.ui.define([
                   formatter: jQuery.proxy(formatter.avgToText, this)
                 }
               }),
-              new ObjectNumber({ number: '{external>tenantsTesting/last}' }),
-              new ObjectNumber({ number: '{external>tenantsTesting/max}' })
+              new ObjectNumber({ number: '{external>tenantsTesting/max}' }),
+              new ObjectNumber({ number: '{external>tenantsTesting/last}' })
             ]
           }),
           new ColumnListItem({
@@ -241,8 +241,8 @@ sap.ui.define([
                   formatter: jQuery.proxy(formatter.avgToText, this)
                 }
               }),
-              new ObjectNumber({ number: '{external>tenantsTrial/last}' }),
-              new ObjectNumber({ number: '{external>tenantsTrial/max}' })
+              new ObjectNumber({ number: '{external>tenantsTrial/max}' }),
+              new ObjectNumber({ number: '{external>tenantsTrial/last}' })
             ]
           })
         ]
@@ -287,10 +287,10 @@ sap.ui.define([
             header: new Text({ text: '{i18n>landscapeExternalAvg}' })
           }),
           new Column({
-            header: new Text({ text: '{i18n>landscapeExternalLast}' })
+            header: new Text({ text: '{i18n>landscapeExternalMax}' })
           }),
           new Column({
-            header: new Text({ text: '{i18n>landscapeExternalMax}' })
+            header: new Text({ text: '{i18n>landscapeExternalLast}' })
           })
         ],
         items: [
@@ -305,8 +305,8 @@ sap.ui.define([
                   formatter: jQuery.proxy(formatter.avgToText, this)
                 }
               }),
-              new ObjectNumber({ number: '{external>tenantsDemo/last}' }),
-              new ObjectNumber({ number: '{external>tenantsDemo/max}' })
+              new ObjectNumber({ number: '{external>tenantsDemo/max}' }),
+              new ObjectNumber({ number: '{external>tenantsDemo/last}' })
             ]
           }),
           new ColumnListItem({
@@ -320,8 +320,8 @@ sap.ui.define([
                   formatter: jQuery.proxy(formatter.avgToText, this)
                 }
               }),
-              new ObjectNumber({ number: '{external>tenantsProductive/last}' }),
-              new ObjectNumber({ number: '{external>tenantsProductive/max}' })
+              new ObjectNumber({ number: '{external>tenantsProductive/max}' }),
+              new ObjectNumber({ number: '{external>tenantsProductive/last}' })
             ]
           }),
           new ColumnListItem({
@@ -335,8 +335,8 @@ sap.ui.define([
                   formatter: jQuery.proxy(formatter.avgToText, this)
                 }
               }),
-              new ObjectNumber({ number: '{external>tenantsTesting/last}' }),
-              new ObjectNumber({ number: '{external>tenantsTesting/max}' })
+              new ObjectNumber({ number: '{external>tenantsTesting/max}' }),
+              new ObjectNumber({ number: '{external>tenantsTesting/last}' })
             ]
           }),
           new ColumnListItem({
@@ -350,8 +350,8 @@ sap.ui.define([
                   formatter: jQuery.proxy(formatter.avgToText, this)
                 }
               }),
-              new ObjectNumber({ number: '{external>tenantsTrial/last}' }),
-              new ObjectNumber({ number: '{external>tenantsTrial/max}' })
+              new ObjectNumber({ number: '{external>tenantsTrial/max}' }),
+              new ObjectNumber({ number: '{external>tenantsTrial/last}' })
             ]
           })
         ]
