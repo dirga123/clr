@@ -73,7 +73,7 @@ sap.ui.define([
       }
     },
 
-    setCurrentDateAndPeriod() {
+    setCurrentDateAndPeriod: function() {
       var oModel = this.getModel();
 
       var oDate = new Date();
@@ -82,6 +82,10 @@ sap.ui.define([
       oModel.setProperty('/date', oDate);
       oModel.setProperty('/from', firstDay);
       oModel.setProperty('/to', oDate);
+    },
+
+    padNumber: function(num) {
+      return (num < 10 ? '0' : '') + num;
     }
 
   });

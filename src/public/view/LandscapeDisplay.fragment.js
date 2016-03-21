@@ -34,10 +34,76 @@ sap.ui.define([
         content: oGeneral
       });
 
+      var oStatusList = new List(this.createId('statusList'), {
+      });
+
+      var oStatusItem = new StandardListItem({
+        title: '{landscapeStatus>description}',
+        error: '{landscapeStatus>error}',
+        type: 'Inactive',
+        info: {
+          parts: [ 'landscapeStatus>priority' ],
+          formatter: function(priority) {
+            if (priority === undefined) {
+              return '';
+            } else {
+              switch (priority) {
+              case '5':
+                return 'Disaster';
+              case '4':
+                return 'High';
+              case '3':
+                return 'Average';
+              case '2':
+                return 'Warning';
+              case '1':
+                return 'Information';
+              case '0':
+              default:
+                return 'Not classified';
+              }
+            }
+          }
+        },
+        infoState: {
+          parts: [ 'landscapeStatus>priority' ],
+          formatter: function(priority) {
+            if (priority === undefined) {
+              return '';
+            } else {
+              switch (priority) {
+              case '5':
+              case '4':
+                return 'Error';
+              case '3':
+              case '2':
+                return 'Warning';
+              case '1':
+              case '0':
+              default:
+                return 'Not classified';
+              }
+            }
+          }
+        }
+      });
+
+      oStatusList.bindItems({
+        path: 'landscapeStatus>/triggers',
+        template: oStatusItem
+      });
+
       var oStatusPanel = new Panel(this.createId('statusPanel'), {
         busyIndicatorDelay: 0,
         backgroundDesign: 'Transparent',
-        content: []
+        content: [
+          new VerticalLayout({
+            width: '100%',
+            content: [
+              oStatusList
+            ]
+          })
+        ]
       });
 
       var oExternalList = new List(this.createId('externalList'), {

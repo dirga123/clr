@@ -122,6 +122,15 @@ router.get('/Landscapes', async ctx => {
     version: config.versionStr
   };
 
+  // Check for parameters
+  if (ctx.query.date === undefined ||
+    ctx.query.from === undefined ||
+    ctx.query.to === undefined) {
+    lsRet.error = 'Wrong input';
+    ctx.body = lsRet;
+    return;
+  }
+
   // Retrieve list of landscapes
   try {
     const redis = new Redis();
@@ -135,19 +144,8 @@ router.get('/Landscapes', async ctx => {
   }
 
   // Retrieve Zabbix info
-  const today = moment();
-  const paramDate = Number.parseInt(ctx.query.date, 10) || +moment();
-
-  // Current month till today, cant use end of month explicitly
-  // (zabbix bug returns N days backwards - from prev month too)
-  let firstDay = moment(paramDate).startOf('month');
-  if (today < firstDay) {
-    firstDay = today.clone().startOf('month');
-  }
-  let lastDay = moment(paramDate).endOf('month');
-  if (today < lastDay) {
-    lastDay = today;
-  }
+  const firstDay = moment(Number.parseInt(ctx.query.from, 10));
+  const lastDay = moment(Number.parseInt(ctx.query.to, 10));
 
   for (const ls of lsRet.landscapes) {
     try {
@@ -216,6 +214,15 @@ router.get('/Landscape/:id', async (ctx) => {
     version: config.versionStr
   };
 
+  // Check for parameters
+  if (ctx.query.date === undefined ||
+    ctx.query.from === undefined ||
+    ctx.query.to === undefined) {
+    lsRet.error = 'Wrong input';
+    ctx.body = lsRet;
+    return;
+  }
+
   try {
     const redis = new Redis();
     await redis.login();
@@ -236,19 +243,8 @@ router.get('/Landscape/:id', async (ctx) => {
     const zabbix = new Zabbix();
     await zabbix.login(zabbixUrl);
 
-    const today = moment();
-    const paramDate = Number.parseInt(ctx.query.date, 10) || +moment();
-
-    // Current month till today, cant use end of month explicitly
-    // (zabbix bug returns N days backwards - from prev month too)
-    let firstDay = moment(paramDate).startOf('month');
-    if (today < firstDay) {
-      firstDay = today.clone().startOf('month');
-    }
-    let lastDay = moment(paramDate).endOf('month');
-    if (today < lastDay) {
-      lastDay = today;
-    }
+    const firstDay = moment(Number.parseInt(ctx.query.from, 10));
+    const lastDay = moment(Number.parseInt(ctx.query.to, 10));
 
     // Get services as map, so it can be spread to landscape root and serviceUnits
     const servicesMap = await servicesAsMap(zabbix, firstDay.unix(), lastDay.unix());
@@ -325,7 +321,7 @@ router.post('/Landscape', async (ctx) => {
   ctx.body = lsRet;
 });
 
-// Landscape add
+// Landscape update
 router.put('/Landscape/:id', async (ctx) => {
   const lsRet = {
     version: config.versionStr
@@ -388,9 +384,8 @@ router.get('/Landscape/:id/general', async (ctx) => {
     version: config.versionStr
   };
 
-  const redis = new Redis();
-
   try {
+    const redis = new Redis();
     await redis.login();
 
     // Retrieve DB info
@@ -402,18 +397,50 @@ router.get('/Landscape/:id/general', async (ctx) => {
     ctx.body = lsRet;
     return;
   }
+
   ctx.body = lsRet;
 });
 
+// path /Landscape/:id/status
 router.get('/Landscape/:id/status', async (ctx) => {
   const lsRet = {
-    version: config.versionStr,
-    error: 'Status: Not implemented'
+    version: config.versionStr
   };
-  // await new Promise(r => setTimeout(r, 2000));
+
+  try {
+    const redis = new Redis();
+    await redis.login();
+
+    // Retrieve DB info
+    lsRet.landscape = await redis.getLandscape(ctx.params.id);
+
+    await redis.logout();
+  } catch (e) {
+    lsRet.error = getErrorString(e);
+    ctx.body = lsRet;
+    return;
+  }
+
+  // Retrieve Zabbix info
+  try {
+    const zabbixUrl = lsRet.landscape.zabbix;
+    const zabbix = new Zabbix();
+    await zabbix.login(zabbixUrl);
+
+    const triggersArr = await triggers(zabbix);
+    lsRet.triggers = triggersArr;
+
+    await zabbix.logout();
+  } catch (e) {
+    lsRet.error = getErrorString(e);
+    ctx.body = lsRet;
+    return;
+  }
+
   ctx.body = lsRet;
 });
 
+// path /Landscape/:id/internal
 router.get('/Landscape/:id/internal', async (ctx) => {
   const lsRet = {
     version: config.versionStr,
@@ -470,8 +497,11 @@ async function landscapeExternalNew(id, date, from, to) {
     const zabbix = new Zabbix();
     await zabbix.login(zabbixUrl);
 
+    const firstDay = moment(Number.parseInt(from, 10));
+    const lastDay = moment(Number.parseInt(to, 10));
+
     // Get services as map, so it can be spread to landscape root and serviceUnits
-    const servicesMap = await servicesAsMap(zabbix, from, to);
+    const servicesMap = await servicesAsMap(zabbix, firstDay.unix(), lastDay.unix());
 
     // Create services array (will hold just 2 values)
     lsRet.external.services = [];
@@ -488,7 +518,7 @@ async function landscapeExternalNew(id, date, from, to) {
     // lsRet.external.hosts = await hosts();
 
     // Retrieve all relevant items
-    lsRet.external.items = await items(zabbix, from, to);
+    lsRet.external.items = await items(zabbix, firstDay.unix(), lastDay.unix());
 
     // Update sla to serviceUnits
     lsRet.external.items.serviceUnits.forEach((currentValue) => {
@@ -592,8 +622,9 @@ async function generateExternalPdf(ctx, external) {
         content: templateStr,
         engine: 'jsrender',
         recipe: 'wkhtmltopdf',
-        helpers: 'function dateDisp(date) { return moment(date).format("YYYY-MM-DD"); };' +
-          'function periodDisp(date) { return moment(date).format("YYYY-MM"); };' +
+        helpers: 'function dateDisp(date) { return moment(date).format("YYYY/MM/DD HH:mm:ss"); };' +
+          'function periodDisp(from, to) { return moment(from).format("YYYY/MM/DD") +' +
+          ' " - " + moment(to).format("YYYY/MM/DD"); };' +
           'function slaDisp(sla) { return parseFloat(sla).toFixed(4) };' +
           'function secondsDisp(val) { var s = Math.floor(val); var d = Math.floor(s / 86400);' +
           's -= d * 86400; var h = Math.floor(s / 3600); s -= h * 3600;' +
@@ -615,7 +646,6 @@ router.get('/Landscape/:id/external/new/:fileName.pdf', async (ctx) => {
     version: config.versionStr
   };
 
-  console.log(ctx.query);
   // Check for parameters
   if (ctx.query.date === undefined ||
     ctx.query.from === undefined ||

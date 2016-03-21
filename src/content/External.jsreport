@@ -134,6 +134,14 @@
       margin-bottom: 10px;
     }
 
+    .sla-name h2 {
+      font-weight:bold;
+      font-size:12px;
+      color:#808080;
+      text-align:left;
+      display: inline-block;
+    }
+
     .sla-value {
       font-weight:bold;
       font-size:14px;
@@ -166,6 +174,14 @@
       font-size:14px;
       color:#4a4a4a;
       text-align:left;
+    }
+
+    .su-name h2 {
+      font-weight:bold;
+      font-size:14px;
+      color:#4a4a4a;
+      text-align:left;
+      display: inline-block;
     }
 
     .su-label {
@@ -256,7 +272,7 @@
 				<div class="clearfix"></div>
 				<div class="header-info-line"><span class="header-created-label">Version: </span><span class="header-created-value">{{:version}}</span></div>
 				<div class="clearfix"></div>
-				<div class="header-info-line"><span class="header-created-label">Period: </span><span class="header-period-value">{{:~periodDisp(date)}} - 2016/03/01</span></div>
+				<div class="header-info-line"><span class="header-created-label">Period: </span><span class="header-period-value">{{:~periodDisp(from, to)}}</span></div>
 				<div class="clearfix"></div>
 			</div>
 		</div>
@@ -348,7 +364,7 @@
                 <div style="display: table-cell;">
                 </div>
                 <div style="display: table-cell;">
-                  <div class="sla-name"><span>{{:name}}</span></div>
+                  <div class="sla-name"><h2><span>{{:name}}</h2></span></div>
                   <div class="sla-value"><span>{{:~slaDisp(currSla)}} / {{:~slaDisp(goodSla)}}</span></div>
                 </div>
               </div>
@@ -399,7 +415,7 @@
         <div style="display: table; margin-bottom: 20px;">
           <div class="su-prefix" style="display: table-cell; vertical-align: middle;"></div>
           <div class="su-name" style="display: table-cell; vertical-align: middle; padding-left: 10px;">
-            Service Unit {{if name}}{{:name.last}} {{/if}}
+            Service Unit <h2>{{if name}}{{:name.last}}{{/if}}</h2>
           </div>
         </div>
 
@@ -543,7 +559,7 @@
         <div style="display: table; margin-bottom: 20px;">
           <div class="su-prefix" style="display: table-cell; vertical-align: middle;"></div>
           <div class="su-name" style="display: table-cell; vertical-align: middle; padding-left: 10px;">
-            Customer ID {{if id}}{{:id}}{{/if}}
+            Customer ID <h2>{{if id}}{{:id}}{{/if}}</h2>
           </div>
         </div>
 

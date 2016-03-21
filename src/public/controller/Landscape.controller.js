@@ -27,7 +27,7 @@ sap.ui.define([
 
       var oModelStatus = new JSONModel();
       this.setModel(oModelStatus, 'landscapeStatus');
-      this._bindElement('statusPanel', 'landscapeStatus>/status');
+      this._bindElement('statusPanel', 'landscapeStatus>/');
 
       var oModelExternal = new JSONModel();
       this.setModel(oModelExternal, 'landscapeExternal');
@@ -35,7 +35,7 @@ sap.ui.define([
 
       var oModelInternal = new JSONModel();
       this.setModel(oModelInternal, 'landscapeInternal');
-      this._bindElement('internalPanel', 'landscapeInternal>/internal');
+      this._bindElement('internalPanel', 'landscapeInternal>/');
 
       this.getRouter().getRoute('landscape').attachPatternMatched(
         this._onObjectMatched, this

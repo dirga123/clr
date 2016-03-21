@@ -35,11 +35,11 @@ sap.ui.define([
       return 'sap.clr.controller.LandscapeExternal';
     },
 
-    createContent: function (oController) {
+    createContent: function (oCtrl) {
       var oExportButton = new Button(this.createId('exportButton'), {
         icon: 'sap-icon://action',
         text: '{i18n>landscapeExportButton}',
-        press: [ oController.onPressExport, oController ]
+        press: [ oCtrl.onPressExport, oCtrl ]
       });
 
       var oBar = new Toolbar({
@@ -50,7 +50,7 @@ sap.ui.define([
             icon: 'sap-icon://delete',
             text: '{i18n>landscapeDeleteButton}',
             type: 'Reject',
-            press: [ oController.onPressDelete, oController ]
+            press: [ oCtrl.onPressDelete, oCtrl ]
           })
         ]
       });
@@ -441,16 +441,23 @@ sap.ui.define([
             text: {
               parts: [ 'external>/from', 'external>/to' ],
               formatter: function(from, to) {
-                var dateFrom = new Date();
-                dateFrom.setTime(from);
-                var dateTo = new Date();
-                dateTo.setTime(to);
-                return dateFrom.getFullYear() + '/' +
-                  (dateFrom.getMonth() < 9 ? '0' : '') + dateFrom.getMonth() + '/' +
-                  (dateFrom.getDate() < 9 ? '0' : '') + dateFrom.getDate() + ' - ' +
-                  dateTo.getFullYear() + '/' +
-                  (dateTo.getMonth() < 9 ? '0' : '') + dateTo.getMonth() + '/' +
-                  (dateTo.getDate() < 9 ? '0' : '') + dateTo.getDate();
+                var sDateFrom = '';
+                if (from !== undefined) {
+                  var dateFrom = new Date();
+                  dateFrom.setTime(from);
+                  sDateFrom = dateFrom.getFullYear() + '/' +
+                    oCtrl.padNumber(dateFrom.getMonth() + 1) + '/' +
+                    oCtrl.padNumber(dateFrom.getDate());
+                }
+                var sDateTo = '';
+                if (to !== undefined) {
+                  var dateTo = new Date();
+                  dateTo.setTime(to);
+                  sDateTo = dateTo.getFullYear() + '/' +
+                    oCtrl.padNumber(dateTo.getMonth() + 1) + '/' +
+                    oCtrl.padNumber(dateTo.getDate());
+                }
+                return sDateFrom + (sDateTo.length > 0 ? ' - ' : '') + sDateTo;
               }
             }
           }),
@@ -459,14 +466,18 @@ sap.ui.define([
             text: {
               parts: [ 'external>/date' ],
               formatter: function(reportDate) {
+                if (reportDate === undefined) {
+                  return '';
+                }
+
                 var date = new Date();
                 date.setTime(reportDate);
                 return date.getFullYear() + '/' +
-                  (date.getMonth() < 9 ? '0' : '') + (date.getMonth() + 1) + '/' +
-                  (date.getDate() < 10 ? '0' : '') + date.getDate() + ' ' +
-                  (date.getHours() < 10 ? '0' : '') + date.getHours() + ':' +
-                  (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + ':' +
-                  (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
+                  oCtrl.padNumber(date.getMonth() + 1) + '/' +
+                  oCtrl.padNumber(date.getDate()) + ' ' +
+                  oCtrl.padNumber(date.getHours()) + ':' +
+                  oCtrl.padNumber(date.getMinutes()) + ':' +
+                  oCtrl.padNumber(date.getSeconds());
               }
             }
           })
@@ -477,7 +488,7 @@ sap.ui.define([
         title: '{i18n>landscapeExternal}: {external>/name}',
         showHeader: true,
         showNavButton: true,
-        navButtonPress: [ oController.onNavBack, oController ],
+        navButtonPress: [ oCtrl.onNavBack, oCtrl ],
         content: [
           oGeneralPanel,
           oTabs

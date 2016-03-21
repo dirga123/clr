@@ -30,7 +30,7 @@ sap.ui.define([
             icon: 'sap-icon://refresh',
             text: '{i18n>landscapeRefreshButton}',
             press: [ oController.onPressRefresh, oController ]
-          }).addStyleClass('uoNoPrint')
+          })
         ]
       });
 
@@ -39,11 +39,10 @@ sap.ui.define([
         number: {
           parts: [ 'landscapes>currSla', 'landscapes>/services/goodSla' ],
           formatter: function(currSla, goodSla) {
-            var text = '';
-            if (currSla !== undefined) {
-              text = parseFloat(currSla).toFixed(4);
+            if (currSla === undefined) {
+              return '';
             }
-            return text;
+            return parseFloat(currSla).toFixed(4);
           }
         },
         numberUnit: '{i18n>landscapesSLA}',
@@ -54,6 +53,9 @@ sap.ui.define([
             if (error !== undefined || count === undefined) {
               return oController.getResourceBundle().getText('landscapeError');
             } else {
+              if (count === 1) {
+                return count.toString() + ' problem';
+              }
               return count.toString() + ' problems';
             }
           }
@@ -64,16 +66,15 @@ sap.ui.define([
             if (error !== undefined) {
               return 'Error';
             }
-
             switch (priority) {
-            case 2:
-            case 3:
+            case '2':
+            case '3':
               return 'Warning';
-            case 4:
-            case 5:
+            case '4':
+            case '5':
               return 'Error';
-            case 0:
-            case 1:
+            case '0':
+            case '1':
             default:
               return 'Success';
             }

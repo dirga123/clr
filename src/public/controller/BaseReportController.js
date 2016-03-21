@@ -35,9 +35,8 @@ sap.ui.define([
       }
     },
 
-    createPdfName(id, date) {
-      var sPdfName = id + '_' + date.getFullYear() +
-        (date.getMonth() < 9 ? '0' : '') + (date.getMonth() + 1);
+    createPdfName: function(id, date) {
+      var sPdfName = id + '_' + date.getFullYear() + this.padNumber(date.getMonth() + 1);
       return sPdfName;
     }
 

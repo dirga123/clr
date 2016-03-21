@@ -18,7 +18,7 @@ sap.ui.define([
       this.getController()._toggleButtonsAndView(false);
     },
     */
-    
+
     createContent: function (oController) {
       var oBar = new Toolbar({
         content: [

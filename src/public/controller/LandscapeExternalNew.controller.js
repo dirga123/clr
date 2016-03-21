@@ -38,6 +38,8 @@ sap.ui.define([
       if (oDate.getMonth() !== oDateFrom.getMonth()) {
         oDateTo = new Date(oDateFrom.getFullYear(), oDateFrom.getMonth() + 1, 1);
       }
+      oModel.setProperty('/date', oDate);
+      oModel.setProperty('/to', oDateTo);
 
       setTimeout(jQuery.proxy(this.onPressRefresh, this));
     },
@@ -56,12 +58,13 @@ sap.ui.define([
       var oDateFrom = oModel.getProperty('/from');
       var oDate = oModel.getProperty('/date');
       var sDefaultName = oDateFrom.getFullYear() + '-' +
-        (oDateFrom.getMonth() < 9 ? '0' : '') + (oDateFrom.getMonth() + 1) + ' ' +
+        this.padNumber(oDateFrom.getMonth() + 1) + ' ' +
         oDate.getFullYear() + '-' +
-        (oDate.getMonth() < 9 ? '0' : '') + (oDate.getMonth() + 1) + '-' +
-        oDate.getDate() + ' ' + (oDate.getHours() < 10 ? '0' : '') + oDate.getHours() + ':' +
-        (oDate.getMinutes() < 10 ? '0' : '') + oDate.getMinutes() + ':' +
-        (oDate.getSeconds() < 10 ? '0' : '') + oDate.getSeconds();
+        this.padNumber(oDate.getMonth() + 1) + '-' +
+        this.padNumber(oDate.getDate()) + ' ' +
+        this.padNumber(oDate.getHours()) + ':' +
+        this.padNumber(oDate.getMinutes()) + ':' +
+        this.padNumber(oDate.getSeconds());
 
       oModel.setProperty('/name', sDefaultName);
       oModel.setProperty('/saveEnabled', sDefaultName.length > 0);

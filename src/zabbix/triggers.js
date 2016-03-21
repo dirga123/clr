@@ -7,6 +7,7 @@ async function triggers(zabbix) {
     output: [
       'triggerid',
       'description',
+      'error',
       'priority'
     ],
     filter: {

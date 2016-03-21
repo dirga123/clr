@@ -25,6 +25,9 @@ sap.ui.define([
         }
       });
 
+      this.setModel(new JSONModel());
+      this.setCurrentDateAndPeriod();
+
       var oModel = new JSONModel();
       this.setModel(oModel, 'landscapes');
 
@@ -37,6 +40,7 @@ sap.ui.define([
       jQuery.sap.log.info('Landscapes.controller:onPressRefresh');
 
       this.getView().setBusy(true);
+      this.setCurrentDateAndPeriod();
       this._requestData();
     },
 
@@ -153,17 +157,27 @@ sap.ui.define([
       jQuery.sap.log.info('Landscapes.controller:_onObjectMatched');
 
       this.getView().setBusy(true);
+      this.setCurrentDateAndPeriod();
       this._requestData();
     },
 
     _requestData: function() {
       jQuery.sap.log.info('Landscapes.controller:_requestData');
 
+      var oViewModel = this.getModel();
+      var oDate = oViewModel.getProperty('/date');
+      var oDateFrom = oViewModel.getProperty('/from');
+      var oDateTo = oViewModel.getProperty('/to');
+
       var oModel = this.getModel('landscapes');
       oModel.attachRequestCompleted(this._requestCompleted, this);
       oModel.loadData(
         '/Landscapes',
-        {},
+        {
+          date: oDate.getTime(),
+          from: oDateFrom.getTime(),
+          to: oDateTo.getTime()
+        },
         true,
         'GET',
         false,
