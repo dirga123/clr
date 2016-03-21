@@ -15,8 +15,13 @@
 			margin-bottom: 50px;
 		}
 
-		.header-logo {
+		div .header-logo {
 			float: left;
+			width: 200px;
+			height: 46px;
+		}
+
+    img .header-logo {
 			width: 200px;
 			height: 46px;
 		}
@@ -31,25 +36,25 @@
 
 		div .icon-big {
 			float: none;
-			width: 60px;
-			height: 60px;
+			width: 30px;
+			height: 30px;
 		}
 
     img .icon-big {
-			width: 60px;
-			height: 60px;
+			width: 30px;
+			height: 30px;
 		}
 
     div .icon-small {
 			float: none;
-			width: 34px;
-			height: 34px;
+			width: 15px;
+			height: 15px;
 		}
 
     img .icon-small {
 			float: none;
-			width: 34px;
-			height: 34px;
+			width: 15px;
+			height: 15px;
 		}
 
 		.clearfix:after {
@@ -274,7 +279,7 @@
 	<body>
 		<div class="header clearfix">
 			<div class="header-logo">
-				<img src="../6DBB7670-586D-4BA5-A79C-CE4E123C0D7F@2x.png" />
+				<img class="header-logo" src="../b1_logo.svg" />
 			</div>
 			<div class="header-info">
 				<div class="header-info-line"><span class="header-name">Cloud report</span></div>
@@ -459,7 +464,7 @@
 
         <div style="display: table; margin-bottom: 10px;">
           <div class="icon-small" style="display: table-cell; vertical-align: middle;">
-            <img src="../1DF66D23-ED0C-4159-8BA7-EE68E8C9AA08@2x.png" />
+            <img class="icon-small" src="../sla_bw.svg" />
           </div>
           <div class="su-name" style="display: table-cell; vertical-align: middle; padding-left: 10px;">
             SLA
@@ -504,8 +509,8 @@
         </section>
 
         <div style="display: table; margin-bottom: 20px;">
-          <div class="icon-big" style="display: table-cell; vertical-align: middle;">
-            <img src="../1DF66D23-ED0C-4159-8BA7-EE68E8C9AA08@2x.png" />
+          <div class="icon-small" style="display: table-cell; vertical-align: middle;">
+            <img class="icon-small" src="../tenant_bw.svg" />
           </div>
           <div class="su-name" style="display: table-cell; vertical-align: middle; padding-left: 10px;">
             Tenants
@@ -575,8 +580,8 @@
         </div>
 
         <div style="display: table; margin-bottom: 20px;">
-          <div class="icon-big" style="display: table-cell; vertical-align: middle;">
-            <img src="../883D6AFE-B720-40A1-8231-44489B386F80@2x.png" />
+          <div class="icon-small" style="display: table-cell; vertical-align: middle;">
+            <img class="icon-small" src="../customer_bw.svg" />
           </div>
           <div class="su-name" style="display: table-cell; vertical-align: middle; padding-left: 10px;">
             Allocation
@@ -611,8 +616,8 @@
         </section>
 
         <div style="display: table; margin-bottom: 20px;">
-          <div class="icon-big" style="display: table-cell; vertical-align: middle;">
-            <img src="../B12DCE1D-C454-487D-AEC1-8221BBBEFC44@2x.png" />
+          <div class="icon-small" style="display: table-cell; vertical-align: middle;">
+            <img class="icon-small" src="../tenant_bw.svg" />
           </div>
           <div class="su-name" style="display: table-cell; vertical-align: middle; padding-left: 10px;">
             Tenants
