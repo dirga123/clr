@@ -437,6 +437,30 @@ sap.ui.define([
             text: '{external>domain}'
           }),
           new ObjectAttribute({
+            title: '{i18n>landscapeExternalCreated}',
+            text: {
+              parts: [ 'external>/date' ],
+              formatter: function(reportDate) {
+                if (reportDate === undefined) {
+                  return '';
+                }
+
+                var date = new Date();
+                date.setTime(reportDate);
+                return date.getFullYear() + '/' +
+                  oCtrl.padNumber(date.getMonth() + 1) + '/' +
+                  oCtrl.padNumber(date.getDate()) + ' ' +
+                  oCtrl.padNumber(date.getHours()) + ':' +
+                  oCtrl.padNumber(date.getMinutes()) + ':' +
+                  oCtrl.padNumber(date.getSeconds());
+              }
+            }
+          }),
+          new ObjectAttribute({
+            title: '{i18n>landscapeVersion}',
+            text: '{external>/version}'
+          }),
+          new ObjectAttribute({
             title: '{i18n>landscapeExternalPeriod}',
             text: {
               parts: [ 'external>/from', 'external>/to' ],
@@ -458,26 +482,6 @@ sap.ui.define([
                     oCtrl.padNumber(dateTo.getDate());
                 }
                 return sDateFrom + (sDateTo.length > 0 ? ' - ' : '') + sDateTo;
-              }
-            }
-          }),
-          new ObjectAttribute({
-            title: '{i18n>landscapeExternalCreated}',
-            text: {
-              parts: [ 'external>/date' ],
-              formatter: function(reportDate) {
-                if (reportDate === undefined) {
-                  return '';
-                }
-
-                var date = new Date();
-                date.setTime(reportDate);
-                return date.getFullYear() + '/' +
-                  oCtrl.padNumber(date.getMonth() + 1) + '/' +
-                  oCtrl.padNumber(date.getDate()) + ' ' +
-                  oCtrl.padNumber(date.getHours()) + ':' +
-                  oCtrl.padNumber(date.getMinutes()) + ':' +
-                  oCtrl.padNumber(date.getSeconds());
               }
             }
           })
