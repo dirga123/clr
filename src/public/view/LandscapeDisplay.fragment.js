@@ -99,7 +99,7 @@ sap.ui.define([
               case '1':
               case '0':
               default:
-                return 'Not classified';
+                return 'Success';
               }
             }
           }

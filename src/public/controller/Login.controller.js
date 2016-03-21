@@ -10,6 +10,11 @@ sap.ui.define([
     onInit: function() {
       jQuery.sap.log.info('Login.controller:onInit');
 
+      var oInput = this.getView().byId('loginInput');
+      oInput.onsapenter = jQuery.proxy(function(oEvent) {
+        this.getView().byId('loginButton').firePress();
+      }, this);
+
       var oModel = new JSONModel({
         input: ''
       });

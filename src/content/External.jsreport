@@ -29,13 +29,24 @@
 			float: right;
 		}
 
-		.icon-big {
+		div .icon-big {
 			float: none;
 			width: 60px;
 			height: 60px;
 		}
 
-    .icon-big {
+    img .icon-big {
+			width: 60px;
+			height: 60px;
+		}
+
+    div .icon-small {
+			float: none;
+			width: 34px;
+			height: 34px;
+		}
+
+    img .icon-small {
 			float: none;
 			width: 34px;
 			height: 34px;
@@ -290,7 +301,7 @@
 				<div style="display: table-row;">
           <div style="display: table-cell;">
 						<div class="icon-big" style="display: table-cell; vertical-align: middle; padding-right: 20px; padding-left: 20px;">
-							<img src="../C03495F1-DE68-43D0-81B8-0779CE2B78A7@2x.png" />
+							<img class="icon-big" src="../customer.svg" />
 						</div>
             <div style="display: table-cell; vertical-align: middle; height: 80px;">
               <div>
@@ -307,7 +318,7 @@
 					<div style="display: table-cell;">
             <div style="display: table;">
   						<div class="icon-big" style="display: table-cell; vertical-align: middle; padding-right: 20px; padding-left: 20px;">
-  							<img src="../D89C6900-6DAF-4E14-9BF9-D2C812410821@2x.png" />
+  							<img class="icon-big" src="../service_case.svg" />
   						</div>
   						<div style="display: table-cell; vertical-align: middle; height: 80px;">
                 <div>
@@ -327,7 +338,7 @@
 					<div style="display: table-cell;">
             <div style="display: table;">
   						<div class="icon-big" style="display: table-cell; vertical-align: middle; padding-right: 20px; padding-left: 20px;">
-							  <img src="../24B41414-FB28-42F6-89E6-6C73943C07CF@2x.png" />
+							  <img class="icon-big" src="../tenant.svg" />
 						  </div>
               <div style="display: table-cell; vertical-align: middle; height: 80px;">
                 <div>

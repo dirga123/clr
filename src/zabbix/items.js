@@ -197,7 +197,7 @@ async function items(zabbix, fromDate, toDate) {
       break;
     }
     return arr;
-  }, new Array());
+  }, []);
 
   const itemIdToTypeMap = itemIdArray.reduce((prevVal, currVal) => {
     prevVal.set(currVal.itemid, currVal.value_type);
