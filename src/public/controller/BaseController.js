@@ -71,6 +71,17 @@ sap.ui.define([
         var bReplace = true;
         this.getRouter().navTo('home', {}, bReplace);
       }
+    },
+
+    setCurrentDateAndPeriod() {
+      var oModel = this.getModel();
+
+      var oDate = new Date();
+      var firstDay = new Date(oDate.getFullYear(), oDate.getMonth(), 1);
+
+      oModel.setProperty('/date', oDate);
+      oModel.setProperty('/from', firstDay);
+      oModel.setProperty('/to', oDate);
     }
 
   });

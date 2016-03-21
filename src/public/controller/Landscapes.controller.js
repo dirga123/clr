@@ -87,7 +87,7 @@ sap.ui.define([
       if (canContinue) {
         oDialog.close();
         this.getView().setBusy(true);
-        setTimeout(this.addLandscape());
+        setTimeout(jQuery.proxy(this.addLandscape(), this));
       }
     },
 

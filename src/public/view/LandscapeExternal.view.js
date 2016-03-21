@@ -45,7 +45,13 @@ sap.ui.define([
       var oBar = new Toolbar({
         content: [
           new ToolbarSpacer(),
-          oExportButton
+          oExportButton,
+          new Button(this.createId('toolbarDelete'), {
+            icon: 'sap-icon://delete',
+            text: '{i18n>landscapeDeleteButton}',
+            type: 'Reject',
+            press: [ oController.onPressDelete, oController ]
+          })
         ]
       });
 
@@ -88,6 +94,7 @@ sap.ui.define([
       });
 
       var oSlaList = new List(this.createId('slaList'), {
+        backgroundDesign: 'Transparent'
       });
 
       oSlaList.bindItems({
@@ -432,11 +439,34 @@ sap.ui.define([
           new ObjectAttribute({
             title: '{i18n>landscapeExternalPeriod}',
             text: {
+              parts: [ 'external>/from', 'external>/to' ],
+              formatter: function(from, to) {
+                var dateFrom = new Date();
+                dateFrom.setTime(from);
+                var dateTo = new Date();
+                dateTo.setTime(to);
+                return dateFrom.getFullYear() + '/' +
+                  (dateFrom.getMonth() < 9 ? '0' : '') + dateFrom.getMonth() + '/' +
+                  (dateFrom.getDate() < 9 ? '0' : '') + dateFrom.getDate() + ' - ' +
+                  dateTo.getFullYear() + '/' +
+                  (dateTo.getMonth() < 9 ? '0' : '') + dateTo.getMonth() + '/' +
+                  (dateTo.getDate() < 9 ? '0' : '') + dateTo.getDate();
+              }
+            }
+          }),
+          new ObjectAttribute({
+            title: '{i18n>landscapeExternalCreated}',
+            text: {
               parts: [ 'external>/date' ],
               formatter: function(reportDate) {
                 var date = new Date();
                 date.setTime(reportDate);
-                return date.getMonth() + '/' + date.getFullYear();
+                return date.getFullYear() + '/' +
+                  (date.getMonth() < 9 ? '0' : '') + (date.getMonth() + 1) + '/' +
+                  (date.getDate() < 10 ? '0' : '') + date.getDate() + ' ' +
+                  (date.getHours() < 10 ? '0' : '') + date.getHours() + ':' +
+                  (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + ':' +
+                  (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
               }
             }
           })

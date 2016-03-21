@@ -14,15 +14,32 @@ sap.ui.define([
       jQuery.sap.log.info('LandscapeExternalNew.controller:onInit');
 
       var oViewModel = new JSONModel({
-        date: new Date(),
-        createDate: new Date(),
         name: ''
       });
       this.setModel(oViewModel);
+      this.setCurrentDateAndPeriod();
+
+      // Create model and set it to view
+      this.setModel(new JSONModel(), 'external');
+      this._bindView('external>/external');
 
       this.getRouter().getRoute('landscapeExternalNew').attachPatternMatched(
         this._onObjectMatched, this
       );
+    },
+
+    onChangePeriod: function() {
+      jQuery.sap.log.info('LandscapeExternalNew.controller:onChangePeriod');
+
+      var oModel = this.getModel();
+      var oDate = new Date();
+      var oDateFrom = oModel.getProperty('/from');
+      var oDateTo = new Date();
+      if (oDate.getMonth() !== oDateFrom.getMonth()) {
+        oDateTo = new Date(oDateFrom.getFullYear(), oDateFrom.getMonth() + 1, 1);
+      }
+
+      setTimeout(jQuery.proxy(this.onPressRefresh, this));
     },
 
     onPressRefresh: function() {
@@ -36,20 +53,25 @@ sap.ui.define([
       jQuery.sap.log.info('LandscapeExternalNew.controller:onPressSave');
 
       var oModel = this.getModel();
+      var oDateFrom = oModel.getProperty('/from');
       var oDate = oModel.getProperty('/date');
-      var oCreateDate = oModel.getProperty('/createDate');
-      var sDefaultName = oDate.getFullYear() + '-' + (oDate.getMonth() + 1) +
-        '-' + oCreateDate.toISOString();
+      var sDefaultName = oDateFrom.getFullYear() + '-' +
+        (oDateFrom.getMonth() < 9 ? '0' : '') + (oDateFrom.getMonth() + 1) + ' ' +
+        oDate.getFullYear() + '-' +
+        (oDate.getMonth() < 9 ? '0' : '') + (oDate.getMonth() + 1) + '-' +
+        oDate.getDate() + ' ' + (oDate.getHours() < 10 ? '0' : '') + oDate.getHours() + ':' +
+        (oDate.getMinutes() < 10 ? '0' : '') + oDate.getMinutes() + ':' +
+        (oDate.getSeconds() < 10 ? '0' : '') + oDate.getSeconds();
 
       oModel.setProperty('/name', sDefaultName);
       oModel.setProperty('/saveEnabled', sDefaultName.length > 0);
 
       var dialog = new Dialog({
-        title: 'Save',
+        title: this.getResourceBundle().getText('landscapeExternalSaveCaption'),
         type: 'Message',
         content: [
           new Label({
-            text: 'Report name:',
+            text: this.getResourceBundle().getText('landscapeExternalSaveReportName'),
             required: true
           }),
           new TextArea({
@@ -59,16 +81,18 @@ sap.ui.define([
               dialog.getModel().setProperty('/saveEnabled', sText.length > 0);
             },
             width: '100%',
-            placeholder: '(required)'
+            placeholder: this.getResourceBundle().getText(
+              'landscapeExternalSaveReportNamePlaceholder'
+            )
           })
         ],
         beginButton: new Button({
-          text: 'Save',
+          text: this.getResourceBundle().getText('landscapeExternalSaveButton'),
           enabled: '{/saveEnabled}',
           press: jQuery.proxy(this.onPressSaveSave, this)
         }),
         endButton: new Button({
-          text: 'Cancel',
+          text: this.getResourceBundle().getText('landscapeExternalCancelButton'),
           press: function () {
             dialog.close();
           }
@@ -83,20 +107,22 @@ sap.ui.define([
     },
 
     onPressSaveSave: function(oEvent) {
-      jQuery.sap.log.info('LandscapeExternalNew.controller:_saveExternal');
+      jQuery.sap.log.info('LandscapeExternalNew.controller:onPressSaveSave');
       oEvent.getSource().getParent().close();
 
       this.getView().setBusy(true);
-      setTimeout(this._saveExternal());
+      setTimeout(jQuery.proxy(this._saveExternal(), this));
     },
 
     _saveExternal: function() {
+      jQuery.sap.log.info('LandscapeExternalNew.controller:_saveExternal');
       var oViewModel = this.getModel();
 
       var oModel = this.getModel('external');
       oModel.setProperty('/name', oViewModel.getProperty('/name'));
       oModel.setProperty('/date', oViewModel.getProperty('/date').getTime());
-      oModel.setProperty('/createDate', oViewModel.getProperty('/createDate').getTime());
+      oModel.setProperty('/from', oViewModel.getProperty('/from').getTime());
+      oModel.setProperty('/to', oViewModel.getProperty('/to').getTime());
 
       var sLandscapeId = oViewModel.getProperty('/id');
 
@@ -142,16 +168,13 @@ sap.ui.define([
       // only if the binding requests data it is set to busy again
       this.getView().setBusy(true);
 
+      this.setCurrentDateAndPeriod();
+
       // Get Landscape id
       var sLandscapeId = oEvent.getParameter('arguments').id;
 
       var oViewModel = this.getModel();
       oViewModel.setProperty('/id', sLandscapeId);
-
-      // Create model and set it to view
-      var oModel = new JSONModel();
-      this.setModel(oModel, 'external');
-      this._bindView('external>/external');
 
       this._requestData();
     },
@@ -162,6 +185,8 @@ sap.ui.define([
       var oViewModel = this.getModel();
       var sLandscapeId = oViewModel.getProperty('/id');
       var oDate = oViewModel.getProperty('/date');
+      var oDateFrom = oViewModel.getProperty('/from');
+      var oDateTo = oViewModel.getProperty('/to');
 
       // Load model
       var oModel = this.getModel('external');
@@ -169,7 +194,9 @@ sap.ui.define([
       oModel.loadData(
         '/Landscape/' + sLandscapeId + '/external/new',
         {
-          date: oDate.getTime()
+          date: oDate.getTime(),
+          from: oDateFrom.getTime(),
+          to: oDateTo.getTime()
         },
         true,
         'GET',

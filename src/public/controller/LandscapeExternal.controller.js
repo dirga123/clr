@@ -5,27 +5,95 @@ sap.ui.define([
   'sap/m/Dialog',
   'sap/m/Label',
   'sap/m/TextArea',
+  'sap/m/Text',
   'sap/m/Button'
-], function (BaseReportController, JSONModel, MessageToast, Dialog, Label, TextArea, Button) {
+], function (BaseReportController, JSONModel, MessageToast, Dialog, Label, TextArea, Text, Button) {
   'use strict';
 
   return BaseReportController.extend('sap.clr.controller.LandscapeExternal', {
     onInit: function() {
       jQuery.sap.log.info('LandscapeExternal.controller:onInit');
 
-      this.setModel(
-        new JSONModel({
-        })
-      );
+      this.setModel(new JSONModel());
+
+      // Create model and set it to view
+      this.setModel(new JSONModel(), 'external');
+      this._bindView('external>/external');
 
       this.getRouter().getRoute('landscapeExternal').attachPatternMatched(
-      this._onObjectMatched, this
+        this._onObjectMatched, this
       );
+    },
+
+    onPressDelete: function() {
+      jQuery.sap.log.info('LandscapeExternal.controller:onPressDelete');
+
+      var dialog = new Dialog({
+        title: this.getResourceBundle().getText('landscapeExternalDeleteCaption'),
+        type: 'Message',
+        content: [
+          new Text({ text: this.getResourceBundle().getText('landscapeExternalDeleteQuestion') })
+        ],
+        beginButton: new Button({
+          text: this.getResourceBundle().getText('landscapeExternalDeleteButton'),
+          icon: 'sap-icon://delete',
+          type: 'Reject',
+          press: jQuery.proxy(this.onPressDeleteDelete, this)
+        }),
+        endButton: new Button({
+          text: this.getResourceBundle().getText('landscapeExternalCancelButton'),
+          press: function () {
+            dialog.close();
+          }
+        }),
+        afterClose: function() {
+          dialog.destroy();
+        }
+      });
+
+      dialog.open();
+    },
+
+    onPressDeleteDelete: function(oEvent) {
+      jQuery.sap.log.info('LandscapeExternal.controller:onPressDeleteDelete');
+      oEvent.getSource().getParent().close();
+
+      this.getView().setBusy(true);
+      setTimeout(jQuery.proxy(this._deleteExternal(), this));
     },
 
 		/* =========================================================== */
 		/* begin: internal methods                                     */
 		/* =========================================================== */
+
+    _deleteExternal: function() {
+      jQuery.sap.log.info('LandscapeExternal.controller:_deleteExternal');
+      var oViewModel = this.getModel();
+
+      var sLandscapeId = oViewModel.getProperty('/id');
+      var sReportId = oViewModel.getProperty('/reportId');
+
+      jQuery.ajax('/Landscape/' + sLandscapeId + '/external/' + sReportId, {
+        method: 'DELETE',
+        error: jQuery.proxy(this.onDeleteError, this),
+        success: jQuery.proxy(this.onDeleteSuccess, this)
+      });
+    },
+
+    onDeleteError: function(resp, textStatus, errorThrown) {
+      this.getView().setBusy(false);
+      MessageToast.show(errorThrown);
+    },
+
+    onDeleteSuccess: function(resp) {
+      this.getView().setBusy(false);
+      if (resp.error) {
+        MessageToast.show(resp.error);
+        return;
+      } else {
+        this.onNavBack();
+      }
+    },
 
 		/**
 		 * Binds the view to the object path and expands the aggregated line items.
@@ -47,11 +115,6 @@ sap.ui.define([
       var oViewModel = this.getModel();
       oViewModel.setProperty('/id', sLandscapeId);
       oViewModel.setProperty('/reportId', sReportId);
-
-      // Create model and set it to view
-      var oModel = new JSONModel();
-      this.setModel(oModel, 'external');
-      this._bindView('external>/external');
 
       this._requestData();
     },
@@ -89,9 +152,13 @@ sap.ui.define([
         date.setTime(oModel.getProperty('/date'));
         oViewModel.setProperty('/date', date);
 
-        var createDate = new Date();
-        createDate.setTime(oModel.getProperty('/date'));
-        oViewModel.setProperty('/createDate', createDate);
+        var dateFrom = new Date();
+        dateFrom.setTime(oModel.getProperty('/from'));
+        oViewModel.setProperty('/from', dateFrom);
+
+        var dateTo = new Date();
+        dateTo.setTime(oModel.getProperty('/to'));
+        oViewModel.setProperty('/to', dateTo);
 
         var sError = oModel.getProperty('/error');
         if (sError) {

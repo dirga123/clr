@@ -13,12 +13,6 @@ sap.ui.define([], function () {
       seconds -= minutes * 60;
 
       return days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds + 's';
-      /*
-      var date = new Date(null);
-      date.setSeconds(sec);
-      return date.toISOString();
-      */
-      // return (new Date(sec * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
     },
 
     statusToState: function(status) {

@@ -36,6 +36,7 @@ sap.ui.define([
 
       var oStatusPanel = new Panel(this.createId('statusPanel'), {
         busyIndicatorDelay: 0,
+        backgroundDesign: 'Transparent',
         content: []
       });
 
@@ -55,12 +56,13 @@ sap.ui.define([
 
       var oExternalPanel = new Panel(this.createId('externalPanel'), {
         busyIndicatorDelay: 0,
+        backgroundDesign: 'Transparent',
         content: [
           new VerticalLayout({
             width: '100%',
             content: [
               new Button({
-                text: 'Add report',
+                text: '{i18n>landscapeAddReportButton}',
                 type: sap.m.ButtonType.Emphasized,
                 press: [ oController.onAddExternal, oController ]
               }),
@@ -72,11 +74,12 @@ sap.ui.define([
 
       var oInternalPanel = new Panel(this.createId('internalPanel'), {
         busyIndicatorDelay: 0,
+        backgroundDesign: 'Transparent',
         content: [
           new VerticalLayout({
             content: [
               new Button({
-                text: 'Add report',
+                text: '{i18n>landscapeAddReportButton}',
                 type: sap.m.ButtonType.Emphasized,
                 press: [ oController.onAddInternal, oController ]
               })
@@ -90,15 +93,15 @@ sap.ui.define([
         backgroundDesign: 'Transparent',
         items: [
           new IconTabFilter({
-            text: 'Status',
+            text: '{i18n>landscapeTabStatus}',
             content: oStatusPanel
           }),
           new IconTabFilter({
-            text: 'Reports',
+            text: '{i18n>landscapeTabExternalReports}',
             content: oExternalPanel
           }),
           new IconTabFilter({
-            text: 'Internal Reports',
+            text: '{i18n>landscapeTabInternalReports}',
             content: oInternalPanel
           })
         ]

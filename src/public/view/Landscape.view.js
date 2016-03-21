@@ -12,6 +12,13 @@ sap.ui.define([
       return 'sap.clr.controller.Landscape';
     },
 
+    /*
+    onBeforeShow: function(oController) {
+      jQuery.sap.log.info('Landscape.controller:onBeforeShow');
+      this.getController()._toggleButtonsAndView(false);
+    },
+    */
+    
     createContent: function (oController) {
       var oBar = new Toolbar({
         content: [

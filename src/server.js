@@ -448,7 +448,7 @@ router.get('/Landscape/:id/external', async (ctx) => {
 // External get new
 // path /Landscape/:id/external/new
 
-async function landscapeExternalNew(id, date) {
+async function landscapeExternalNew(id, date, from, to) {
   const lsRet = {
     version: config.versionStr
   };
@@ -470,22 +470,8 @@ async function landscapeExternalNew(id, date) {
     const zabbix = new Zabbix();
     await zabbix.login(zabbixUrl);
 
-    const today = moment();
-    const paramDate = Number.parseInt(date, 10) || +moment();
-
-    // Current month till today, cant use end of month explicitly
-    // (zabbix bug returns N days backwards - from prev month too)
-    let firstDay = moment(paramDate).startOf('month');
-    if (today < firstDay) {
-      firstDay = today.clone().startOf('month');
-    }
-    let lastDay = moment(paramDate).endOf('month');
-    if (today < lastDay) {
-      lastDay = today;
-    }
-
     // Get services as map, so it can be spread to landscape root and serviceUnits
-    const servicesMap = await servicesAsMap(zabbix, firstDay.unix(), lastDay.unix());
+    const servicesMap = await servicesAsMap(zabbix, from, to);
 
     // Create services array (will hold just 2 values)
     lsRet.external.services = [];
@@ -502,7 +488,7 @@ async function landscapeExternalNew(id, date) {
     // lsRet.external.hosts = await hosts();
 
     // Retrieve all relevant items
-    lsRet.external.items = await items(zabbix, firstDay.unix(), lastDay.unix());
+    lsRet.external.items = await items(zabbix, from, to);
 
     // Update sla to serviceUnits
     lsRet.external.items.serviceUnits.forEach((currentValue) => {
@@ -520,8 +506,26 @@ async function landscapeExternalNew(id, date) {
   return lsRet;
 }
 
+// External create new
 router.get('/Landscape/:id/external/new', async (ctx) => {
-  ctx.body = await landscapeExternalNew(ctx.params.id, ctx.query.date);
+  // Check for parameters
+  if (ctx.query.date === undefined ||
+    ctx.query.from === undefined ||
+    ctx.query.to === undefined) {
+    const lsRet = {
+      version: config.versionStr
+    };
+    lsRet.error = 'Wrong input';
+    ctx.body = lsRet;
+    return;
+  }
+
+  ctx.body = await landscapeExternalNew(
+    ctx.params.id,
+    ctx.query.date,
+    ctx.query.from,
+    ctx.query.to
+  );
 });
 
 // External save new
@@ -605,13 +609,29 @@ async function generateExternalPdf(ctx, external) {
   }
 }
 
+// External retrieve new as pdf
 router.get('/Landscape/:id/external/new/:fileName.pdf', async (ctx) => {
   const lsRet = {
     version: config.versionStr
   };
 
+  console.log(ctx.query);
+  // Check for parameters
+  if (ctx.query.date === undefined ||
+    ctx.query.from === undefined ||
+    ctx.query.to === undefined) {
+    lsRet.error = 'Wrong input';
+    ctx.body = lsRet;
+    return;
+  }
+
   try {
-    const external = await landscapeExternalNew(ctx.params.id, ctx.query.date);
+    const external = await landscapeExternalNew(
+      ctx.params.id,
+      ctx.query.date,
+      ctx.query.from,
+      ctx.query.to
+    );
     await generateExternalPdf(ctx, external);
   } catch (e) {
     lsRet.error = getErrorString(e);
@@ -620,7 +640,7 @@ router.get('/Landscape/:id/external/new/:fileName.pdf', async (ctx) => {
   }
 });
 
-// 'Content-Disposition': 'inline; filename="report.pdf"',
+// External retrieve saved as pdf
 router.get('/Landscape/:id/external/:reportId/:fileName.pdf', async (ctx) => {
   const lsRet = {
     version: config.versionStr
@@ -663,6 +683,27 @@ router.get('/Landscape/:id/external/:reportId', async (ctx) => {
 
   ctx.body = lsRet;
 });
+
+// path /Landscape/:id/external/:reportId
+router.del('/Landscape/:id/external/:reportId', async (ctx) => {
+  const lsRet = {
+    version: config.versionStr
+  };
+
+  try {
+    const redis = new Redis();
+    await redis.login();
+    lsRet.deleted = await redis.deleteExternal(ctx.params.id, ctx.params.reportId);
+    await redis.logout();
+  } catch (e) {
+    lsRet.error = getErrorString(e);
+    ctx.body = lsRet;
+    return;
+  }
+
+  ctx.body = lsRet;
+});
+
 
 /*
 router.post('/Landscape.json', async (ctx) => {

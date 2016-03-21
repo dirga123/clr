@@ -220,7 +220,8 @@ export default class Redis {
       const extMapId = `ls:${lsId}:external:${nextExtId}`;
       await this.client.hmsetAsync(extMapId, 'name', ext.name);
       await this.client.hmsetAsync(extMapId, 'date', ext.date);
-      await this.client.hmsetAsync(extMapId, 'createDate', ext.createDate);
+      await this.client.hmsetAsync(extMapId, 'from', ext.from);
+      await this.client.hmsetAsync(extMapId, 'to', ext.to);
       await this.client.hmsetAsync(extMapId, 'body', JSON.stringify(ext));
 
       return nextExtId;
@@ -249,9 +250,41 @@ export default class Redis {
       const extMapId = `ls:${lsId}:external:${extId}`;
       const bodyVal = await this.client.hgetAsync(extMapId, 'body');
 
+      if (bodyVal === null) {
+        throw { message: `Report ${extId} is corrupted.` };
+      }
+
       return bodyVal;
     } catch (e) {
       debug('redis')(`getExternal error: ${e.message}`);
+      throw e.message;
+    }
+  }
+
+  async deleteExternal(lsId, extId) {
+    try {
+      debug('redis')(`deleteExternal(${lsId}, ${extId})`);
+
+      const exists = await this.existsLandscape(lsId);
+      if (exists === false) {
+        throw { message: `Landscape ${lsId} doesnt exists.` };
+      }
+
+      const extSetId = `ls:${lsId}:external`;
+
+      const isInSet = await this.client.sismemberAsync(extSetId, extId);
+      if (isInSet === 0) {
+        throw { message: `Report ${extId} doesnt exists.` };
+      }
+
+      const extMapId = `ls:${lsId}:external:${extId}`;
+
+      let deleted = await this.client.delAsync(extMapId);
+      deleted += await this.client.sremAsync(extSetId, extId);
+
+      return deleted;
+    } catch (e) {
+      debug('redis')(`deleteExternal error: ${e.message}`);
       throw e.message;
     }
   }

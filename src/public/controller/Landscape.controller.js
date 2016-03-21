@@ -2,8 +2,12 @@ sap.ui.define([
   'sap/clr/controller/BaseController',
   'sap/ui/model/json/JSONModel',
   'sap/m/MessageToast',
-  'sap/m/MessageStrip'
-], function (BaseController, JSONModel, MessageToast, MessageStrip) {
+  'sap/m/MessageStrip',
+  'sap/m/Dialog',
+  'sap/m/Button',
+  'sap/m/Text'
+], function (BaseController, JSONModel, MessageToast, MessageStrip, Dialog,
+  Button, Text) {
   'use strict';
 
   return BaseController.extend('sap.clr.controller.Landscape', {
@@ -13,21 +17,8 @@ sap.ui.define([
       // Set the initial form to be the display one
       this._toggleButtonsAndView(false);
 
-      var oDate = new Date();
-      var oDateUTC = new Date();
-      oDateUTC.setTime(Date.UTC(oDate.getFullYear(), oDate.getMonth(), oDate.getDate()));
-      var utcDate = new Date(Date.UTC(96, 11, 1, 0, 0, 0));
-      console.log(oDate.getFullYear());
-      console.log(oDate.getMonth());
-      console.log(oDate.getDate());
-      console.log(oDate.getTime());
-      console.log(oDateUTC.getTime());
-      console.log(utcDate.getTime());
-
-      var oViewModel = new JSONModel({
-        date: oDate
-      });
-      this.setModel(oViewModel);
+      this.setModel(new JSONModel());
+      this.setCurrentDateAndPeriod();
 
       // Create model and set it to view
       var oModel = new JSONModel();
@@ -63,6 +54,10 @@ sap.ui.define([
       }
     },
 
+    onBeforeRendering: function() {
+      jQuery.sap.log.info('Landscape.controller:onBeforeRendering');
+    },
+
 		// General tab
 
     onPressEdit: function() {
@@ -93,6 +88,40 @@ sap.ui.define([
 
     onPressDelete: function() {
       jQuery.sap.log.info('Landscape.controller:onPressDelete');
+
+      var dialog = new Dialog({
+        title: this.getResourceBundle().getText('landscapeDeleteCaption'),
+        type: 'Message',
+        content: [
+          new Text({ text: this.getResourceBundle().getText('landscapeDeleteQuestion') })
+        ],
+        beginButton: new Button({
+          text: this.getResourceBundle().getText('landscapeDeleteButton'),
+          icon: 'sap-icon://delete',
+          type: 'Reject',
+          press: jQuery.proxy(this.onPressDeleteDelete, this)
+        }),
+        endButton: new Button({
+          text: this.getResourceBundle().getText('landscapeCancelButton'),
+          press: function () {
+            dialog.close();
+          }
+        }),
+        afterClose: function() {
+          dialog.destroy();
+        }
+      });
+
+      dialog.open();
+    },
+
+    onPressDeleteDelete: function(oEvent) {
+      jQuery.sap.log.info('Landscape.controller:onPressDeleteDelete');
+
+      oEvent.getSource().getParent().close();
+
+      this.getView().setBusy(true);
+      setTimeout(jQuery.proxy(this._deleteLandscape(), this));
     },
 
     onPressRefresh: function() {
@@ -139,6 +168,34 @@ sap.ui.define([
 
     _formFragments: {},
     _messageStrips: [],
+
+    _deleteLandscape: function() {
+      jQuery.sap.log.info('Landscape.controller:_deleteLandscape');
+      var oViewModel = this.getModel();
+
+      var sLandscapeId = oViewModel.getProperty('/id');
+
+      jQuery.ajax('/Landscape/' + sLandscapeId, {
+        method: 'DELETE',
+        error: jQuery.proxy(this.onDeleteError, this),
+        success: jQuery.proxy(this.onDeleteSuccess, this)
+      });
+    },
+
+    onDeleteError: function(resp, textStatus, errorThrown) {
+      this.getView().setBusy(false);
+      MessageToast.show(errorThrown);
+    },
+
+    onDeleteSuccess: function(resp) {
+      this.getView().setBusy(false);
+      if (resp.error) {
+        MessageToast.show(resp.error);
+        return;
+      } else {
+        this.onNavBack();
+      }
+    },
 
     _toggleButtonsAndView: function(bEdit) {
       var oView = this.getView();
@@ -205,6 +262,7 @@ sap.ui.define([
     _onObjectMatched: function (oEvent) {
       jQuery.sap.log.info('Landscape.controller:_onObjectMatched');
 
+      this._toggleButtonsAndView(false);
       this._setBusy();
 
       // Get Landscape id

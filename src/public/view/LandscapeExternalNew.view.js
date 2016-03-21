@@ -54,17 +54,6 @@ sap.ui.define([
       var oBar = new Toolbar({
         content: [
           new ToolbarSpacer(),
-          new sap.m.DateTimeInput(this.createId('pickMonth'), {
-            width: '15em',
-            displayFormat: 'MM/yyyy',
-            dateValue: '{/date}',
-            change: [ oController.onPressRefresh, oController ]
-          }),
-          new Button({
-            icon: 'sap-icon://refresh',
-            text: '{i18n>landscapeRefreshButton}',
-            press: [ oController.onPressRefresh, oController ]
-          }),
           oSaveButton,
           oExportButton
         ]
@@ -109,6 +98,7 @@ sap.ui.define([
       });
 
       var oSlaList = new List(this.createId('slaList'), {
+        backgroundDesign: 'Transparent'
       });
 
       oSlaList.bindItems({
@@ -454,6 +444,24 @@ sap.ui.define([
         ]
       });
 
+      var oSelectionPanel = new Panel(this.createId('selection'), {
+        title: '{i18n>landscapeID}: {external>id}',
+        backgroundDesign: 'Transparent',
+        content: [
+          new sap.m.DateTimeInput(this.createId('pickMonth'), {
+            width: '15em',
+            displayFormat: 'MM/yyyy',
+            dateValue: '{/from}',
+            change: [ oController.onChangePeriod, oController ]
+          }),
+          new Button({
+            icon: 'sap-icon://refresh',
+            text: '{i18n>landscapeRefreshButton}',
+            press: [ oController.onPressRefresh, oController ]
+          })
+        ]
+      }).addStyleClass('sapUiContentPadding sapUiSmallMargin');
+
       var oPage = new Page(this.createId('landscapeNewExternalPage'), {
         title: '{i18n>landscapeExternalNew}',
         showHeader: true,
@@ -461,6 +469,7 @@ sap.ui.define([
         navButtonPress: [ oController.onNavBack, oController ],
         content: [
           oGeneralPanel,
+          oSelectionPanel,
           oTabs
         ],
         footer: [
