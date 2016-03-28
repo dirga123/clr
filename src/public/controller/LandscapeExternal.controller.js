@@ -14,15 +14,16 @@ sap.ui.define([
     onInit: function() {
       jQuery.sap.log.info('LandscapeExternal.controller:onInit');
 
-      this.setModel(new JSONModel());
+      this.setModel(new JSONModel({
+        route: 'landscapeExternal'
+      }));
 
       // Create model and set it to view
       this.setModel(new JSONModel(), 'external');
       this._bindView('external>/external');
 
-      this.getRouter().getRoute('landscapeExternal').attachPatternMatched(
-        this._onObjectMatched, this
-      );
+      this.attachDisplayForRoute(this._requestData);
+      this.attachPatternMatched(this._onObjectMatched);
     },
 
     onPressDelete: function() {
@@ -59,7 +60,7 @@ sap.ui.define([
       oEvent.getSource().getParent().close();
 
       this.getView().setBusy(true);
-      setTimeout(jQuery.proxy(this._deleteExternal(), this));
+      setTimeout(jQuery.proxy(this._deleteExternal, this));
     },
 
 		/* =========================================================== */
@@ -73,16 +74,11 @@ sap.ui.define([
       var sLandscapeId = oViewModel.getProperty('/id');
       var sReportId = oViewModel.getProperty('/reportId');
 
-      jQuery.ajax('/Landscape/' + sLandscapeId + '/external/' + sReportId, {
+      jQuery.ajax('/landscape/' + sLandscapeId + '/external/' + sReportId, {
         method: 'DELETE',
-        error: jQuery.proxy(this.onDeleteError, this),
+        error: jQuery.proxy(this.ajaxError, this, 'landscapeExternalDeleteFailed'),
         success: jQuery.proxy(this.onDeleteSuccess, this)
       });
-    },
-
-    onDeleteError: function(resp, textStatus, errorThrown) {
-      this.getView().setBusy(false);
-      MessageToast.show(errorThrown);
     },
 
     onDeleteSuccess: function(resp) {
@@ -104,9 +100,9 @@ sap.ui.define([
     _onObjectMatched: function (oEvent) {
       jQuery.sap.log.info('LandscapeExternal.controller:_onObjectMatched');
 
-      // If the view was not bound yet its not busy,
-      // only if the binding requests data it is set to busy again
-      this.getView().setBusy(true);
+      if (this.navigateHomeIfNotLoggedAsAdmin()) {
+        return;
+      }
 
       // Get Landscape id
       var sLandscapeId = oEvent.getParameter('arguments').id;
@@ -122,6 +118,8 @@ sap.ui.define([
     _requestData: function() {
       jQuery.sap.log.info('LandscapeExternal.controller:_requestData');
 
+      this.getView().setBusy(true);
+
       var oViewModel = this.getModel();
       var sLandscapeId = oViewModel.getProperty('/id');
       var sReportId = oViewModel.getProperty('/reportId');
@@ -130,7 +128,7 @@ sap.ui.define([
       var oModel = this.getModel('external');
       oModel.attachRequestCompleted(this._requestCompleted, this);
       oModel.loadData(
-        '/Landscape/' + sLandscapeId + '/external/' + sReportId,
+        '/landscape/' + sLandscapeId + '/external/' + sReportId,
         null,
         true,
         'GET',
@@ -144,6 +142,8 @@ sap.ui.define([
 
       var oModel = this.getModel('external');
       oModel.detachRequestCompleted(this._requestCompleted, this);
+
+      this.getView().setBusy(false);
 
       if (oEvent.getParameter('success')) {
         var oViewModel = this.getModel();
@@ -166,14 +166,17 @@ sap.ui.define([
         }
       } else {
         var oError = oEvent.getParameter('errorobject');
-        jQuery.sap.log.error(oError);
-        MessageToast.show(
-          'Error ' + oError.statusCode + ': ' + oError.statusText +
-          ' ' + oError.responseText
-        );
-      }
 
-      this.getView().setBusy(false);
+        var sGeneralError = this.getResourceBundle().getText('generalError', [
+          oError.statusCode,
+          oError.statusText,
+          oError.responseText
+        ]);
+
+        MessageToast.show(sGeneralError);
+
+        this.navigateToLoginAfter401(oError.statusCode);
+      }
     },
 
 		/*

@@ -6,6 +6,8 @@ sap.ui.define([
 
   return BaseController.extend('sap.clr.controller.App', {
     onInit: function() {
+      jQuery.sap.log.info('App.controller:onInit');
+
       var oModel = new JSONModel({
         icon: jQuery.sap.getModulePath('sap.ui.core', '/') + 'mimes/logo/sap_50x26.png'
       });
@@ -14,13 +16,24 @@ sap.ui.define([
     },
 
     onPressLogoff: function() {
-      var oModel = this.getComponent().getModel('user');
-      oModel.setProperty('/logged', false);
+      jQuery.sap.log.info('App.controller:onPressLogoff');
 
+      this.getComponent().setIsLogged(false);
+
+      jQuery.ajax('/logout', {
+        method: 'GET',
+        error: jQuery.proxy(this.onLoginFinished, this),
+        success: jQuery.proxy(this.onLoginFinished, this)
+      });
+    },
+
+    onLoginFinished: function() {
+      jQuery.sap.log.info('App.controller:onLoginFinished');
       this.getRouter().navTo('login');
     },
 
     onPressHome: function() {
+      jQuery.sap.log.info('App.controller:onPressHome');
       this.getRouter().navTo('home');
     }
   });

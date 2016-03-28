@@ -32,7 +32,10 @@ function runServer(cb) {
   }
 
   server = cp.spawn('node', [ '--debug', serverPath ], {
-    env: Object.assign({ NODE_ENV: 'development' }, process.env),
+    env: Object.assign({
+      NODE_ENV: 'development',
+      DEBUG: 'koa-redis'
+    }, process.env),
     silent: false
   });
 

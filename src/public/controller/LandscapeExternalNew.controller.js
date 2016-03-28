@@ -13,19 +13,18 @@ sap.ui.define([
     onInit: function() {
       jQuery.sap.log.info('LandscapeExternalNew.controller:onInit');
 
-      var oViewModel = new JSONModel({
-        name: ''
-      });
-      this.setModel(oViewModel);
+      this.setModel(new JSONModel({
+        name: '',
+        route: 'landscapeExternalNew'
+      }));
       this.setCurrentDateAndPeriod();
 
       // Create model and set it to view
       this.setModel(new JSONModel(), 'external');
       this._bindView('external>/external');
 
-      this.getRouter().getRoute('landscapeExternalNew').attachPatternMatched(
-        this._onObjectMatched, this
-      );
+      this.attachDisplayForRoute();
+      this.attachPatternMatched(this._onObjectMatched);
     },
 
     onChangePeriod: function() {
@@ -41,13 +40,14 @@ sap.ui.define([
       oModel.setProperty('/date', oDate);
       oModel.setProperty('/to', oDateTo);
 
-      setTimeout(jQuery.proxy(this.onPressRefresh, this));
+      setTimeout(jQuery.proxy(
+        this.onPressRefresh, this)
+      );
     },
 
     onPressRefresh: function() {
       jQuery.sap.log.info('LandscapeExternalNew.controller:onPressRefresh');
 
-      this.getView().setBusy(true);
       this._requestData();
     },
 
@@ -114,7 +114,10 @@ sap.ui.define([
       oEvent.getSource().getParent().close();
 
       this.getView().setBusy(true);
-      setTimeout(jQuery.proxy(this._saveExternal(), this));
+      setTimeout(jQuery.proxy(
+        this._saveExternal,
+        this)
+      );
     },
 
     _saveExternal: function() {
@@ -129,19 +132,14 @@ sap.ui.define([
 
       var sLandscapeId = oViewModel.getProperty('/id');
 
-      jQuery.ajax('/Landscape/' + sLandscapeId + '/external/new', {
+      jQuery.ajax('/landscape/' + sLandscapeId + '/external/new', {
         method: 'POST',
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify(oModel.getProperty('/')),
-        error: jQuery.proxy(this.onAddError, this),
+        error: jQuery.proxy(this.ajaxError, this, 'landscapeExternalNewFailed'),
         success: jQuery.proxy(this.onAddSuccess, this)
       });
-    },
-
-    onAddError: function(resp, textStatus, errorThrown) {
-      this.getView().setBusy(false);
-      MessageToast.show(errorThrown);
     },
 
     onAddSuccess: function(resp) {
@@ -167,9 +165,9 @@ sap.ui.define([
     _onObjectMatched: function (oEvent) {
       jQuery.sap.log.info('LandscapeExternalNew.controller:_onObjectMatched');
 
-      // If the view was not bound yet its not busy,
-      // only if the binding requests data it is set to busy again
-      this.getView().setBusy(true);
+      if (this.navigateHomeIfNotLoggedAsAdmin()) {
+        return;
+      }
 
       this.setCurrentDateAndPeriod();
 
@@ -185,6 +183,8 @@ sap.ui.define([
     _requestData: function() {
       jQuery.sap.log.info('LandscapeExternalNew.controller:_requestData');
 
+      this.getView().setBusy(true);
+
       var oViewModel = this.getModel();
       var sLandscapeId = oViewModel.getProperty('/id');
       var oDate = oViewModel.getProperty('/date');
@@ -195,7 +195,7 @@ sap.ui.define([
       var oModel = this.getModel('external');
       oModel.attachRequestCompleted(this._requestCompleted, this);
       oModel.loadData(
-        '/Landscape/' + sLandscapeId + '/external/new',
+        '/landscape/' + sLandscapeId + '/external/new',
         {
           date: oDate.getTime(),
           from: oDateFrom.getTime(),
@@ -214,21 +214,9 @@ sap.ui.define([
       var oModel = this.getModel('external');
       oModel.detachRequestCompleted(this._requestCompleted, this);
 
-      if (oEvent.getParameter('success')) {
-        var sError = oModel.getProperty('/error');
-        if (sError) {
-          MessageToast.show(sError);
-        }
-      } else {
-        var oError = oEvent.getParameter('errorobject');
-        jQuery.sap.log.error(oError);
-        MessageToast.show(
-          'Error ' + oError.statusCode + ': ' + oError.statusText +
-          ' ' + oError.responseText
-        );
-      }
-
       this.getView().setBusy(false);
+
+      this.checkForErrorWithNavigate(oModel, oEvent);
     },
 
 		/*

@@ -1,8 +1,17 @@
+/*
+import md5 from 'crypto-js/md5';
+
+jQuery.sap.registerModulePath('ModuleName', 'http://externalFileDomain.com');
+jQuery.sap.require('ModuleName.jsFileName');
+
+    return crypto.createHash('md5').update(data).digest(digest || 'base64');
+*/
 sap.ui.getCore().attachInit(() => {
-  new sap.ui.core.ComponentContainer({
+  const oContainer = new sap.ui.core.ComponentContainer({
     name: 'sap.clr',
     height: '100%'
-  }).placeAt('content');
+  });
+  oContainer.placeAt('content');
 });
 
 const { NODE_ENV } = process.env;

@@ -10,37 +10,67 @@ sap.ui.define([
     onInit: function() {
       jQuery.sap.log.info('Home.controller:onInit');
 
-      var oModel = new JSONModel({});
-      this.setModel(oModel, 'home');
+      this.setModel(new JSONModel({
+        route: 'home'
+      }));
 
-      this.getRouter().getRoute('home').attachPatternMatched(this._onObjectMatched, this);
+      var oLandscapesModel = new JSONModel({});
+      this.setModel(oLandscapesModel, 'homeLandscapes');
+
+      var oUsersModel = new JSONModel({});
+      this.setModel(oUsersModel, 'homeUsers');
+
+      this.attachDisplayForRoute(this._requestData);
+      this.attachPatternMatched(this._onObjectMatched);
     },
 
     onPressLandscapes: function(oEvent) {
+      jQuery.sap.log.info('Home.controller:onPressRefresh');
       this.getRouter().navTo('landscapes');
+    },
+
+    onPressUsers: function(oEvent) {
+      jQuery.sap.log.info('Home.controller:onPressUsers');
+      this.getRouter().navTo('users');
+    },
+
+    onPressGSC: function(oEvent) {
+      jQuery.sap.log.info('Home.controller:onPressGSC');
+      this.getRouter().navTo('gsc');
     },
 
     onPressRefresh: function() {
       jQuery.sap.log.info('Home.controller:onPressRefresh');
 
-      this.getView().byId('landscapesTile').setBusy(true);
       this._requestData();
     },
 
     _onObjectMatched: function(oEvent) {
       jQuery.sap.log.info('Home.controller:_onObjectMatched');
 
-      this.getView().byId('landscapesTile').setBusy(true);
       this._requestData();
     },
 
     _requestData: function() {
       jQuery.sap.log.info('Home.controller:_requestData');
 
-      var oModel = this.getModel('home');
-      oModel.attachRequestCompleted(this._requestCompleted, this);
-      oModel.loadData(
-        '/Home',
+      this.getView().byId('landscapesTile').setBusy(true);
+      var oLandscapesModel = this.getModel('homeLandscapes');
+      oLandscapesModel.attachRequestCompleted(this._requestCompletedLandscapes, this);
+      oLandscapesModel.loadData(
+        '/home/landscapes',
+        null,
+        true,
+        'GET',
+        false,
+        false
+      );
+
+      this.getView().byId('usersTile').setBusy(true);
+      var oUsersModel = this.getModel('homeUsers');
+      oUsersModel.attachRequestCompleted(this._requestCompletedUsers, this);
+      oUsersModel.loadData(
+        '/home/users',
         null,
         true,
         'GET',
@@ -49,23 +79,26 @@ sap.ui.define([
       );
     },
 
-    _requestCompleted: function(oEvent) {
-      jQuery.sap.log.info('Home.controller:_requestCompleted');
-      var oModel = this.getModel('home');
-      oModel.detachRequestCompleted(this._requestCompleted, this);
+    _requestCompletedLandscapes: function(oEvent) {
+      jQuery.sap.log.info('Home.controller:_requestCompletedLandscapes');
 
-      if (oEvent.getParameter('success')) {
-        var sError = oModel.getProperty('/error');
-        if (sError) {
-          MessageToast.show(sError);
-        }
-      } else {
-        var oError = oEvent.getParameter('errorobject');
-        MessageToast.show('Error ' + oError.statusCode + ': ' +
-          oError.statusText + ' ' + oError.responseText);
-      }
+      var oModel = this.getModel('homeLandscapes');
+      oModel.detachRequestCompleted(this._requestCompletedLandscapes, this);
 
       this.getView().byId('landscapesTile').setBusy(false);
+
+      this.checkForErrorWithNavigate(oModel, oEvent);
+    },
+
+    _requestCompletedUsers: function(oEvent) {
+      jQuery.sap.log.info('Home.controller:_requestCompletedUsers');
+
+      var oModel = this.getModel('homeUsers');
+      oModel.detachRequestCompleted(this._requestCompletedUsers, this);
+
+      this.getView().byId('usersTile').setBusy(false);
+
+      this.checkForErrorWithNavigate(oModel, oEvent);
     }
 
   });

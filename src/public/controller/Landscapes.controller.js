@@ -25,23 +25,41 @@ sap.ui.define([
         }
       });
 
-      this.setModel(new JSONModel());
+      this.setModel(new JSONModel({
+        route: 'landscapes'
+      }));
       this.setCurrentDateAndPeriod();
 
       var oModel = new JSONModel();
       this.setModel(oModel, 'landscapes');
 
-      this.getRouter().getRoute('landscapes').attachPatternMatched(
-        this._onObjectMatched, this
-      );
+      this.attachDisplayForRoute(this._requestData);
+      this.attachPatternMatched(this._onObjectMatched);
     },
 
     onPressRefresh: function() {
       jQuery.sap.log.info('Landscapes.controller:onPressRefresh');
 
-      this.getView().setBusy(true);
-      this.setCurrentDateAndPeriod();
       this._requestData();
+    },
+
+    onSearch: function(oEvt) {
+      jQuery.sap.log.info('Landscapes.controller:onSearch');
+
+      var aFilters = [];
+      var sQuery = oEvt.getSource().getValue();
+      if (sQuery && sQuery.length > 0) {
+        var filter = new sap.ui.model.Filter([
+          new sap.ui.model.Filter('project', sap.ui.model.FilterOperator.Contains, sQuery),
+          new sap.ui.model.Filter('domain', sap.ui.model.FilterOperator.Contains, sQuery)
+        ], false);
+        aFilters.push(filter);
+      }
+
+      // update list binding
+      var list = this.getView().byId('landscapesTiles');
+      var binding = list.getBinding('tiles');
+      binding.filter(aFilters, sap.ui.model.FilterType.Application);
     },
 
     onPressAdd: function(oEvent) {
@@ -78,7 +96,7 @@ sap.ui.define([
         }
       });
 
-    // check states of inputs
+      // check states of inputs
       var canContinue = true;
       jQuery.each(inputs, function (i, input) {
         if (input.getValueState() === 'Error') {
@@ -91,7 +109,7 @@ sap.ui.define([
       if (canContinue) {
         oDialog.close();
         this.getView().setBusy(true);
-        setTimeout(jQuery.proxy(this.addLandscape(), this));
+        setTimeout(jQuery.proxy(this.addLandscape, this));
       }
     },
 
@@ -101,34 +119,14 @@ sap.ui.define([
       var oModel = this.getModel('landscapes');
       var oData = oModel.getProperty('/new');
 
-      jQuery.ajax('/Landscape', {
+      jQuery.ajax('/landscape', {
         method: 'POST',
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify(oData),
-        error: jQuery.proxy(this.onAddError, this),
-        success: jQuery.proxy(this.onAddSuccess, this)
+        error: jQuery.proxy(this.ajaxError, this, 'landscapeAddFailed'),
+        success: jQuery.proxy(this.ajaxSuccess, this, this._requestData)
       });
-    },
-
-    onAddError: function(resp, textStatus, errorThrown) {
-      jQuery.sap.log.info('Landscapes.controller:onAddError');
-
-      this.getView().setBusy(false);
-      var sMsg = this.getResourceBundle().getText('landscapeAddFailed', [ errorThrown ]);
-      MessageToast.show(sMsg);
-    },
-
-    onAddSuccess: function(resp) {
-      jQuery.sap.log.info('Landscapes.controller:onAddSuccess');
-
-      if (resp.error) {
-        this.getView().setBusy(false);
-        MessageToast.show(resp.error);
-        return;
-      }
-
-      this._requestData();
     },
 
     onPressDetail: function(oEvent) {
@@ -156,13 +154,18 @@ sap.ui.define([
     _onObjectMatched: function(oEvent) {
       jQuery.sap.log.info('Landscapes.controller:_onObjectMatched');
 
-      this.getView().setBusy(true);
-      this.setCurrentDateAndPeriod();
+      if (this.navigateHomeIfNotLoggedAsAdmin()) {
+        return;
+      }
+
       this._requestData();
     },
 
     _requestData: function() {
       jQuery.sap.log.info('Landscapes.controller:_requestData');
+
+      this.getView().setBusy(true);
+      this.setCurrentDateAndPeriod();
 
       var oViewModel = this.getModel();
       var oDate = oViewModel.getProperty('/date');
@@ -172,7 +175,7 @@ sap.ui.define([
       var oModel = this.getModel('landscapes');
       oModel.attachRequestCompleted(this._requestCompleted, this);
       oModel.loadData(
-        '/Landscapes',
+        '/landscapes',
         {
           date: oDate.getTime(),
           from: oDateFrom.getTime(),
@@ -191,21 +194,9 @@ sap.ui.define([
       var oModel = this.getModel('landscapes');
       oModel.detachRequestCompleted(this._requestCompleted, this);
 
-      if (oEvent.getParameter('success')) {
-        var sError = oModel.getProperty('/error');
-        if (sError) {
-          MessageToast.show(sError);
-        }
-      } else {
-        var oError = oEvent.getParameter('errorobject');
-        jQuery.sap.log.info(oError);
-        MessageToast.show(
-          'Error ' + oError.statusCode + ': ' +
-          oError.statusText + ' ' + oError.responseText
-        );
-      }
-
       this.getView().setBusy(false);
+
+      this.checkForErrorWithNavigate(oModel, oEvent);
     }
   });
 });

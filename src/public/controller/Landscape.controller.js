@@ -17,7 +17,9 @@ sap.ui.define([
       // Set the initial form to be the display one
       this._toggleButtonsAndView(false);
 
-      this.setModel(new JSONModel());
+      this.setModel(new JSONModel({
+        route: 'landscape'
+      }));
       this.setCurrentDateAndPeriod();
 
       // Create model and set it to view
@@ -37,9 +39,8 @@ sap.ui.define([
       this.setModel(oModelInternal, 'landscapeInternal');
       this._bindElement('internalPanel', 'landscapeInternal>/');
 
-      this.getRouter().getRoute('landscape').attachPatternMatched(
-        this._onObjectMatched, this
-      );
+      this.attachDisplayForRoute(this._requestData);
+      this.attachPatternMatched(this._onObjectMatched);
     },
 
     onExit: function() {
@@ -58,10 +59,12 @@ sap.ui.define([
 
     onPressEdit: function() {
       jQuery.sap.log.info('Landscape.controller:onPressEdit');
+
       // Clone the data
       this._oLandscape = jQuery.extend({},
         this.getView().getModel('landscape').getData().landscape
       );
+
       this._toggleButtonsAndView(true);
     },
 
@@ -80,7 +83,7 @@ sap.ui.define([
     onPressSave: function() {
       jQuery.sap.log.info('Landscape.controller:onPressSave');
 
-      setTimeout(jQuery.proxy(this._saveLandscape(), this));
+      setTimeout(jQuery.proxy(this._saveLandscape, this));
     },
 
     _saveLandscape: function() {
@@ -92,32 +95,18 @@ sap.ui.define([
       var oModel = this.getModel('landscape');
       var oData = oModel.getProperty('/landscape');
 
-      jQuery.ajax('/Landscape/' + sLandscapeId, {
+      jQuery.ajax('/landscape/' + sLandscapeId, {
         method: 'PUT',
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify(oData),
-        error: jQuery.proxy(this.onSaveError, this),
-        success: jQuery.proxy(this.onSaveSuccess, this)
+        error: jQuery.proxy(this.ajaxError, this, 'landscapeSaveFailed'),
+        success: jQuery.proxy(this.onSaveSuccess, this, this.onSaveSuccess)
       });
     },
 
-    onSaveError: function(resp, textStatus, errorThrown) {
-      jQuery.sap.log.info('Landscapes.controller:onSaveError');
-
-      this.getView().setBusy(false);
-      var sMsg = this.getResourceBundle().getText('landscapeSaveFailed', [ errorThrown ]);
-      MessageToast.show(sMsg);
-    },
-
-    onSaveSuccess: function(resp) {
+    onSaveSuccess: function() {
       jQuery.sap.log.info('Landscapes.controller:onSaveSuccess');
-
-      if (resp.error) {
-        this.getView().setBusy(false);
-        MessageToast.show(resp.error);
-        return;
-      }
 
       this._oLandscape = null;
       this._toggleButtonsAndView(false);
@@ -158,7 +147,7 @@ sap.ui.define([
       oEvent.getSource().getParent().close();
 
       this.getView().setBusy(true);
-      setTimeout(jQuery.proxy(this._deleteLandscape(), this));
+      setTimeout(jQuery.proxy(this._deleteLandscape, this));
     },
 
     onPressRefresh: function() {
@@ -170,6 +159,7 @@ sap.ui.define([
 		// Status tab
 
 		// External tab
+
     onAddExternal: function() {
       var oViewModel = this.getModel();
       var sLandscapeId = oViewModel.getProperty('/id');
@@ -196,8 +186,11 @@ sap.ui.define([
     },
 
 		// Internal tab
+
     onAddInternal: function() {
     },
+
+    // General panel
 
     onLinkZabbixPress: function(oEvent) {
       jQuery.sap.log.info('Landscape.controller:onLinkZabbixPress');
@@ -238,16 +231,11 @@ sap.ui.define([
 
       var sLandscapeId = oViewModel.getProperty('/id');
 
-      jQuery.ajax('/Landscape/' + sLandscapeId, {
+      jQuery.ajax('/landscape/' + sLandscapeId, {
         method: 'DELETE',
-        error: jQuery.proxy(this.onDeleteError, this),
+        error: jQuery.proxy(this.ajaxError, this, 'landscapeDeleteFailed'),
         success: jQuery.proxy(this.onDeleteSuccess, this)
       });
-    },
-
-    onDeleteError: function(resp, textStatus, errorThrown) {
-      this.getView().setBusy(false);
-      MessageToast.show(errorThrown);
     },
 
     onDeleteSuccess: function(resp) {
@@ -309,7 +297,6 @@ sap.ui.define([
     },
 
     _setBusy: function() {
-      this._closeMessageStrips();
       this.getView().byId('generalPanel').setBusy(true);
       this.getView().byId('statusPanel').setBusy(true);
       this.getView().byId('externalPanel').setBusy(true);
@@ -324,6 +311,10 @@ sap.ui.define([
 		 */
     _onObjectMatched: function (oEvent) {
       jQuery.sap.log.info('Landscape.controller:_onObjectMatched');
+
+      if (this.navigateHomeIfNotLoggedAsAdmin()) {
+        return;
+      }
 
       this._toggleButtonsAndView(false);
       this._setBusy();
@@ -340,6 +331,8 @@ sap.ui.define([
     _requestData: function() {
       jQuery.sap.log.info('Landscape.controller:_requestData');
 
+      this._closeMessageStrips();
+
       var oViewModel = this.getModel();
       var sLandscapeId = oViewModel.getProperty('/id');
       var oDate = oViewModel.getProperty('/date');
@@ -348,7 +341,7 @@ sap.ui.define([
       var oModel = this.getModel('landscape');
       oModel.attachRequestCompleted(this._requestCompletedGeneral, this);
       oModel.loadData(
-        '/Landscape/' + sLandscapeId + '/general',
+        '/landscape/' + sLandscapeId + '/general',
         null,
         true,
         'GET',
@@ -360,7 +353,7 @@ sap.ui.define([
       var oModelStatus = this.getModel('landscapeStatus');
       oModelStatus.attachRequestCompleted(this._requestCompletedStatus, this);
       oModelStatus.loadData(
-        '/Landscape/' + sLandscapeId + '/status',
+        '/landscape/' + sLandscapeId + '/status',
         {
           date: oDate.getTime()
         },
@@ -374,7 +367,7 @@ sap.ui.define([
       var oModelInternal = this.getModel('landscapeInternal');
       oModelInternal.attachRequestCompleted(this._requestCompletedInternal, this);
       oModelInternal.loadData(
-        '/Landscape/' + sLandscapeId + '/internal',
+        '/landscape/' + sLandscapeId + '/internal',
         null,
         true,
         'GET',
@@ -385,7 +378,7 @@ sap.ui.define([
       var oModelExternal = this.getModel('landscapeExternal');
       oModelExternal.attachRequestCompleted(this._requestCompletedExternal, this);
       oModelExternal.loadData(
-        '/Landscape/' + sLandscapeId + '/external',
+        '/landscape/' + sLandscapeId + '/external',
         null,
         true,
         'GET',
@@ -399,7 +392,7 @@ sap.ui.define([
       var oPanel = this.getView().byId('generalPanel');
       var oModel = this.getModel('landscape');
       oModel.detachRequestCompleted(this._requestCompletedGeneral, this);
-      this._requestCompleted(oEvent, oPanel, oModel);
+      this._requestCompleted(oEvent, oPanel, oModel, true);
     },
 
     _requestCompletedStatus: function(oEvent) {
@@ -426,7 +419,7 @@ sap.ui.define([
       this._requestCompleted(oEvent, oPanel, oModel);
     },
 
-    _requestCompleted: function(oEvent, oPanel, oModel) {
+    _requestCompleted: function(oEvent, oPanel, oModel, check401) {
       jQuery.sap.log.info('Landscape.controller:_requestCompleted');
 
       var sError;
@@ -437,8 +430,17 @@ sap.ui.define([
         }
       } else {
         var oError = oEvent.getParameter('errorobject');
-        sError = 'Error ' + oError.statusCode + ': ' + oError.statusText +
-          ' ' + oError.responseText;
+
+        sError = this.getResourceBundle().getText('generalError', [
+          oError.statusCode,
+          oError.statusText,
+          oError.responseText
+        ]);
+
+        // Should be sure to execute only once?
+        if (check401) {
+          this.navigateToLoginAfter401(oError.statusCode);
+        }
       }
 
       if (sError) {
@@ -452,6 +454,7 @@ sap.ui.define([
         this._messageStrips.push(oMessageStrip);
         oPanel.insertContent(oMessageStrip,	0);
       }
+
       oPanel.setBusy(false);
     },
 

@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "app",
-      "script": "./src/server.js",
+      "script": "./server.js",
       "instances": 1,
       "log_date_format": "YYYY-MM-DD HH:mm Z",
       "log_file": "./logs/app.log",

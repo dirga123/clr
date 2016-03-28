@@ -93,6 +93,16 @@
   				"pattern": "landscape/{id}/external/{reportId}",
   				"name": "landscapeExternal",
           "target": "landscapeExternal"
+  			},
+        {
+  				"pattern": "users",
+  				"name": "users",
+          "target": "users"
+  			},
+        {
+  				"pattern": "gsc",
+  				"name": "gsc",
+          "target": "gsc"
   			}
       ],
       "targets": {
@@ -113,6 +123,12 @@
           },
           "landscapeExternal": {
              "viewName": "LandscapeExternal"
+          },
+          "users": {
+             "viewName": "Users"
+          },
+          "gsc": {
+             "viewName": "GSC"
           },
           "notfound": {
              "viewName": "NotFound",

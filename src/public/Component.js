@@ -2,58 +2,133 @@ sap.ui.define([
   'sap/ui/core/UIComponent',
   'sap/ui/model/json/JSONModel'
 ], function (UIComponent, JSONModel) {
-    'use strict';
+  'use strict';
 
-    return UIComponent.extend('sap.clr.Component', {
-      metadata: {
-        manifest: 'json'
-      },
+  return UIComponent.extend('sap.clr.Component', {
+    metadata: {
+      manifest: 'json'
+    },
 
-      init: function() {
-        var oUserModel = new JSONModel({
-          user: {
-            id: null
-          },
-          logged: false
-        });
-        oUserModel.setDefaultBindingMode('OneWay');
-        this.setModel(oUserModel, 'user');
+    init: function() {
+      jQuery.sap.log.info('Component:init');
 
-        // Set device model
-        var oDeviceModel = new sap.ui.model.json.JSONModel({
-          isTouch: sap.ui.Device.support.touch,
-          isNoTouch: !sap.ui.Device.support.touch,
-          isPhone: sap.ui.Device.system.phone,
-          isNoPhone: !sap.ui.Device.system.phone,
-          listMode: sap.ui.Device.system.phone ? 'None' : 'SingleSelectMaster',
-          listItemType: sap.ui.Device.system.phone ? 'Active' : 'Inactive'
-        });
-        oDeviceModel.setDefaultBindingMode('OneWay');
-        this.setModel(oDeviceModel, 'device');
+      var oUserModel = new JSONModel();
+      oUserModel.setDefaultBindingMode('OneWay');
+      this.setModel(oUserModel, 'loginInfo');
+      this.resetLoginInfoModel();
 
-        // call the init function of the parent
-        UIComponent.prototype.init.apply(this, arguments);
+      // Set device model
+      var oDeviceModel = new sap.ui.model.json.JSONModel({
+        isTouch: sap.ui.Device.support.touch,
+        isNoTouch: !sap.ui.Device.support.touch,
+        isPhone: sap.ui.Device.system.phone,
+        isNoPhone: !sap.ui.Device.system.phone,
+        listMode: sap.ui.Device.system.phone ? 'None' : 'SingleSelectMaster',
+        listItemType: sap.ui.Device.system.phone ? 'Active' : 'Inactive'
+      });
+      oDeviceModel.setDefaultBindingMode('OneWay');
+      this.setModel(oDeviceModel, 'device');
 
-        // create the views based on the url/hash
-        this.getRouter().initialize();
-        this.getRouter().attachRouteMatched(this.onRouteMatched, this);
-      },
+      // call the init function of the parent
+      UIComponent.prototype.init.apply(this, arguments);
 
-      getEventBus: function() {
-        return sap.ui.getCore().getEventBus();
-      },
+      // create the views based on the url/hash
+      var oRouter = this.getRouter();
+      oRouter.initialize();
+      oRouter.attachRouteMatched(this.onRouteMatched, this);
+      oRouter.attachBypassed(function() {
+        setTimeout(function() {
+          oRouter.navTo('home');
+        }, 2000);
+      });
+    },
 
-      onRouteMatched: function(oEvent) {
-        var oParameters = oEvent.getParameters();
-        if (oParameters.name !== 'login') {
-          var oUserModel = this.getModel('user');
-          if (oUserModel.getProperty('/logged') !== true) {
-            this.getRouter().getTargets().display('login', {
-              fromTarget: oParameters.name
-            });
-          }
+    onRouteMatched: function(oEvent) {
+      jQuery.sap.log.info('Component:onRouteMatched');
+
+      var oParameters = oEvent.getParameters();
+      if (oParameters.name !== 'login') {
+        jQuery.sap.log.info(
+          'Component:onRouteMatched: matched - ' + oParameters.name
+        );
+
+        if (!this.isLogged()) {
+          jQuery.sap.log.info(
+            'Component:onRouteMatched: navigating to login'
+          );
+
+          this.getRouter().getTargets().display('login', {
+            fromTarget: oParameters.name
+          });
         }
       }
-    });
-  }
-);
+    },
+
+    setIsLogged: function(isLogged) {
+      jQuery.sap.log.info('Component:setIsLogged');
+
+      var oUserModel = this.getModel('loginInfo');
+      oUserModel.setProperty('/logged', isLogged);
+
+      if (!isLogged) {
+        this.resetLoginInfoModel();
+      }
+    },
+
+    resetLoginInfoModel: function() {
+      jQuery.sap.log.info('Component:resetLoginInfoModel');
+
+      var oModel = this.getModel('loginInfo');
+      oModel.setData({
+        user: {
+          isAdmin: 'false',
+          isGSC: 'false'
+        },
+        logged: false
+      });
+    },
+
+    isLogged: function() {
+      jQuery.sap.log.info('Component:isLogged');
+
+      var oModel = this.getModel('loginInfo');
+      var bLogged = oModel.getProperty('/logged');
+
+      if (bLogged === true) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+
+    isAdmin: function() {
+      jQuery.sap.log.info('Component:isAdmin');
+
+      var oModel = this.getModel('loginInfo');
+      var bLogged = oModel.getProperty('/logged');
+      var sIsAdmin = oModel.getProperty('/user/isAdmin');
+
+      if (bLogged === true && sIsAdmin === 'true') {
+        return true;
+      } else {
+        return false;
+      }
+    },
+
+    isGSC: function(logged, user) {
+      jQuery.sap.log.info('Component:isGSC');
+
+      var oModel = this.getModel('loginInfo');
+      var bLogged = oModel.getProperty('/logged');
+      var sIsAdmin = oModel.getProperty('/user/isAdmin');
+      var sIsGSC = oModel.getProperty('/user/isGSC');
+
+      if (bLogged === true && (sIsAdmin === 'true' || sIsGSC === 'true')) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+  });
+});

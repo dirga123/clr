@@ -1,7 +1,9 @@
 sap.ui.define([
   'sap/ui/unified/Shell',
-  'sap/m/App'
-], function (Shell, App) {
+  'sap/m/App',
+  'sap/ui/unified/ShellHeadItem',
+  'sap/ui/unified/ShellHeadUserItem'
+], function (Shell, App, ShellHeadItem, ShellHeadUserItem) {
   'use strict';
 
   sap.ui.jsview('sap.clr.view.App', {
@@ -16,21 +18,38 @@ sap.ui.define([
       var oShell = new Shell(this.createId('appShell'), {
         icon: '{/icon}',
         headItems: [
-          new sap.ui.unified.ShellHeadItem(this.createId('appHome'), {
+          new ShellHeadItem(this.createId('appHome'), {
             icon: 'sap-icon://home',
             tooltip: 'Home',
-            visible: '{user>/logged}',
+            visible: '{loginInfo>/logged}',
             press: [ oController.onPressHome, oController ]
           })
         ],
         headEndItems: [
-          new sap.ui.unified.ShellHeadItem(this.createId('appLogoff'), {
+          new ShellHeadItem(this.createId('appLogoff'), {
             icon: 'sap-icon://log',
             tooltip: 'Logoff',
-            visible: '{user>/logged}',
+            visible: '{loginInfo>/logged}',
             press: [ oController.onPressLogoff, oController ]
           })
         ],
+        user: new ShellHeadUserItem({
+          image: 'sap-icon://person-placeholder',
+          visible: '{loginInfo>/logged}',
+          showPopupIndicator: false,
+          username: {
+            parts: [ 'loginInfo>/user/name', 'loginInfo>/user/login' ],
+            formatter: function(name, login) {
+              if (name !== undefined) {
+                return name;
+              }
+              if (login !== undefined) {
+                return login;
+              }
+              return oController.getResourceBundle().getText('userUnknown');
+            }
+          }
+        }),
         content: new App(this.createId('App'), {
         })
       });

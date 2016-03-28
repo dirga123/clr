@@ -10,51 +10,79 @@ sap.ui.define([
     onInit: function() {
       jQuery.sap.log.info('Login.controller:onInit');
 
-      var oInput = this.getView().byId('loginInput');
-      oInput.onsapenter = jQuery.proxy(function(oEvent) {
-        this.getView().byId('loginButton').firePress();
-      }, this);
+      this.setModel(new JSONModel({
+        username: '',
+        password: ''
+      }));
 
-      var oModel = new JSONModel({
-        input: ''
-      });
-      this.getView().setModel(oModel);
-
-      var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+      var oRouter = this.getRouter();
       var oTarget = oRouter.getTarget('login');
 
-      oTarget.attachDisplay(function (oEvent) {
-        this._oData = oEvent.getParameter('data');
-      }, this);
+      oTarget.attachDisplay(
+        function (oEvent) {
+          jQuery.sap.log.info('Login.controller:_onAttachDisplay');
+          this._oData = oEvent.getParameter('data');
+
+          this.getModel().setProperty('/password', '');
+
+          setTimeout(jQuery.proxy(function() {
+            var oDialog = this._getLoginDialog();
+            if (!oDialog.isOpen()) {
+              jQuery.sap.log.info('Login.controller:_onAttachDisplay: opening dialog');
+              oDialog.open();
+            }
+          }, this));
+        }, this
+      );
+    },
+
+    onExit: function() {
+      jQuery.sap.log.info('Login.controller:onExit');
+
+      if (this._oLoginDialog) {
+        this._oLoginDialog.destroy();
+        this._oLoginDialog = null;
+      }
     },
 
     onPressLogin: function() {
+      jQuery.sap.log.info('Login.controller:onPressLogin');
+
       this.getView().setBusy(true);
-      this.login();
+      setTimeout(jQuery.proxy(this._login, this));
     },
 
-    login: function() {
-      var sInput = this.getView().getModel().getProperty('/input');
+    _login: function() {
+      jQuery.sap.log.info('Login.controller:_login');
+
+      var oModel = this.getModel();
+      var sUsername = oModel.getProperty('/username');
+      var sPassword = oModel.getProperty('/password');
 
       jQuery.ajax('/login', {
         method: 'POST',
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-          input: sInput
+          username: sUsername,
+          password: sPassword
         }),
-        error: jQuery.proxy(this.onLoginError, this),
-        success: jQuery.proxy(this.onLoginSuccess, this)
+        error: jQuery.proxy(this._onLoginError, this),
+        success: jQuery.proxy(this._onLoginSuccess, this)
       });
     },
 
-    onLoginError: function(resp, textStatus, errorThrown) {
+    _onLoginError: function(resp, textStatus, errorThrown) {
+      jQuery.sap.log.info('Login.controller:_onLoginError');
+
       this.getView().setBusy(false);
       var sMsg = this.getResourceBundle().getText('loginFailed', [ errorThrown ]);
       MessageToast.show(sMsg);
     },
 
-    onLoginSuccess: function(resp) {
+    _onLoginSuccess: function(resp) {
+      jQuery.sap.log.info('Login.controller:_onLoginSuccess');
+
       this.getView().setBusy(false);
 
       if (resp.error) {
@@ -62,23 +90,45 @@ sap.ui.define([
         return;
       }
 
-      var oUserModel = this.getComponent().getModel('user');
+      var oUserModel = this.getComponent().getModel('loginInfo');
       oUserModel.setData(resp);
       oUserModel.setProperty('/logged', true);
-
-      this.onNavBackWithoutHash();
+      this._onNavBackWithoutHash();
     },
 
     // override the parent's onNavBack (inherited from BaseController)
-    onNavBackWithoutHash: function () {
+    _onNavBackWithoutHash: function () {
+      jQuery.sap.log.info('Login.controller:_onNavBackWithoutHash');
+
       var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
       // in some cases we could display a certain target when the back button is pressed
       if (this._oData && this._oData.fromTarget) {
-        oRouter.getTargets().display(this._oData.fromTarget);
+        jQuery.sap.log.info(
+          'Login.controller:_onNavBackWithoutHash: navigating to ' + this._oData.fromTarget
+        );
+
+        oRouter.getTargets().display(this._oData.fromTarget, {
+          fromTarget: 'login'
+        });
         delete this._oData.fromTarget;
         return;
       }
+
+      jQuery.sap.log.info(
+        'Login.controller:_onNavBackWithoutHash: navigating to home because of no data'
+      );
       oRouter.navTo('home');
+    },
+
+    _getLoginDialog: function() {
+      jQuery.sap.log.info('Login.controller:_getLoginDialog');
+
+      if (!this._oLoginDialog) {
+        this._oLoginDialog = sap.ui.jsfragment('sap.clr.view.Login', this);
+        this.getView().addDependent(this._oLoginDialog);
+      }
+
+      return this._oLoginDialog;
     }
   });
 });

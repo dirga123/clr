@@ -4,8 +4,9 @@ sap.ui.define([
   'sap/m/Toolbar',
   'sap/m/ToolbarSpacer',
   'sap/m/TileContainer',
-  'sap/m/StandardTile'
-], function (Page, Button, Toolbar, ToolbarSpacer, TileContainer, StandardTile) {
+  'sap/m/StandardTile',
+  'sap/m/SearchField'
+], function (Page, Button, Toolbar, ToolbarSpacer, TileContainer, StandardTile, SearchField) {
   'use strict';
 
   sap.ui.jsview('sap.clr.view.Landscapes', {
@@ -83,7 +84,7 @@ sap.ui.define([
         press: [ oController.onPressDetail, oController ]
       });
 
-      var oTileContainer = new TileContainer(this.createId('tileContainer'), {
+      var oTileContainer = new TileContainer(this.createId('landscapesTiles'), {
         width: '100%',
         height: '100%'
       });
@@ -96,6 +97,14 @@ sap.ui.define([
         showNavButton: true,
         navButtonPress: [ oController.onNavBack, oController ],
         enableScrolling: false,
+        subHeader: [
+          new Toolbar({
+            content: new SearchField({
+              width: '100%',
+              liveChange: [ oController.onSearch, oController ]
+            })
+          })
+        ],
         content: [
           oTileContainer
         ],

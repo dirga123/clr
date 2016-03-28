@@ -65,6 +65,23 @@ sap.ui.define([], function () {
         return 0;
       }
       return parseFloat(avg).toFixed(4);
+    },
+
+    isAdmin: function(logged, user) {
+      if (logged === true && user !== undefined && user.isAdmin === 'true') {
+        return true;
+      } else {
+        return false;
+      }
+    },
+
+    isGSC: function(logged, user) {
+      if (logged === true && user !== undefined &&
+        (user.isGSC === 'true' || user.isAdmin === 'true')) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
   };
