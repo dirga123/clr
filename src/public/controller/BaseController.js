@@ -128,7 +128,9 @@ sap.ui.define([
             fromTarget: this.getRoutePath()
           });
         }, this), 2000);
+        return true;
       }
+      return false;
     },
 
     checkForErrorWithNavigate: function(oModel, oEvent) {

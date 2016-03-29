@@ -37,6 +37,7 @@ function transformOS(os) {
       return 'Mac OS 10.10';
     } else if (os.indexOf('Version 15') > -1) {
       return 'Mac OS 10.11';
+
       // Even though it doesn't exist yet....
       // Feel free to roll your own OS stuff here as well
       //! Don't feel restrained by my life choices!
@@ -88,6 +89,7 @@ function transformHosts(data) {
         newHost.totalMem = item.lastvalue / 1073741824; // 1024^3 => GB
         break;
       case 'vm.memory.size[free]':
+
         // free(avail)=free+cached+inactive on linux, free on Windows
         newHost.freeMem += item.lastvalue / 1073741824;
         break;
@@ -130,6 +132,7 @@ function transformHosts(data) {
             break;
           }
         }
+
         break;
       default:
         break;

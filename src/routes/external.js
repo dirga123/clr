@@ -281,6 +281,7 @@ router.get('/:id/external/:reportId', async (ctx) => {
   try {
     const redis = new Redis();
     await redis.login();
+
     // Overwrite version, error, etc.
     lsRet = await redis.getExternal(ctx.params.id, ctx.params.reportId);
     await redis.logout();

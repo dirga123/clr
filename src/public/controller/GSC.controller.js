@@ -61,8 +61,19 @@ sap.ui.define([
     onPressDetail: function(oEvent) {
       jQuery.sap.log.info('GSC.controller:onPressDetail');
 
-      this.getModel('gsc').setProperty('/reason', '');
-      this._getReguestDialog().open();
+      if (this.getComponent().isAdmin()) {
+        var oItem = oEvent.getSource();
+        var oBindingContext = oItem.getBindingContext('landscapes');
+        var sId = oBindingContext.getProperty('id');
+        console.log(sId);
+        var oRouter = this.getRouter();
+        oRouter.navTo('gscaccess', {
+          id: sId
+        });
+      } else {
+        this.getModel('gsc').setProperty('/reason', '');
+        this._getReguestDialog().open();
+      }
     },
 
     onPressSubmit: function() {
@@ -117,7 +128,7 @@ sap.ui.define([
       var oModel = this.getModel('landscapes');
       oModel.attachRequestCompleted(this._requestCompleted, this);
       oModel.loadData(
-        '/landscapes',
+        '/gsc',
         {
           date: oDate.getTime(),
           from: oDateFrom.getTime(),

@@ -30,7 +30,7 @@
         "type": "JS"
     },
   	"dependencies": {
-  	  "minUI5Version": "1.32",
+  	  "minUI5Version": "1.34",
   	  "libs": {
   		    "sap.m": {}
   	  }
@@ -103,6 +103,11 @@
   				"pattern": "gsc",
   				"name": "gsc",
           "target": "gsc"
+  			},
+        {
+  				"pattern": "gsc/{id}",
+  				"name": "gscaccess",
+          "target": "gscaccess"
   			}
       ],
       "targets": {
@@ -129,6 +134,9 @@
           },
           "gsc": {
              "viewName": "GSC"
+          },
+          "gscaccess": {
+             "viewName": "GSCAccess"
           },
           "notfound": {
              "viewName": "NotFound",

@@ -12,6 +12,14 @@ import errorString from './errorString.js';
 // that the password is correct and then invoke `cb` with a user object, which
 // will be set at `req.user` in route handlers after authentication.
 
+/*
+co(function*() {
+  const user = yield User.byEmail(email)
+  ...
+  return user
+}).then(res => done(null, res), done)
+*/
+
 passport.use(new LocalStrategy(
   async (username, password, done) => {
     debug('dev')('LocalStrategy');
@@ -30,17 +38,8 @@ passport.use(new LocalStrategy(
     } catch (e) {
       await done(null, errorString(e));
     }
-
-    /*
-    co(function*() {
-      const user = yield User.byEmail(email)
-      ...
-      return user
-    }).then(res => done(null, res), done)
-    */
   })
 );
-
 
 // Configure Passport authenticated session persistence.
 //
@@ -50,15 +49,14 @@ passport.use(new LocalStrategy(
 // serializing, and querying the user record by ID from the database when
 // deserializing.
 passport.serializeUser((user, done) => {
-  debug('dev')('serializeUser');
+  debug('dev')(`auth::serializeUser ${user.id}:${user.name}`);
 
   done(null, user);
-  // cb(null, user.id);
 });
 
 // passport.deserializeUser((user/*id*/, done) => {
 passport.deserializeUser((user, done) => {
-  debug('dev')('deserializeUser');
+  debug('dev')(`auth::deserializeUser ${user.id}`);
 
   done(null, user);
   /*

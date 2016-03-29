@@ -10,6 +10,7 @@ sap.ui.define([
   sap.ui.jsfragment('sap.clr.view.Login', {
     createContent: function(oController) {
       var oDialog = new sap.m.Dialog({
+        busyIndicatorDelay: 0,
         title: '{i18n>loginTitle}',
         content: new SimpleForm({
           layout: 'ResponsiveGridLayout',

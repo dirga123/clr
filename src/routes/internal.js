@@ -10,6 +10,7 @@ router.get('/:id/internal', async (ctx) => {
     version: config.versionStr,
     error: 'Internal report list: Not implemented'
   };
+
   // await new Promise(r => setTimeout(r, 2000));
   ctx.body = lsRet;
 });

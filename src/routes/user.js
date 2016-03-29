@@ -17,6 +17,7 @@ function checkInput(body, checkPassword) {
     body.isGSC === undefined) {
     return false;
   }
+
   return true;
 }
 
@@ -45,6 +46,7 @@ router.post('/', async (ctx) => {
     ctx.body = ret;
     return;
   }
+
   ctx.body = ret;
 });
 
@@ -98,6 +100,7 @@ router.put('/:id', async (ctx) => {
     ctx.body = ret;
     return;
   }
+
   ctx.body = ret;
 });
 

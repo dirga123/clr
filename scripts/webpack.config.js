@@ -116,6 +116,7 @@ const clientConfig = extend(true, {}, config, {
     path: path.join(__dirname, '../build/public'),
     filename: DEBUG ? '[name].js?[hash]' : '[name].js'
   },
+
   // Choose a developer tool to enhance debugging
   // http://webpack.github.io/docs/configuration.html#devtool
   devtool: DEBUG ? 'cheap-module-eval-source-map' : false,

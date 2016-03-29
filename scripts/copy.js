@@ -14,7 +14,7 @@ async function copy({ watch } = {}) {
     ncp('src/public', 'build/public'),
     ncp('src/content', 'build/content'),
     ncp('src/pdf', 'build/pdf'),
-    ncp('src/ui5', 'build/ui5'),
+    ncp('openui5', 'build/ui5'),
     ncp('package.json', 'build/package.json'),
     ncp('processes.json', 'build/processes.json'),
     ncp('READMEBUILD.md', 'build/README.md')
@@ -30,7 +30,13 @@ async function copy({ watch } = {}) {
 
   if (watch) {
     const watcher = await new Promise((resolve, reject) => {
-      gaze('src/content/**/*.*', (err, val) => err ? reject(err) : resolve(val));
+      gaze('src/content/**/*.*', (err, val) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(val);
+        }
+      });
     });
     watcher.on('changed', async (file) => {
       const relPath = file.substr(path.join(__dirname, '../src/content/').length);
@@ -38,7 +44,13 @@ async function copy({ watch } = {}) {
     });
 
     const watcherPublic = await new Promise((resolve, reject) => {
-      gaze('src/public/**/*.*', (err, val) => err ? reject(err) : resolve(val));
+      gaze('src/public/**/*.*', (err, val) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(val);
+        }
+      });
     });
     watcherPublic.on('changed', async (file) => {
       const relPath = file.substr(path.join(__dirname, '../src/public/').length);

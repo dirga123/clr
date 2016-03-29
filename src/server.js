@@ -12,6 +12,7 @@ import bodyparser from 'koa-bodyparser';
 import koaQs from 'koa-qs';
 import session from 'koa-generic-session';
 import SessionRedis from 'koa-redis';
+
 // import send from 'koa-send';
 
 import Config from './config';
@@ -24,6 +25,7 @@ import routesLandscapes from './routes/landscapes';
 import routesLandscape from './routes/landscape';
 import routesExternal from './routes/external';
 import routesInternal from './routes/internal';
+import routesGSC from './routes/gsc';
 
 const { NODE_ENV } = process.env;
 if (NODE_ENV === 'development') {
@@ -74,6 +76,17 @@ server.use(bodyparser());
 const publicRouter = new Router();
 
 publicRouter.post('/login', async (ctx, next) => {
+  if (ctx.request.body === null ||
+    ctx.request.body.username === null ||
+    ctx.request.body.username.length === 0 ||
+    ctx.request.body.password === null ||
+    ctx.request.body.password.length === 0) {
+    ctx.body = {
+      error: 'Wrong username or password'
+    };
+    return;
+  }
+
   await passport.authenticate('local', async (user, info, status) => {
     const ret = {
       version: config.versionStr
@@ -85,6 +98,7 @@ publicRouter.post('/login', async (ctx, next) => {
       } else {
         ret.error = user;
       }
+
       ctx.body = ret;
       await ctx.logout();
     } else {
@@ -164,6 +178,18 @@ async function authedAsAdmin(ctx, next) {
   }
 }
 
+async function authedAsGSC(ctx, next) {
+  if (ctx.isAuthenticated() &&
+    ctx.passport.user &&
+    (ctx.passport.user.isAdmin === 'true' ||
+    ctx.passport.user.isGSC === 'true')) {
+    await next();
+  } else {
+    ctx.status = 401;
+    ctx.body = 'Not authenticated';
+  }
+}
+
 const securedRouter = new Router();
 /*
 securedRouter.get('/app', authed, (ctx) => {
@@ -190,6 +216,9 @@ securedRouter.use('/landscape', authedAsAdmin,
 );
 securedRouter.use('/landscape', authedAsAdmin,
   routesInternal.routes(), routesInternal.allowedMethods()
+);
+securedRouter.use('/gsc', authedAsGSC,
+  routesGSC.routes(), routesGSC.allowedMethods()
 );
 
 server.use(publicRouter.routes());

@@ -21,6 +21,7 @@ async function services(zabbix, fromDate, toDate) {
     if (currentValue.parent.length === 0) {
       previousValue.add(currentValue.serviceid);
     }
+
     return previousValue;
   }, new Set());
 
@@ -29,6 +30,7 @@ async function services(zabbix, fromDate, toDate) {
       topServicesMap.has(currentValue.parent.serviceid)) {
       previousValue.push(currentValue);
     }
+
     return previousValue;
   }, []);
 
@@ -80,6 +82,7 @@ async function servicesAsMap(zabbix, fromDate, toDate) {
     if (currentValue.parent.length === 0) {
       previousValue.add(currentValue.serviceid);
     }
+
     return previousValue;
   }, new Set());
 
@@ -88,6 +91,7 @@ async function servicesAsMap(zabbix, fromDate, toDate) {
       topServicesMap.has(currentValue.parent.serviceid)) {
       previousValue.push(currentValue);
     }
+
     return previousValue;
   }, []);
 

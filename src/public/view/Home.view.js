@@ -77,6 +77,17 @@ sap.ui.define([
         },
         busyIndicatorDelay: 0,
         title: '{i18n>homeUsersTitle}',
+        info: {
+          parts: [ 'homeUsers>/onlineUsers' ],
+          formatter: function(onlineCount) {
+            if (onlineCount === undefined) {
+              onlineCount = 0;
+            }
+            return oController.getResourceBundle().getText(
+              'homeUsersOnline', [ onlineCount ]
+            );
+          }
+        },
         number: '{homeUsers>/users}',
         numberUnit: {
           parts: [ 'homeUsers>/users' ],

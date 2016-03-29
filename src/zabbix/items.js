@@ -40,6 +40,7 @@ async function items(zabbix, fromDate, toDate) {
     if (itemIdObj.hasOwnProperty(prop)) {
       debug('zabbix')(`items: duplicate item for customer: ${prop}, ${item.itemid}`);
     }
+
     itemIdObj[prop] = item.itemid;
   };
 
@@ -52,6 +53,7 @@ async function items(zabbix, fromDate, toDate) {
     if (prop1Val.hasOwnProperty(prop)) {
       debug('zabbix')(`items: duplicate item for ${prop1}: ${thisid}, ${prop}, ${item.itemid}`);
     }
+
     prop1Val[prop] = item.itemid;
   };
 
@@ -79,6 +81,7 @@ async function items(zabbix, fromDate, toDate) {
           customerFromItemWithId('usersRDS', item, usersParams[0]);
         }
       }
+
       break;
     case (item.key_.startsWith(ZK.CUST_TENANTS) ? item.key_ : undefined):
       {
@@ -106,6 +109,7 @@ async function items(zabbix, fromDate, toDate) {
           }
         }
       }
+
       break;
       /*
     case (item.key_.startsWith(ZK.HANA) ? item.key_ : undefined):
@@ -127,6 +131,7 @@ async function items(zabbix, fromDate, toDate) {
           suFromItemWithId('name', item, suNameParams[0]);
         }
       }
+
       break;
     case (item.key_.startsWith(ZK.SU_VERSION) ? item.key_ : undefined):
       {
@@ -136,6 +141,7 @@ async function items(zabbix, fromDate, toDate) {
           suFromItemWithId('version', item, suVersionParams[0]);
         }
       }
+
       break;
     case (item.key_.startsWith(ZK.SU_PURPOSE) ? item.key_ : undefined):
       {
@@ -145,6 +151,7 @@ async function items(zabbix, fromDate, toDate) {
           suFromItemWithId('purpose', item, suPurposeParams[0]);
         }
       }
+
       break;
     case (item.key_.startsWith(ZK.SU_COMP_DB) ? item.key_ : undefined):
       {
@@ -161,6 +168,7 @@ async function items(zabbix, fromDate, toDate) {
           }
         }
       }
+
       break;
     case (item.key_.startsWith(ZK.SU_TENANTS) ? item.key_ : undefined):
       {
@@ -186,12 +194,14 @@ async function items(zabbix, fromDate, toDate) {
           }
         }
       }
+
       break;
     case (item.key_.startsWith(ZK.SU_COUNT) ? item.key_ : undefined):
       {
         arr.push(item);
         objectFromItem('serviceUnitCount', item);
       }
+
       break;
     default:
       break;
@@ -231,6 +241,7 @@ async function items(zabbix, fromDate, toDate) {
       } else if (type === '3') {
         firstValue = Number.parseFloat(firstValue);
       }
+
       let lastValue = history.result[history.result.length - 1].value;
       if (type === '0') {
         lastValue = Number.parseInt(lastValue, 10);
@@ -256,12 +267,15 @@ async function items(zabbix, fromDate, toDate) {
           } else if (type === '3') {
             val = Number.parseFloat(h.value);
           }
+
           if (val < minValue) {
             minValue = val;
           }
+
           if (val > maxValue) {
             maxValue = val;
           }
+
           sumValue += val;
         });
 

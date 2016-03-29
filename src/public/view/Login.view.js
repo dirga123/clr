@@ -20,6 +20,8 @@ sap.ui.define([
         ]
       });
 
+      this.setBusyIndicatorDelay(0);
+      
       return oPage;
     }
   });

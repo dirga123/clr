@@ -48,8 +48,10 @@ sap.ui.define([
     onPressLogin: function() {
       jQuery.sap.log.info('Login.controller:onPressLogin');
 
-      this.getView().setBusy(true);
-      setTimeout(jQuery.proxy(this._login, this));
+      this._oLoginDialog.setBusy(true);
+      setTimeout(jQuery.proxy(
+        this._login, this)
+      );
     },
 
     _login: function() {
@@ -75,7 +77,7 @@ sap.ui.define([
     _onLoginError: function(resp, textStatus, errorThrown) {
       jQuery.sap.log.info('Login.controller:_onLoginError');
 
-      this.getView().setBusy(false);
+      this._oLoginDialog.setBusy(false);
       var sMsg = this.getResourceBundle().getText('loginFailed', [ errorThrown ]);
       MessageToast.show(sMsg);
     },
@@ -83,7 +85,7 @@ sap.ui.define([
     _onLoginSuccess: function(resp) {
       jQuery.sap.log.info('Login.controller:_onLoginSuccess');
 
-      this.getView().setBusy(false);
+      this._oLoginDialog.setBusy(false);
 
       if (resp.error) {
         MessageToast.show(resp.error);

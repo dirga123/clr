@@ -38,6 +38,8 @@ router.get('/users', async ctx => {
     await redis.login();
     const users = await redis.getUsers();
     ret.users = users.length;
+    const onlineUsersCount = await redis.getOnlineUsersCount();
+    ret.onlineUsers = onlineUsersCount;
     await redis.logout();
   } catch (e) {
     ret.error = errorString(e);

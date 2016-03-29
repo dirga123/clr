@@ -114,6 +114,7 @@ export default class Redis {
       if (isInSet === 0) {
         return false;
       }
+
       return true;
     } catch (e) {
       debug('redis')(`existsLandscape error: ${e.message}`);
@@ -331,6 +332,18 @@ export default class Redis {
     }
   }
 
+  async getOnlineUsersCount() {
+    try {
+      debug('redis')('getOnlineUsersCount');
+      const sessionKeysId = 'session:*';
+      const keys = await this.client.keysAsync(sessionKeysId);
+      return keys.length;
+    } catch (e) {
+      debug('redis')(`getOnlineUsersCount error: ${e.message}`);
+      throw e.message;
+    }
+  }
+
   async getLoginUser(username, password) {
     try {
       debug('redis')('getLoginUser');
@@ -341,6 +354,7 @@ export default class Redis {
         // check if user does exists, just password key is missing?
         return undefined;
       }
+
       if (pass !== password) {
         return undefined;
       }
@@ -356,6 +370,7 @@ export default class Redis {
       if (user === null) {
         throw { message: `User record for ${username} is corrupted` };
       }
+
       user.id = id;
       return user;
     } catch (e) {
@@ -442,6 +457,7 @@ export default class Redis {
       if (isInSet === 0) {
         return false;
       }
+
       return true;
     } catch (e) {
       debug('redis')(`existsUser error: ${e.message}`);

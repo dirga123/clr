@@ -133,10 +133,12 @@ sap.ui.define([
       jQuery.sap.log.info('Landscapes.controller:onPressDetail');
 
       var oItem = oEvent.getSource();
-      var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
       var oBindingContext = oItem.getBindingContext('landscapes');
+      var sId = oBindingContext.getProperty('id');
+
+      var oRouter = this.getRouter();
       oRouter.navTo('landscape', {
-        id: oBindingContext.getProperty('id')
+        id: sId
       });
     },
 

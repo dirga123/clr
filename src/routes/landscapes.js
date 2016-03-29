@@ -62,6 +62,7 @@ router.get('/', async ctx => {
         if (currVal.priority > prevVal) {
           prevVal = currVal.priority;
         }
+
         return prevVal;
       }, Number(0));
 

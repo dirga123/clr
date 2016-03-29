@@ -439,7 +439,9 @@ sap.ui.define([
 
         // Should be sure to execute only once?
         if (check401) {
-          this.navigateToLoginAfter401(oError.statusCode);
+          if (this.navigateToLoginAfter401(oError.statusCode)) {
+            return;
+          }
         }
       }
 
