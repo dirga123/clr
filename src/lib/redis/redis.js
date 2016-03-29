@@ -511,4 +511,42 @@ export default class Redis {
       throw e.message;
     }
   }
+
+  async existsGSCAccess(lsId) {
+    try {
+      debug('redis')(`existsGSCAccess(${lsId})`);
+
+      const gscAccessId = `ls:${lsId}:gscaccess:`;
+      const exists = await this.client.existsAsync(gscAccessId);
+      if (exists === 1) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      debug('redis')(`existsGSCAccess error: ${e.message}`);
+      throw e.message;
+    }
+  }
+
+  async getGSCAccess(lsId) {
+    try {
+      debug('redis')(`getGSCAccess(${lsId})`);
+
+      const gscAccessId = `ls:${lsId}:gscaccess:`;
+      const exists = await this.client.existsAsync(gscAccessId);
+      if (exists !== 1) {
+        throw { message: `GSC Access for Landscape ${lsId} doesnt exists.` };
+      }
+
+      const val = await this.clienthgetAsync(gscAccessId);
+
+      return {
+        gscaccess: val
+      };
+    } catch (e) {
+      debug('redis')(`getGSCAccess error: ${e.message}`);
+      throw e.message;
+    }
+  }
 }

@@ -14,7 +14,6 @@ sap.ui.define([
       this.setModel(new JSONModel({
         route: 'gsc'
       }));
-      this.setCurrentDateAndPeriod();
 
       var oModel = new JSONModel();
       this.setModel(oModel, 'landscapes');
@@ -118,22 +117,14 @@ sap.ui.define([
       jQuery.sap.log.info('GSC.controller:_requestData');
 
       this.getView().setBusy(true);
-      this.setCurrentDateAndPeriod();
-
-      var oViewModel = this.getModel();
-      var oDate = oViewModel.getProperty('/date');
-      var oDateFrom = oViewModel.getProperty('/from');
-      var oDateTo = oViewModel.getProperty('/to');
 
       var oModel = this.getModel('landscapes');
+      oModel.setData({});
+
       oModel.attachRequestCompleted(this._requestCompleted, this);
       oModel.loadData(
         '/gsc',
-        {
-          date: oDate.getTime(),
-          from: oDateFrom.getTime(),
-          to: oDateTo.getTime()
-        },
+        null,
         true,
         'GET',
         false,
@@ -146,10 +137,20 @@ sap.ui.define([
 
       var oModel = this.getModel('landscapes');
       oModel.detachRequestCompleted(this._requestCompleted, this);
-
       this.getView().setBusy(false);
 
-      this.checkForErrorWithNavigate(oModel, oEvent);
+      if (this.checkForErrorWithNavigate(oModel, oEvent)) {
+        return;
+      }
+
+      // if not error continue with response
+      var oLandscapes = oModel.getProperty('/landscapes');
+      if (Object.prototype.toString.call(oLandscapes) === '[object Array]') {
+        for (var i = 0; i < oLandscapes.length; i++) {
+          var oLandscape = oLandscapes[i];
+          console.log(oLandscape.id);
+        }
+      }
     }
   });
 });

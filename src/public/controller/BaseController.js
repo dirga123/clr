@@ -33,6 +33,10 @@ sap.ui.define([
       return this.getView().getModel(sName);
     },
 
+    hasModel: function(sName) {
+      return this.getView().hasModel(sName);
+    },
+
 		/**
 		 * Convenience method for setting the view model in every controller of the application.
 		 * @public
@@ -138,6 +142,7 @@ sap.ui.define([
         var sError = oModel.getProperty('/error');
         if (sError) {
           MessageToast.show(sError);
+          return true;
         }
       } else {
         var oError = oEvent.getParameter('errorobject');
@@ -149,9 +154,10 @@ sap.ui.define([
         ]);
 
         MessageToast.show(sGeneralError);
-
         this.navigateToLoginAfter401(oError.statusCode);
+        return true;
       }
+      return false;
     },
 
     attachDisplayForRoute: function(callback) {
