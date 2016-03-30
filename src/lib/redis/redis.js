@@ -516,7 +516,7 @@ export default class Redis {
     try {
       debug('redis')(`existsGSCAccess(${lsId})`);
 
-      const gscAccessId = `ls:${lsId}:gscaccess:`;
+      const gscAccessId = `ls:${lsId}:gscaccess`;
       const exists = await this.client.existsAsync(gscAccessId);
       if (exists === 1) {
         return true;
@@ -533,19 +533,29 @@ export default class Redis {
     try {
       debug('redis')(`getGSCAccess(${lsId})`);
 
-      const gscAccessId = `ls:${lsId}:gscaccess:`;
-      const exists = await this.client.existsAsync(gscAccessId);
-      if (exists !== 1) {
-        throw { message: `GSC Access for Landscape ${lsId} doesnt exists.` };
+      const gscAccessId = `ls:${lsId}:gscaccess`;
+      let val = await this.client.hgetallAsync(gscAccessId);
+      if (val === null || val.text === null) {
+        val = {
+          text: ''
+        };
       }
 
-      const val = await this.clienthgetAsync(gscAccessId);
-
-      return {
-        gscaccess: val
-      };
+      return val;
     } catch (e) {
       debug('redis')(`getGSCAccess error: ${e.message}`);
+      throw e.message;
+    }
+  }
+
+  async setGSCAccess(lsId, gscaccess) {
+    try {
+      debug('redis')(`setGSCAccess(${lsId})`);
+      const gscAccessId = `ls:${lsId}:gscaccess`;
+      const added = await this.client.hmsetAsync(gscAccessId, 'text', gscaccess.text);
+      return added;
+    } catch (e) {
+      debug('redis')(`setGSCAccess error: ${e.message}`);
       throw e.message;
     }
   }

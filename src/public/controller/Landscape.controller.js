@@ -14,30 +14,21 @@ sap.ui.define([
     onInit: function() {
       jQuery.sap.log.info('Landscape.controller:onInit');
 
-      // Set the initial form to be the display one
-      this._toggleButtonsAndView(false);
-
       this.setModel(new JSONModel({
         route: 'landscape'
       }));
       this.setCurrentDateAndPeriod();
 
       // Create model and set it to view
-      var oModel = new JSONModel();
-      this.setModel(oModel, 'landscape');
-      this._bindElement('generalPanel', 'landscape>/landscape');
+      this.setModel(new JSONModel(), 'landscape');
+      this.setModel(new JSONModel(), 'landscapeStatus');
+      this.setModel(new JSONModel(), 'landscapeExternal');
+      this.setModel(new JSONModel(), 'landscapeInternal');
+      this.setModel(new JSONModel(), 'gscaccess');
+      this.setModel(new JSONModel(), 'gscrequests');
 
-      var oModelStatus = new JSONModel();
-      this.setModel(oModelStatus, 'landscapeStatus');
-      this._bindElement('statusPanel', 'landscapeStatus>/');
-
-      var oModelExternal = new JSONModel();
-      this.setModel(oModelExternal, 'landscapeExternal');
-      this._bindElement('externalPanel', 'landscapeExternal>/');
-
-      var oModelInternal = new JSONModel();
-      this.setModel(oModelInternal, 'landscapeInternal');
-      this._bindElement('internalPanel', 'landscapeInternal>/');
+      // Set the initial form to be the display one
+      this._toggleButtonsAndView(false);
 
       this.attachDisplayForRoute(this._requestData);
       this.attachPatternMatched(this._onObjectMatched);
@@ -62,7 +53,10 @@ sap.ui.define([
 
       // Clone the data
       this._oLandscape = jQuery.extend({},
-        this.getView().getModel('landscape').getData().landscape
+        this.getView().getModel('landscape').getProperty('/landscape')
+      );
+      this._oGSCAccess = jQuery.extend({},
+        this.getView().getModel('gscaccess').getProperty('/gscaccess')
       );
 
       this._toggleButtonsAndView(true);
@@ -72,10 +66,8 @@ sap.ui.define([
       jQuery.sap.log.info('Landscape.controller:onPressCancel');
 
       // Restore the data
-      var oModel = this.getView().getModel('landscape');
-      var oData = oModel.getData();
-      oData.landscape = this._oLandscape;
-      oModel.setData(oData);
+      this.getView().getModel('landscape').setProperty('/landscape', this._oLandscape);
+      this.getView().getModel('gscaccess').setProperty('/gscaccess', this._oGSCAccess);
 
       this._toggleButtonsAndView(false);
     },
@@ -83,7 +75,9 @@ sap.ui.define([
     onPressSave: function() {
       jQuery.sap.log.info('Landscape.controller:onPressSave');
 
-      setTimeout(jQuery.proxy(this._saveLandscape, this));
+      setTimeout(jQuery.proxy(
+        this._saveLandscape, this)
+      );
     },
 
     _saveLandscape: function() {
@@ -101,14 +95,34 @@ sap.ui.define([
         dataType: 'json',
         data: JSON.stringify(oData),
         error: jQuery.proxy(this.ajaxError, this, 'landscapeSaveFailed'),
-        success: jQuery.proxy(this.onSaveSuccess, this, this.onSaveSuccess)
+        success: jQuery.proxy(this._onSaveLandscapeSuccess, this)
       });
     },
 
-    onSaveSuccess: function() {
-      jQuery.sap.log.info('Landscapes.controller:onSaveSuccess');
+    _onSaveLandscapeSuccess: function() {
+      jQuery.sap.log.info('Landscapes.controller:_onSaveLandscapeSuccess');
+
+      var oViewModel = this.getModel();
+      var sLandscapeId = oViewModel.getProperty('/id');
+
+      var oGSCAccessModel = this.getModel('gscaccess');
+      var oGSCAccessData = oGSCAccessModel.getProperty('/gscaccess');
+
+      jQuery.ajax('/landscape/' + sLandscapeId + '/gscaccess', {
+        method: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify(oGSCAccessData),
+        error: jQuery.proxy(this.ajaxError, this, 'gscAccessSaveFailed'),
+        success: jQuery.proxy(this._onSaveGSCAccessSuccess, this)
+      });
+    },
+
+    _onSaveGSCAccessSuccess: function() {
+      jQuery.sap.log.info('Landscapes.controller:_onSaveGSCAccessSuccess');
 
       this._oLandscape = null;
+      this._oGSCAccess = null;
       this._toggleButtonsAndView(false);
     },
 
@@ -234,11 +248,11 @@ sap.ui.define([
       jQuery.ajax('/landscape/' + sLandscapeId, {
         method: 'DELETE',
         error: jQuery.proxy(this.ajaxError, this, 'landscapeDeleteFailed'),
-        success: jQuery.proxy(this.onDeleteSuccess, this)
+        success: jQuery.proxy(this._onDeleteSuccess, this)
       });
     },
 
-    onDeleteSuccess: function(resp) {
+    _onDeleteSuccess: function(resp) {
       this.getView().setBusy(false);
       if (resp.error) {
         MessageToast.show(resp.error);
@@ -249,14 +263,12 @@ sap.ui.define([
     },
 
     _toggleButtonsAndView: function(bEdit) {
-      var oView = this.getView();
-
       // Show the appropriate action buttons
-      oView.byId('toolbarEdit').setVisible(!bEdit);
-      oView.byId('toolbarRefresh').setVisible(!bEdit);
-      oView.byId('toolbarSave').setVisible(bEdit);
-      oView.byId('toolbarCancel').setVisible(bEdit);
-      oView.byId('toolbarDelete').setVisible(bEdit);
+      this.byId('toolbarEdit').setVisible(!bEdit);
+      this.byId('toolbarRefresh').setVisible(!bEdit);
+      this.byId('toolbarSave').setVisible(bEdit);
+      this.byId('toolbarCancel').setVisible(bEdit);
+      this.byId('toolbarDelete').setVisible(bEdit);
 
       // Set the right form type
       this._showFormFragment(bEdit ? 'Change' : 'Display');
@@ -297,10 +309,18 @@ sap.ui.define([
     },
 
     _setBusy: function() {
-      this.getView().byId('generalPanel').setBusy(true);
-      this.getView().byId('statusPanel').setBusy(true);
-      this.getView().byId('externalPanel').setBusy(true);
-      this.getView().byId('internalPanel').setBusy(true);
+      var panels = [
+        this.byId('generalPanel'),
+        this.byId('statusPanel'),
+        this.byId('externalPanel'),
+        this.byId('internalPanel'),
+        this.byId('gscAccessPanel'),
+        this.byId('gscRequestsPanel')
+      ];
+
+      jQuery.each(panels, function (i, panel) {
+        panel.setBusy(true);
+      });
     },
 
 		/**
@@ -319,7 +339,6 @@ sap.ui.define([
       this._toggleButtonsAndView(false);
       this._setBusy();
 
-      // Get Landscape id
       var sLandscapeId = oEvent.getParameter('arguments').id;
 
       var oViewModel = this.getModel();
@@ -385,6 +404,28 @@ sap.ui.define([
         false,
         false
       );
+
+      var oModelGSCAccess = this.getModel('gscaccess');
+      oModelGSCAccess.attachRequestCompleted(this._requestCompletedGSCAccess, this);
+      oModelGSCAccess.loadData(
+        '/landscape/' + sLandscapeId + '/gscaccess',
+        null,
+        true,
+        'GET',
+        false,
+        false
+      );
+
+      var oModelGSCRequests = this.getModel('gscrequests');
+      oModelGSCRequests.attachRequestCompleted(this._requestCompletedGSCRequests, this);
+      oModelGSCRequests.loadData(
+        '/landscape/' + sLandscapeId + '/gscrequests',
+        null,
+        true,
+        'GET',
+        false,
+        false
+      );
     },
 
     _requestCompletedGeneral: function(oEvent) {
@@ -419,8 +460,26 @@ sap.ui.define([
       this._requestCompleted(oEvent, oPanel, oModel);
     },
 
+    _requestCompletedGSCAccess: function(oEvent) {
+      jQuery.sap.log.info('Landscape.controller:_requestCompletedGSCAccess');
+      var oPanel = this.getView().byId('gscAccessPanel');
+      var oModel = this.getModel('gscaccess');
+      oModel.detachRequestCompleted(this._requestCompletedGSCAccess, this);
+      this._requestCompleted(oEvent, oPanel, oModel);
+    },
+
+    _requestCompletedGSCRequests: function(oEvent) {
+      jQuery.sap.log.info('Landscape.controller:_requestCompletedGSCRequests');
+      var oPanel = this.getView().byId('gscRequestsPanel');
+      var oModel = this.getModel('gscrequests');
+      oModel.detachRequestCompleted(this._requestCompletedGSCRequests, this);
+      this._requestCompleted(oEvent, oPanel, oModel);
+    },
+
     _requestCompleted: function(oEvent, oPanel, oModel, check401) {
       jQuery.sap.log.info('Landscape.controller:_requestCompleted');
+
+      oPanel.setBusy(false);
 
       var sError;
 
@@ -456,24 +515,6 @@ sap.ui.define([
         this._messageStrips.push(oMessageStrip);
         oPanel.insertContent(oMessageStrip,	0);
       }
-
-      oPanel.setBusy(false);
-    },
-
-		/*
-		 * Binds the view to the object path. Makes sure that detail view displays
-		 * a busy indicator while data for the corresponding element binding is loaded.
-		 * @function
-		 * @param {string} sObjectPath path to the object to be bound to the view.
-		 * @private
-		 */
-    _bindElement: function (sId, sPath) {
-      jQuery.sap.log.info('Landscape.controller:_bindElement');
-
-      this.getView().byId(sId).bindElement({
-        path: sPath
-      });
     }
-
   });
 });

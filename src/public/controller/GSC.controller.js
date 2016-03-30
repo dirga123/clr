@@ -59,20 +59,36 @@ sap.ui.define([
 
     onPressDetail: function(oEvent) {
       jQuery.sap.log.info('GSC.controller:onPressDetail');
-
+/*
       if (this.getComponent().isAdmin()) {
         var oItem = oEvent.getSource();
         var oBindingContext = oItem.getBindingContext('landscapes');
         var sId = oBindingContext.getProperty('id');
-        console.log(sId);
+        var bExists = oBindingContext.getProperty('exists');
         var oRouter = this.getRouter();
         oRouter.navTo('gscaccess', {
-          id: sId
+          id: sId,
+          create: !bExists
         });
       } else {
         this.getModel('gsc').setProperty('/reason', '');
         this._getReguestDialog().open();
       }
+*/
+      var oItem = oEvent.getSource();
+      var oBindingContext = oItem.getBindingContext('landscapes');
+      var bExists = oBindingContext.getProperty('exists');
+      if (!bExists) {
+        var sProject = oBindingContext.getProperty('project');
+        var bCompact = !!this.getView().$().closest('.sapUiSizeCompact').length;
+        MessageBox.error('GSC Access is not set for project ' + sProject, {
+          styleClass: bCompact ? 'sapUiSizeCompact' : ''
+        });
+        return;
+      }
+
+      this.getModel('gsc').setProperty('/reason', '');
+      this._getReguestDialog().open();
     },
 
     onPressSubmit: function() {
@@ -147,10 +163,38 @@ sap.ui.define([
       var oLandscapes = oModel.getProperty('/landscapes');
       if (Object.prototype.toString.call(oLandscapes) === '[object Array]') {
         for (var i = 0; i < oLandscapes.length; i++) {
-          var oLandscape = oLandscapes[i];
-          console.log(oLandscape.id);
+          var sId = oModel.getProperty('/landscapes/' + i + '/id');
+
+          jQuery.ajax('/gsc/' + sId + '/status', {
+            method: 'GET',
+            error: jQuery.proxy(this._onStatusError, this, sId),
+            success: jQuery.proxy(this._onStatusSuccess, this, sId)
+          });
+        }
+      }
+    },
+
+    _onStatusError: function(lsId, resp, textStatus, errorThrown) {
+      jQuery.sap.log.info('GSC.controller:_onStatusError');
+    },
+
+    _onStatusSuccess: function(lsId, resp) {
+      jQuery.sap.log.info('GSC.controllesr:_onStatusSuccess');
+
+      var oModel = this.getModel('landscapes');
+      var oLandscapes = oModel.getProperty('/landscapes');
+      for (var i = 0; i < oLandscapes.length; i++) {
+        var sId = oModel.getProperty('/landscapes/' + i + '/id');
+        if (sId === lsId) {
+          if (resp.error !== undefined) {
+            oModel.setProperty('/landscapes/' + i + '/error', resp.error);
+          }
+          if (resp.exists !== undefined) {
+            oModel.setProperty('/landscapes/' + i + '/exists', resp.exists);
+          }
         }
       }
     }
+
   });
 });

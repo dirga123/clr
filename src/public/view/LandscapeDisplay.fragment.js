@@ -7,9 +7,10 @@ sap.ui.define([
   'sap/ui/layout/VerticalLayout',
   'sap/m/Button',
   'sap/m/IconTabBar',
-  'sap/m/IconTabFilter'
+  'sap/m/IconTabFilter',
+  'sap/m/Text'
 ], function (ObjectHeader, ObjectAttribute, Panel, List, StandardListItem,
-  VerticalLayout, Button, IconTabBar, IconTabFilter) {
+  VerticalLayout, Button, IconTabBar, IconTabFilter, Text) {
   'use strict';
 
   sap.ui.jsfragment('sap.clr.view.LandscapeDisplay', {
@@ -50,6 +51,10 @@ sap.ui.define([
         busyIndicatorDelay: 0,
         backgroundDesign: 'Transparent',
         content: oGeneral
+      });
+
+      oGeneralPanel.bindElement({
+        path: 'landscape>/landscape'
       });
 
       var oStatusList = new List(this.createId('statusList'), {
@@ -124,6 +129,10 @@ sap.ui.define([
         ]
       });
 
+      oStatusPanel.bindElement({
+        path: 'landscapeStatus>/'
+      });
+
       var oExternalList = new List(this.createId('externalList'), {
       });
 
@@ -156,6 +165,10 @@ sap.ui.define([
         ]
       });
 
+      oExternalPanel.bindElement({
+        path: 'landscapeExternal>/'
+      });
+
       var oInternalPanel = new Panel(this.createId('internalPanel'), {
         busyIndicatorDelay: 0,
         backgroundDesign: 'Transparent',
@@ -170,6 +183,43 @@ sap.ui.define([
             ]
           })
         ]
+      });
+
+      oInternalPanel.bindElement({
+        path: 'landscapeInternal>/'
+      });
+
+      var oGSCAccessPanel = new Panel(this.createId('gscAccessPanel'), {
+        busyIndicatorDelay: 0,
+        backgroundDesign: 'Transparent',
+        content: [
+          new VerticalLayout({
+            content: [
+              new Text({
+                text: '{gscaccess>text}'
+              })
+            ]
+          })
+        ]
+      });
+
+      oGSCAccessPanel.bindElement({
+        path: 'gscaccess>/gscaccess'
+      });
+
+      var oGSCRequestsPanel = new Panel(this.createId('gscRequestsPanel'), {
+        busyIndicatorDelay: 0,
+        backgroundDesign: 'Transparent',
+        content: [
+          new VerticalLayout({
+            content: [
+            ]
+          })
+        ]
+      });
+
+      oGSCRequestsPanel.bindElement({
+        path: 'gscrequests>/'
       });
 
       var oTabs = new IconTabBar({
@@ -187,6 +237,14 @@ sap.ui.define([
           new IconTabFilter({
             text: '{i18n>landscapeTabInternalReports}',
             content: oInternalPanel
+          }),
+          new IconTabFilter({
+            text: '{i18n>landscapeTabGSCAccess}',
+            content: oGSCAccessPanel
+          }),
+          new IconTabFilter({
+            text: '{i18n>landscapeTabGSCRequests}',
+            content: oGSCRequestsPanel
           })
         ]
       });

@@ -31,7 +31,7 @@ sap.ui.define([
                 label: new Label({ text: '{i18n>gscAccessInfo}' }),
                 fields: [
                   new TextArea({
-                    value: '{gscAccess>text}',
+                    value: '{gscaccess>text}',
                     rows: 20
                   })
                 ]
@@ -49,7 +49,7 @@ sap.ui.define([
       });
 
       oPanel.bindElement({
-        path: 'gscAccess>/'
+        path: 'gscaccess>/gscaccess'
       });
 
       return oPanel;

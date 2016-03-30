@@ -29,48 +29,46 @@ sap.ui.define([
       });
 
       var oTile = new StandardTile({
-        icon: 'sap-icon://overview-chart',
-        number: {
-          parts: [ 'landscapes>currSla', 'landscapes>/services/goodSla' ],
-          formatter: function(currSla, goodSla) {
-            if (currSla === undefined) {
-              return '';
+        icon: 'sap-icon://credit-card',
+        busyIndicatorDelay: 0,
+        busy: {
+          parts: [ 'landscapes>exists', 'landscapes>error' ],
+          formatter: function(exists, error) {
+            if (error === undefined && exists === undefined) {
+              return true;
+            } else {
+              return false;
             }
-            return parseFloat(currSla).toFixed(4);
           }
         },
-        numberUnit: '{i18n>landscapesSLA}',
+        // number: '{landscapes>exists}',
+        // numberUnit: '{i18n>landscapesSLA}',
         title: '{landscapes>project} {landscapes>domain}',
         info: {
-          parts: [ 'landscapes>triggersCount', 'landscapes>error' ],
-          formatter: function(count, error) {
-            if (error !== undefined || count === undefined) {
+          parts: [ 'landscapes>exists', 'landscapes>error' ],
+          formatter: function(exists, error) {
+            if (error !== undefined && exists === undefined) {
               return oController.getResourceBundle().getText('landscapeError');
+            } else if (exists === true) {
+              return 'Set';
+            } else if (exists === false) {
+              return 'Not set';
             } else {
-              if (count === 1) {
-                return count.toString() + ' problem';
-              }
-              return count.toString() + ' problems';
+              return '';
             }
           }
         },
         infoState: {
-          parts: [ 'landscapes>triggersPriority', 'landscapes>error' ],
-          formatter: function(priority, error) {
+          parts: [ 'landscapes>exists', 'landscapes>error' ],
+          formatter: function(exists, error) {
             if (error !== undefined) {
               return 'Error';
-            }
-            switch (priority) {
-            case '2':
-            case '3':
-              return 'Warning';
-            case '4':
-            case '5':
-              return 'Error';
-            case '0':
-            case '1':
-            default:
+            } else if (exists === true) {
               return 'Success';
+            } else if (exists === false) {
+              return 'Warning';
+            } else {
+              return 'None';
             }
           }
         },

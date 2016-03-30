@@ -14,11 +14,12 @@ sap.ui.define([
     onInit: function() {
       jQuery.sap.log.info('GSCAccess.controller:onInit');
 
-      this._toggleButtonsAndView(false);
-
       this.setModel(new JSONModel({
-        route: 'gscaccess'
+        route: 'gscaccess',
+        edit: false,
+        create: false
       }));
+      this._toggleButtonsAndView(false);
       this.setCurrentDateAndPeriod();
 
       this.setModel(new JSONModel(), 'gscAccess');
@@ -60,8 +61,6 @@ sap.ui.define([
 
       // Restore the data
       var oModel = this.getView().getModel('gscAccess');
-      var oData = oModel.getData();
-      //oData.landscape = this._oGSCAccess;
       oModel.setData(this._oGSCAccess);
 
       this._toggleButtonsAndView(false);
@@ -71,7 +70,7 @@ sap.ui.define([
       jQuery.sap.log.info('GSCAccess.controller:onPressSave');
 
       setTimeout(jQuery.proxy(
-        this._saveLandscape, this)
+        this._saveGSCAccess, this)
       );
     },
 
@@ -79,19 +78,19 @@ sap.ui.define([
       jQuery.sap.log.info('GSCAccess.controller:onPressDelete');
 
       var dialog = new Dialog({
-        title: this.getResourceBundle().getText('landscapeDeleteCaption'),
+        title: this.getResourceBundle().getText('gscAccessDeleteCaption'),
         type: 'Message',
         content: [
-          new Text({ text: this.getResourceBundle().getText('landscapeDeleteQuestion') })
+          new Text({ text: this.getResourceBundle().getText('gscAccessDeleteQuestion') })
         ],
         beginButton: new Button({
-          text: this.getResourceBundle().getText('landscapeDeleteButton'),
+          text: this.getResourceBundle().getText('gscAccessDeleteButton'),
           icon: 'sap-icon://delete',
           type: 'Reject',
           press: jQuery.proxy(this.onPressDeleteDelete, this)
         }),
         endButton: new Button({
-          text: this.getResourceBundle().getText('landscapeCancelButton'),
+          text: this.getResourceBundle().getText('gscAccessCancelButton'),
           press: function () {
             dialog.close();
           }
@@ -111,7 +110,7 @@ sap.ui.define([
 
       this.getView().setBusy(true);
       setTimeout(jQuery.proxy(
-        this._deleteLandscape, this)
+        this._deleteGSCAccess, this)
       );
     },
 
@@ -122,8 +121,8 @@ sap.ui.define([
     _formFragments: {},
     _messageStrips: [],
 
-    _saveLandscape: function() {
-      jQuery.sap.log.info('GSCAccess.controller:_saveLandscape');
+    _saveGSCAccess: function() {
+      jQuery.sap.log.info('GSCAccess.controller:_saveGSCAccess');
 
       var oViewModel = this.getModel();
       var sLandscapeId = oViewModel.getProperty('/id');
@@ -151,8 +150,8 @@ sap.ui.define([
       this._toggleButtonsAndView(false);
     },
 
-    _deleteLandscape: function() {
-      jQuery.sap.log.info('GSCAccess.controller:_deleteLandscape');
+    _deleteGSCAccess: function() {
+      jQuery.sap.log.info('GSCAccess.controller:_deleteGSCAccess');
       var oViewModel = this.getModel();
 
       var sLandscapeId = oViewModel.getProperty('/id');
@@ -175,18 +174,13 @@ sap.ui.define([
       }
     },
 
-    _toggleButtonsAndView: function(bEdit) {
+    _toggleButtonsAndView: function(bEdit, bCreate) {
       jQuery.sap.log.info('GSCAccess.controller:_toggleButtonsAndView');
-      var oView = this.getView();
 
-      // Show the appropriate action buttons
-      oView.byId('toolbarEdit').setVisible(!bEdit);
-      oView.byId('toolbarRefresh').setVisible(!bEdit);
-      oView.byId('toolbarSave').setVisible(bEdit);
-      oView.byId('toolbarCancel').setVisible(bEdit);
-      oView.byId('toolbarDelete').setVisible(bEdit);
-
-      // Set the right form type
+      this.getModel().setProperty('/edit', bEdit);
+      if (bCreate !== undefined) {
+        this.getModel().setProperty('/create', bCreate);
+      }
       this._showFormFragment(bEdit ? 'Change' : 'Display');
     },
 
@@ -209,7 +203,7 @@ sap.ui.define([
     },
 
     _showFormFragment: function (sFragmentName) {
-      var oPanel = this.getView().byId('landscapePanel');
+      var oPanel = this.getView().byId('gscAccessPanel');
 
       oPanel.removeAllContent();
       oPanel.insertContent(this._getFormFragment(sFragmentName));
@@ -241,15 +235,17 @@ sap.ui.define([
         return;
       }
 
-      this._toggleButtonsAndView(false);
-
-      // Get Landscape id
       var sLandscapeId = oEvent.getParameter('arguments').id;
+      var bCreate = oEvent.getParameter('arguments').create;
+
+      this._toggleButtonsAndView(bCreate, bCreate);
 
       var oViewModel = this.getModel();
       oViewModel.setProperty('/id', sLandscapeId);
 
-      this._requestData();
+      if (!bCreate) {
+        this._requestData();
+      }
     },
 
     _requestData: function() {
@@ -261,7 +257,6 @@ sap.ui.define([
       var oViewModel = this.getModel();
       var sLandscapeId = oViewModel.getProperty('/id');
 
-      // Load landscape model
       var oModel = this.getModel('gscAccess');
       oModel.attachRequestCompleted(this._requestCompleted, this);
       oModel.loadData(

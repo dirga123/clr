@@ -238,4 +238,64 @@ router.get('/:id/status', async (ctx) => {
   ctx.body = lsRet;
 });
 
+// path /landscape/:id/gscaccess
+router.get('/:id/gscaccess', async (ctx) => {
+  const ret = {
+    version: config.versionStr
+  };
+
+  try {
+    const redis = new Redis();
+    await redis.login();
+    ret.gscaccess = await redis.getGSCAccess(ctx.params.id);
+    await redis.logout();
+  } catch (e) {
+    ret.error = errorString(e);
+    ctx.body = ret;
+    return;
+  }
+
+  ctx.body = ret;
+});
+
+// path /landscape/:id/gscaccess
+router.post('/:id/gscaccess', async (ctx) => {
+  const ret = {
+    version: config.versionStr
+  };
+
+  // Check for parameters
+  if (ctx.request.body === undefined ||
+    ctx.request.body.text === undefined) {
+    ret.error = 'Wrong input';
+    ctx.body = ret;
+    return;
+  }
+
+  try {
+    const redis = new Redis();
+    await redis.login();
+
+    ret.added = await redis.setGSCAccess(ctx.params.id, ctx.request.body);
+
+    await redis.logout();
+  } catch (e) {
+    ret.error = errorString(e);
+    ctx.body = ret;
+    return;
+  }
+
+  ctx.body = ret;
+});
+
+router.get('/:id/gscrequests', async (ctx) => {
+  const ret = {
+    version: config.versionStr,
+    error: 'GSC requests list: Not implemented'
+  };
+
+  // await new Promise(r => setTimeout(r, 2000));
+  ctx.body = ret;
+});
+
 export default router;

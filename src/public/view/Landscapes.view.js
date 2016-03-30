@@ -37,6 +37,7 @@ sap.ui.define([
 
       var oTile = new StandardTile({
         icon: 'sap-icon://overview-chart',
+        busyIndicatorDelay: 0,
         number: {
           parts: [ 'landscapes>currSla', 'landscapes>/services/goodSla' ],
           formatter: function(currSla, goodSla) {
