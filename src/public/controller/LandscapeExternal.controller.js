@@ -76,6 +76,7 @@ sap.ui.define([
 
       jQuery.ajax('/landscape/' + sLandscapeId + '/external/' + sReportId, {
         method: 'DELETE',
+        cache: false,        
         error: jQuery.proxy(this.ajaxError, this, 'landscapeExternalDeleteFailed'),
         success: jQuery.proxy(this.onDeleteSuccess, this)
       });

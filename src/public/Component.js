@@ -82,7 +82,8 @@ sap.ui.define([
       oModel.setData({
         user: {
           isAdmin: 'false',
-          isGSC: 'false'
+          isGSC: 'false',
+          isReporting: 'false'
         },
         logged: false
       });
@@ -124,6 +125,21 @@ sap.ui.define([
       var sIsGSC = oModel.getProperty('/user/isGSC');
 
       if (bLogged === true && (sIsAdmin === 'true' || sIsGSC === 'true')) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+
+    isReporting: function(logged, user) {
+      jQuery.sap.log.info('Component:isReporting');
+
+      var oModel = this.getModel('loginInfo');
+      var bLogged = oModel.getProperty('/logged');
+      var sIsAdmin = oModel.getProperty('/user/isAdmin');
+      var sIsReporting = oModel.getProperty('/user/isReporting');
+
+      if (bLogged === true && (sIsAdmin === 'true' || sIsReporting === 'true')) {
         return true;
       } else {
         return false;

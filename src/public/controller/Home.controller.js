@@ -39,6 +39,11 @@ sap.ui.define([
       this.getRouter().navTo('gsc');
     },
 
+    onPressReporting: function(oEvent) {
+      jQuery.sap.log.info('Home.controller:onPressReporting');
+      this.getRouter().navTo('reporting');
+    },
+
     onPressRefresh: function() {
       jQuery.sap.log.info('Home.controller:onPressRefresh');
 
@@ -54,7 +59,7 @@ sap.ui.define([
     _requestData: function() {
       jQuery.sap.log.info('Home.controller:_requestData');
 
-      this.getView().byId('landscapesTile').setBusy(true);
+      this.byId('landscapesTile').setBusy(true);
       var oLandscapesModel = this.getModel('homeLandscapes');
       oLandscapesModel.attachRequestCompleted(this._requestCompletedLandscapes, this);
       oLandscapesModel.loadData(
@@ -66,7 +71,7 @@ sap.ui.define([
         false
       );
 
-      this.getView().byId('usersTile').setBusy(true);
+      this.byId('usersTile').setBusy(true);
       var oUsersModel = this.getModel('homeUsers');
       oUsersModel.attachRequestCompleted(this._requestCompletedUsers, this);
       oUsersModel.loadData(
@@ -85,7 +90,7 @@ sap.ui.define([
       var oModel = this.getModel('homeLandscapes');
       oModel.detachRequestCompleted(this._requestCompletedLandscapes, this);
 
-      this.getView().byId('landscapesTile').setBusy(false);
+      this.byId('landscapesTile').setBusy(false);
 
       this.checkForErrorWithNavigate(oModel, oEvent);
     },
@@ -96,7 +101,7 @@ sap.ui.define([
       var oModel = this.getModel('homeUsers');
       oModel.detachRequestCompleted(this._requestCompletedUsers, this);
 
-      this.getView().byId('usersTile').setBusy(false);
+      this.byId('usersTile').setBusy(false);
 
       this.checkForErrorWithNavigate(oModel, oEvent);
     }

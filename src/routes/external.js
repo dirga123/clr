@@ -207,6 +207,52 @@ async function generateExternalPdf(ctx, external) {
   }
 }
 
+async function generateExternalXlsx(ctx, external) {
+  try {
+    const templateStr = await fs.readFileAsync(
+      path.resolve(__dirname, 'content/External.jsreport'),
+      'utf8'
+    );
+
+    const jsReport = new JsReport({
+      wkhtmltopdf: {
+        allowLocalFilesAccess: true
+      },
+      rootDirectory: __dirname,
+      dataDirectory: path.join(__dirname, 'pdf'),
+      tempDirectory: path.join(__dirname, 'pdf/temp'),
+      tasks: {
+        allowedModules: [ 'moment' ]
+      }
+    });
+
+    jsReport.use(require('jsreport-html-to-xlsx')());
+    jsReport.use(require('jsreport-jsrender')());
+
+    await jsReport.init();
+    const out = await jsReport.render({
+      template: {
+        content: templateStr,
+        engine: 'jsrender',
+        recipe: 'html-to-xlsx',
+        helpers: 'function dateDisp(date) { return moment(date).format("YYYY/MM/DD HH:mm:ss"); };' +
+          'function periodDisp(from, to) { return moment(from).format("YYYY/MM/DD") +' +
+          ' " - " + moment(to).format("YYYY/MM/DD"); };' +
+          'function slaDisp(sla) { return parseFloat(sla).toFixed(4) };' +
+          'function secondsDisp(val) { var s = Math.floor(val); var d = Math.floor(s / 86400);' +
+          's -= d * 86400; var h = Math.floor(s / 3600); s -= h * 3600;' +
+          'var m = Math.floor(s / 60); s -= m * 60; return d+"d "+h+"h "+m+"m "+s+"s";}'
+      },
+      data: external
+    });
+
+    ctx.body = out.stream;
+    ctx.response.set(out.headers);
+  } catch (e) {
+    throw errorString(e);
+  }
+}
+
 // External retrieve new as pdf
 router.get('/:id/external/new/:fileName.pdf', async (ctx) => {
   /*
@@ -245,6 +291,44 @@ router.get('/:id/external/new/:fileName.pdf', async (ctx) => {
   }
 });
 
+// External retrieve new as pdf
+router.get('/:id/external/new/:fileName.xlsx', async (ctx) => {
+  /*
+  const ret = {
+    version: config.versionStr
+  };
+  */
+
+  // Check for parameters
+  if (ctx.query.date === undefined ||
+    ctx.query.from === undefined ||
+    ctx.query.to === undefined) {
+    /*
+    ret.error = 'Wrong input';
+    ctx.body = ret;
+    */
+    ctx.body = 'Wrong input';
+    return;
+  }
+
+  try {
+    const external = await landscapeExternalNew(
+      ctx.params.id,
+      ctx.query.date,
+      ctx.query.from,
+      ctx.query.to
+    );
+    await generateExternalXlsx(ctx, external);
+  } catch (e) {
+    /*
+    ret.error = errorString(e);
+    ctx.body = ret;
+    */
+    ctx.body = errorString(e);
+    return;
+  }
+});
+
 // External retrieve saved as pdf
 router.get('/:id/external/:reportId/:fileName.pdf', async (ctx) => {
   /*
@@ -260,6 +344,30 @@ router.get('/:id/external/:reportId/:fileName.pdf', async (ctx) => {
 
     const externalObj = JSON.parse(external);
     await generateExternalPdf(ctx, externalObj);
+  } catch (e) {
+    /*
+    ret.error = errorString(e);
+    ctx.body = ret;
+    */
+    ctx.body = errorString(e);
+    return;
+  }
+});
+
+router.get('/:id/external/:reportId/:fileName.xlsx', async (ctx) => {
+  /*
+  const lsRet = {
+    version: config.versionStr
+  };
+  */
+  try {
+    const redis = new Redis();
+    await redis.login();
+    const external = await redis.getExternal(ctx.params.id, ctx.params.reportId);
+    await redis.logout();
+
+    const externalObj = JSON.parse(external);
+    await generateExternalXlsx(ctx, externalObj);
   } catch (e) {
     /*
     ret.error = errorString(e);

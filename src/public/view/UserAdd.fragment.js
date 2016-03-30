@@ -66,10 +66,18 @@ sap.ui.define([
               }
             }),
             new Label({ text: '{i18n>userIsGSC}' }),
-            new Switch(this.createId('userAddIsgsc'), {
+            new Switch(this.createId('userAddIsGSC'), {
               valueLiveUpdate: true,
               state: {
                 path: 'users>/new/isGSC',
+                type: 'sap.ui.model.type.String'
+              }
+            }),
+            new Label({ text: '{i18n>userIsReporting}' }),
+            new Switch(this.createId('userAddIsReporting'), {
+              valueLiveUpdate: true,
+              state: {
+                path: 'users>/new/isReporting',
                 type: 'sap.ui.model.type.String'
               }
             })

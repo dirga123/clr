@@ -108,6 +108,11 @@
   				"pattern": "gsc/{id}",
   				"name": "gscaccess",
           "target": "gscaccess"
+  			},
+        {
+  				"pattern": "reporting",
+  				"name": "reporting",
+          "target": "reporting"
   			}
       ],
       "targets": {
@@ -137,6 +142,9 @@
           },
           "gscaccess": {
              "viewName": "GSCAccess"
+          },
+          "reporting": {
+             "viewName": "Reporting"
           },
           "notfound": {
              "viewName": "NotFound",

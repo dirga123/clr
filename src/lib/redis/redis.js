@@ -408,6 +408,7 @@ export default class Redis {
       await this.client.hmsetAsync(userMapId, 'domain', user.domain);
       await this.client.hmsetAsync(userMapId, 'isAdmin', user.isAdmin);
       await this.client.hmsetAsync(userMapId, 'isGSC', user.isGSC);
+      await this.client.hmsetAsync(userMapId, 'isReporting', user.isReporting);
 
       return addedCount;
     } catch (e) {
@@ -496,6 +497,7 @@ export default class Redis {
       await this.client.hmsetAsync(userMapId, 'domain', user.domain);
       await this.client.hmsetAsync(userMapId, 'isAdmin', user.isAdmin);
       await this.client.hmsetAsync(userMapId, 'isGSC', user.isGSC);
+      await this.client.hmsetAsync(userMapId, 'isReporting', user.isReporting);
 
       if (!/^(undefined|null)?$/.test(user.password) && user.password.length > 0) {
         const userPasswordId = `users:password:${user.login}`;

@@ -69,6 +69,14 @@ sap.ui.define([
                 path: 'edit>isGSC',
                 type: 'sap.ui.model.type.String'
               }
+            }),
+            new Label({ text: '{i18n>userIsReporting}' }),
+            new Switch(this.createId('userEditIsReporting'), {
+              valueLiveUpdate: true,
+              state: {
+                path: 'edit>isReporting',
+                type: 'sap.ui.model.type.String'
+              }
             })
           ]
         }),

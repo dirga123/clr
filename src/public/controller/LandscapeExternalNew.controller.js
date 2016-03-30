@@ -134,6 +134,7 @@ sap.ui.define([
 
       jQuery.ajax('/landscape/' + sLandscapeId + '/external/new', {
         method: 'POST',
+        cache: false,        
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify(oModel.getProperty('/')),

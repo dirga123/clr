@@ -91,6 +91,7 @@ sap.ui.define([
 
       jQuery.ajax('/landscape/' + sLandscapeId, {
         method: 'PUT',
+        cache: false,                
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify(oData),
@@ -110,6 +111,7 @@ sap.ui.define([
 
       jQuery.ajax('/landscape/' + sLandscapeId + '/gscaccess', {
         method: 'POST',
+        cache: false,
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify(oGSCAccessData),
@@ -247,6 +249,7 @@ sap.ui.define([
 
       jQuery.ajax('/landscape/' + sLandscapeId, {
         method: 'DELETE',
+        cache: false,
         error: jQuery.proxy(this.ajaxError, this, 'landscapeDeleteFailed'),
         success: jQuery.proxy(this._onDeleteSuccess, this)
       });

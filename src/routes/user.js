@@ -14,7 +14,8 @@ function checkInput(body, checkPassword) {
     body.name === undefined ||
     (checkPassword && body.password === undefined) ||
     body.isAdmin === undefined ||
-    body.isGSC === undefined) {
+    body.isGSC === undefined ||
+    body.isReporting === undefined) {
     return false;
   }
 

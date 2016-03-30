@@ -37,8 +37,7 @@ sap.ui.define([
           formatter: jQuery.proxy(formatter.isAdmin, this)
         },
         busyIndicatorDelay: 0,
-        title: '{i18n>homeLandscapeManagementReportingTitle}',
-        info: '{loginInfo>(/user/isAdmin === "true")}',
+        title: '{i18n>homeManagementTitle}',
         number: '{homeLandscapes>/landscapes}',
         numberUnit: {
           parts: [ 'homeLandscapes>/landscapes' ],
@@ -60,12 +59,24 @@ sap.ui.define([
         icon: 'sap-icon://customer',
         type: 'None',
         visible: {
-          parts: [ 'loginInfo>/logged', 'loginInfo>/user', 'loginInfo>/user' ],
+          parts: [ 'loginInfo>/logged', 'loginInfo>/user' ],
           formatter: jQuery.proxy(formatter.isGSC, this)
         },
         busyIndicatorDelay: 0,
         title: '{i18n>homeGSCTitle}',
         press: [ oController.onPressGSC, oController ]
+      });
+
+      var oReportingTile = new StandardTile(this.createId('ReportingTile'), {
+        icon: 'sap-icon://expense-report',
+        type: 'None',
+        visible: {
+          parts: [ 'loginInfo>/logged', 'loginInfo>/user' ],
+          formatter: jQuery.proxy(formatter.isReporting, this)
+        },
+        busyIndicatorDelay: 0,
+        title: '{i18n>homeReportingTitle}',
+        press: [ oController.onPressReporting, oController ]
       });
 
       var oUsersTile = new StandardTile(this.createId('usersTile'), {
@@ -112,13 +123,14 @@ sap.ui.define([
               title: '{i18n>homeLandscapeManagement}',
               visible: {
                 parts: [ 'loginInfo>/logged', 'loginInfo>/user' ],
-                formatter: jQuery.proxy(formatter.isGSC, this)
+                formatter: jQuery.proxy(formatter.isGSCOrReporting, this)
               }
             }).addStyleClass('lpHeader'),
             new HorizontalLayout({
               content: [
                 oLandscapesTile,
-                oGSCTile
+                oGSCTile,
+                oReportingTile
               ]
             }),
             new sap.m.ObjectHeader({

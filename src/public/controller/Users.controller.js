@@ -121,6 +121,7 @@ sap.ui.define([
 
       jQuery.ajax('/user/' + oData.id, {
         method: 'DELETE',
+        cache: false,
         data: JSON.stringify(oData),
         error: jQuery.proxy(this.ajaxError, this, 'userDeleteFailed'),
         success: jQuery.proxy(this.ajaxSuccess, this, this._requestData)
@@ -205,6 +206,7 @@ sap.ui.define([
 
       jQuery.ajax('/user/' + sUserId, {
         method: 'PUT',
+        cache: false,
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify(oData),
@@ -275,6 +277,7 @@ sap.ui.define([
 
       jQuery.ajax('/user', {
         method: 'POST',
+        cache: false,        
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify(oData),

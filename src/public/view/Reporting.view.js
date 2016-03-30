@@ -9,24 +9,17 @@ sap.ui.define([
 ], function (Page, Button, Toolbar, ToolbarSpacer, TileContainer, StandardTile, SearchField) {
   'use strict';
 
-  sap.ui.jsview('sap.clr.view.Landscapes', {
+  sap.ui.jsview('sap.clr.view.Reporting', {
     getControllerName: function () {
-      return 'sap.clr.controller.Landscapes';
+      return 'sap.clr.controller.Reporting';
     },
 
     createContent: function (oController) {
-      jQuery.sap.log.info('Landscapes.view:createContent');
-
-      var oAddButton = new Button(this.createId('addButton'), {
-        icon: 'sap-icon://add',
-        text: '{i18n>landscapeAddButton}',
-        press: [ oController.onPressAdd, oController ]
-      });
+      jQuery.sap.log.info('Reporting.view:createContent');
 
       var oBar = new Toolbar({
         content: [
           new ToolbarSpacer(),
-          oAddButton,
           new Button({
             icon: 'sap-icon://refresh',
             text: '{i18n>landscapeRefreshButton}',
@@ -36,7 +29,7 @@ sap.ui.define([
       });
 
       var oTile = new StandardTile({
-        icon: 'sap-icon://overview-chart',
+        icon: 'sap-icon://expense-report',
         busyIndicatorDelay: 0,
         busy: {
           parts: [ 'landscapes>currSla', 'landscapes>error' ],
@@ -66,7 +59,7 @@ sap.ui.define([
               return oController.getResourceBundle().getText('landscapeError');
             } else if (count === 1) {
               return count.toString() + ' problem';
-            } else if (count !== undefined) {
+            } if (count !== undefined) {
               return count.toString() + ' problems';
             } else {
               return '';
@@ -103,8 +96,8 @@ sap.ui.define([
 
       oTileContainer.bindAggregation('tiles', 'landscapes>/landscapes', oTile);
 
-      var oPage = new Page(this.createId('landscapesPage'), {
-        title: '{i18n>landscapesTitle}',
+      var oPage = new Page(this.createId('reportingPage'), {
+        title: '{i18n>reportingTitle}',
         showHeader: true,
         showNavButton: true,
         navButtonPress: [ oController.onNavBack, oController ],

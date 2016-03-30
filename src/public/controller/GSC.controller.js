@@ -159,7 +159,6 @@ sap.ui.define([
         return;
       }
 
-      // if not error continue with response
       var oLandscapes = oModel.getProperty('/landscapes');
       if (Object.prototype.toString.call(oLandscapes) === '[object Array]') {
         for (var i = 0; i < oLandscapes.length; i++) {
@@ -167,6 +166,7 @@ sap.ui.define([
 
           jQuery.ajax('/gsc/' + sId + '/status', {
             method: 'GET',
+            cache: false,
             error: jQuery.proxy(this._onStatusError, this, sId),
             success: jQuery.proxy(this._onStatusSuccess, this, sId)
           });
@@ -176,6 +176,22 @@ sap.ui.define([
 
     _onStatusError: function(lsId, resp, textStatus, errorThrown) {
       jQuery.sap.log.info('GSC.controller:_onStatusError');
+
+      var oModel = this.getModel('landscapes');
+      var oLandscapes = oModel.getProperty('/landscapes');
+      for (var i = 0; i < oLandscapes.length; i++) {
+        var sId = oModel.getProperty('/landscapes/' + i + '/id');
+        if (sId === lsId) {
+          var sError = this.getResourceBundle().getText('generalError', [
+            resp.status,
+            resp.statusText,
+            errorThrown
+          ]);
+
+          oModel.setProperty('/landscapes/' + i + '/error', sError);
+          break;
+        }
+      }
     },
 
     _onStatusSuccess: function(lsId, resp) {

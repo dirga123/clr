@@ -26,6 +26,7 @@ import routesLandscape from './routes/landscape';
 import routesExternal from './routes/external';
 import routesInternal from './routes/internal';
 import routesGSC from './routes/gsc';
+import routesReporting from './routes/reporting';
 
 const { NODE_ENV } = process.env;
 if (NODE_ENV === 'development') {
@@ -52,7 +53,7 @@ server.use(convert(session({
   prefix: 'session:',
   rolling: true,
   cookie: {
-    maxAge: 1000 * 60
+    maxAge: 1000 * 60 * 15
   },
   store: new SessionRedis({
     host: config.redisUrl,
@@ -190,6 +191,18 @@ async function authedAsGSC(ctx, next) {
   }
 }
 
+async function authedAsReporting(ctx, next) {
+  if (ctx.isAuthenticated() &&
+    ctx.passport.user &&
+    (ctx.passport.user.isAdmin === 'true' ||
+    ctx.passport.user.isReporting === 'true')) {
+    await next();
+  } else {
+    ctx.status = 401;
+    ctx.body = 'Not authenticated';
+  }
+}
+
 const securedRouter = new Router();
 /*
 securedRouter.get('/app', authed, (ctx) => {
@@ -205,13 +218,13 @@ securedRouter.use('/users', authedAsAdmin,
 securedRouter.use('/user', authedAsAdmin,
   routesUser.routes(), routesUser.allowedMethods()
 );
-securedRouter.use('/landscapes', authedAsAdmin,
+securedRouter.use('/landscapes', authedAsReporting,
   routesLandscapes.routes(), routesLandscapes.allowedMethods()
 );
 securedRouter.use('/landscape', authedAsAdmin,
   routesLandscape.routes(), routesLandscape.allowedMethods()
 );
-securedRouter.use('/landscape', authedAsAdmin,
+securedRouter.use('/landscape', authedAsReporting,
   routesExternal.routes(), routesExternal.allowedMethods()
 );
 securedRouter.use('/landscape', authedAsAdmin,
@@ -219,6 +232,9 @@ securedRouter.use('/landscape', authedAsAdmin,
 );
 securedRouter.use('/gsc', authedAsGSC,
   routesGSC.routes(), routesGSC.allowedMethods()
+);
+securedRouter.use('/reporting', authedAsReporting,
+  routesReporting.routes(), routesReporting.allowedMethods()
 );
 
 server.use(publicRouter.routes());

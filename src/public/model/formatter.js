@@ -82,6 +82,24 @@ sap.ui.define([], function () {
       } else {
         return false;
       }
+    },
+
+    isReporting: function(logged, user) {
+      if (logged === true && user !== undefined &&
+        (user.isReporting === 'true' || user.isAdmin === 'true')) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+
+    isGSCOrReporting: function(logged, user) {
+      if (logged === true && user !== undefined &&
+        (user.isGSC === 'true' || user.isReporting === 'true' || user.isAdmin === 'true')) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
   };

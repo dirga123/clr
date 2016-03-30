@@ -123,6 +123,19 @@ sap.ui.define([
       return false;
     },
 
+    navigateHomeIfNotLoggedAsReporting: function() {
+      var oComponent = this.getComponent();
+      if (!oComponent.isLogged()) {
+        this.getRouter().navTo('login');
+        return true;
+      }
+      if (!oComponent.isReporting()) {
+        this.getRouter().navTo('home');
+        return true;
+      }
+      return false;
+    },
+
     navigateToLoginAfter401: function(statusCode) {
       if (statusCode === 401) {
         this.getComponent().setIsLogged(false);

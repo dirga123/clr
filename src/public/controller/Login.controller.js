@@ -63,6 +63,7 @@ sap.ui.define([
 
       jQuery.ajax('/login', {
         method: 'POST',
+        cache: false,        
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({

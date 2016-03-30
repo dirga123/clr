@@ -22,6 +22,7 @@ sap.ui.define([
 
       jQuery.ajax('/logout', {
         method: 'GET',
+        cache: false,                
         error: jQuery.proxy(this.onLoginFinished, this),
         success: jQuery.proxy(this.onLoginFinished, this)
       });
