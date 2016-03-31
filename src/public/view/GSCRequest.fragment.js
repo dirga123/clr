@@ -10,13 +10,13 @@ sap.ui.define([
   sap.ui.jsfragment('sap.clr.view.GSCRequest', {
 
     createContent: function(oController) {
-      var oDialog = new sap.m.Dialog({
+      var oDialog = new sap.m.Dialog(this.createId('gscRequestDialog'), {
         title: '{i18n>GSCRequestTitle}',
         content: new SimpleForm({
           layout: 'ResponsiveGridLayout',
           content: [
             new Label({ text: '{i18n>GSCRequestReason}', required: true }),
-            new TextArea(this.createId('GSCReguestReason'), {
+            new TextArea(this.createId('gscReguestReason'), {
               rows: 5,
               cols: 40,
               valueLiveUpdate: true,
@@ -31,18 +31,17 @@ sap.ui.define([
           ]
         }),
 
-        buttons: [
-          new Button({
-            type: 'Emphasized',
-            text: '{i18n>GSCRequestSubmit}',
-            press: [ oController.onPressSubmit, oController ]
-          }),
-          new Button({
-            type: 'Default',
-            text: '{i18n>GSCRequestCancel}',
-            press: [ oController.onPressCancel, oController ]
-          })
-        ]
+        beginButton: new Button(this.createId('gscRequestSubmit'), {
+          type: 'Emphasized',
+          text: '{i18n>GSCRequestSubmit}',
+          press: [ oController.onPressSubmit, oController ]
+        }),
+
+        endButton: new Button(this.createId('gscRequestCancel'), {
+          type: 'Default',
+          text: '{i18n>GSCRequestCancel}',
+          press: [ oController.onPressCancel, oController ]
+        })
       });
 
       return oDialog;

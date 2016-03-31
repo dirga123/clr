@@ -26,6 +26,7 @@ sap.ui.define([
     },
 
     onExit: function() {
+      jQuery.sap.log.info('GSC.controller:onExit');
       if (this._oRequestDialog) {
         this._oRequestDialog.destroy();
         this._oRequestDialog = null;
@@ -86,7 +87,7 @@ sap.ui.define([
 
       this.getModel('gsc').setProperty('/reason', '');
       var oDialog = this._getReguestDialog();
-      oDialog.sId = oBindingContext.getProperty('id');
+      oDialog.sLandscapeId = oBindingContext.getProperty('id');
       oDialog.open();
     },
 
@@ -94,7 +95,7 @@ sap.ui.define([
       jQuery.sap.log.info('GSC.controller:onPressSubmit');
 
       var oDialog = this._getReguestDialog();
-      var sId = oDialog.sId;
+      var sId = oDialog.sLandscapeId;
       oDialog.close();
 
       this.getView().setBusy(true);
