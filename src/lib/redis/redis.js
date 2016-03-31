@@ -561,4 +561,65 @@ export default class Redis {
       throw e.message;
     }
   }
+
+  async addGSCRequest(lsId, userId, date, reason, access) {
+    try {
+      debug('redis')(`addGSCRequest(${lsId},${userId})`);
+
+      const nextGscRequestId = await this.client.incrAsync('gscrequests:nextid');
+
+      const gscRequestsSetId = 'gscrequests';
+      let addedCount = await this.client.saddAsync(gscRequestsSetId, nextGscRequestId);
+      if (addedCount !== 1) {
+        throw { message: `Adding of GSC Request ${nextGscRequestId} failed.` };
+      }
+
+      const gscRequestMapId = `gscrequest:${nextGscRequestId}`;
+      await this.client.hmsetAsync(gscRequestMapId, 'landscapeId', lsId);
+      await this.client.hmsetAsync(gscRequestMapId, 'userId', userId);
+      await this.client.hmsetAsync(gscRequestMapId, 'date', date);
+      await this.client.hmsetAsync(gscRequestMapId, 'reason', reason);
+      await this.client.hmsetAsync(gscRequestMapId, 'access', access);
+
+      const gscRequestsLandscapeSetId = `ls:${lsId}:gscrequests`;
+      addedCount += await this.client.saddAsync(gscRequestsLandscapeSetId, nextGscRequestId);
+
+      const gscRequestsUserSetId = `users:${userId}:gscrequests`;
+      addedCount += await this.client.saddAsync(gscRequestsUserSetId, nextGscRequestId);
+
+      return addedCount;
+    } catch (e) {
+      debug('redis')(`addGSCRequest error: ${e.message}`);
+      throw e.message;
+    }
+  }
+
+  async getGSCRequests(lsId) {
+    try {
+      debug('redis')(`getGSCRequests(${lsId})`);
+
+      const gscRequestsLandscapeSetId = `ls:${lsId}:gscrequests`;
+      const requestsSet = await this.client.smembersAsync(gscRequestsLandscapeSetId);
+
+      const requestsArr = [];
+      for (const requestId of requestsSet) {
+        const gscRequestMapId = `gscrequest:${requestId}`;
+        const request = await this.client.hgetallAsync(gscRequestMapId);
+        if (request !== null) {
+          request.id = requestId;
+          requestsArr.push(request);
+        }
+      }
+
+      for (const request of requestsArr) {
+        const userMapId = `users:${request.userId}`;
+        request.userName = await this.client.hmgetAsync(userMapId, 'name');
+      }
+
+      return requestsArr;
+    } catch (e) {
+      debug('redis')(`getGSCRequests error: ${e.message}`);
+      throw e.message;
+    }
+  }
 }

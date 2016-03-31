@@ -91,7 +91,7 @@ sap.ui.define([
 
       jQuery.ajax('/landscape/' + sLandscapeId, {
         method: 'PUT',
-        cache: false,                
+        cache: false,
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify(oData),

@@ -21,8 +21,13 @@ class Config {
     _this.zabbixUser = process.env.ZABBIX_USER || data.zabbixUser;
     _this.zabbixPassword = process.env.ZABBIX_PASSWORD || data.zabbixPassword;
 
-    const data2 = require('../package.json');
-    _this.versionStr = data2.version;
+    _this.smtpServer = process.env.SMTP_SERVER || data.smtpServer;
+    _this.smtpPort = process.env.SMTP_PORT || data.smtpPort;
+    _this.smtpAgent = process.env.SMTP_AGENT || data.smtpAgent;
+    _this.smtpSuffix = process.env.SMTP_SUFFIX || data.smtpSuffix;
+
+    const dataPackage = require('../package.json');
+    _this.versionStr = dataPackage.version;
 
     return _this;
   }

@@ -56,7 +56,7 @@ sap.ui.define([
       var sId = oBindingContext.getProperty('id');
 
       var oRouter = this.getRouter();
-      oRouter.navTo('landscape', {
+      oRouter.navTo('reportingLandscape', {
         id: sId
       });
     },

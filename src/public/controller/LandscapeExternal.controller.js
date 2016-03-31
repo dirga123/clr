@@ -76,7 +76,7 @@ sap.ui.define([
 
       jQuery.ajax('/landscape/' + sLandscapeId + '/external/' + sReportId, {
         method: 'DELETE',
-        cache: false,        
+        cache: false,
         error: jQuery.proxy(this.ajaxError, this, 'landscapeExternalDeleteFailed'),
         success: jQuery.proxy(this.onDeleteSuccess, this)
       });
@@ -101,7 +101,7 @@ sap.ui.define([
     _onObjectMatched: function (oEvent) {
       jQuery.sap.log.info('LandscapeExternal.controller:_onObjectMatched');
 
-      if (this.navigateHomeIfNotLoggedAsAdmin()) {
+      if (this.navigateHomeIfNotLoggedAsReporting()) {
         return;
       }
 

@@ -176,29 +176,6 @@ router.del('/:id', async (ctx) => {
   ctx.body = lsRet;
 });
 
-// path /landscape/:id/general
-router.get('/:id/general', async (ctx) => {
-  const lsRet = {
-    version: config.versionStr
-  };
-
-  try {
-    const redis = new Redis();
-    await redis.login();
-
-    // Retrieve DB info
-    lsRet.landscape = await redis.getLandscape(ctx.params.id);
-
-    await redis.logout();
-  } catch (e) {
-    lsRet.error = errorString(e);
-    ctx.body = lsRet;
-    return;
-  }
-
-  ctx.body = lsRet;
-});
-
 // path /landscape/:id/status
 router.get('/:id/status', async (ctx) => {
   const lsRet = {
@@ -290,11 +267,20 @@ router.post('/:id/gscaccess', async (ctx) => {
 
 router.get('/:id/gscrequests', async (ctx) => {
   const ret = {
-    version: config.versionStr,
-    error: 'GSC requests list: Not implemented'
+    version: config.versionStr
   };
 
-  // await new Promise(r => setTimeout(r, 2000));
+  try {
+    const redis = new Redis();
+    await redis.login();
+    ret.gscrequests = await redis.getGSCRequests(ctx.params.id);
+    await redis.logout();
+  } catch (e) {
+    ret.error = errorString(e);
+    ctx.body = ret;
+    return;
+  }
+
   ctx.body = ret;
 });
 

@@ -113,6 +113,11 @@
   				"pattern": "reporting",
   				"name": "reporting",
           "target": "reporting"
+  			},
+        {
+  				"pattern": "reporting/{id}",
+  				"name": "reportingLandscape",
+          "target": "reportingLandscape"
   			}
       ],
       "targets": {
@@ -145,6 +150,9 @@
           },
           "reporting": {
              "viewName": "Reporting"
+          },
+          "reportingLandscape": {
+             "viewName": "ReportingLandscape"
           },
           "notfound": {
              "viewName": "NotFound",

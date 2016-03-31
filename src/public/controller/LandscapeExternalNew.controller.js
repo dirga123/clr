@@ -134,7 +134,7 @@ sap.ui.define([
 
       jQuery.ajax('/landscape/' + sLandscapeId + '/external/new', {
         method: 'POST',
-        cache: false,        
+        cache: false,
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify(oModel.getProperty('/')),
@@ -166,7 +166,7 @@ sap.ui.define([
     _onObjectMatched: function (oEvent) {
       jQuery.sap.log.info('LandscapeExternalNew.controller:_onObjectMatched');
 
-      if (this.navigateHomeIfNotLoggedAsAdmin()) {
+      if (this.navigateHomeIfNotLoggedAsReporting()) {
         return;
       }
 

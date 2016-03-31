@@ -1,4 +1,5 @@
 import 'babel-polyfill';
+import 'babel-polyfill';
 import path from 'path';
 import debug from 'debug';
 
@@ -27,6 +28,7 @@ import routesExternal from './routes/external';
 import routesInternal from './routes/internal';
 import routesGSC from './routes/gsc';
 import routesReporting from './routes/reporting';
+import routesReportingLandscape from './routes/reportingLandscape';
 
 const { NODE_ENV } = process.env;
 if (NODE_ENV === 'development') {
@@ -218,23 +220,26 @@ securedRouter.use('/users', authedAsAdmin,
 securedRouter.use('/user', authedAsAdmin,
   routesUser.routes(), routesUser.allowedMethods()
 );
-securedRouter.use('/landscapes', authedAsReporting,
-  routesLandscapes.routes(), routesLandscapes.allowedMethods()
-);
-securedRouter.use('/landscape', authedAsAdmin,
-  routesLandscape.routes(), routesLandscape.allowedMethods()
-);
-securedRouter.use('/landscape', authedAsReporting,
-  routesExternal.routes(), routesExternal.allowedMethods()
-);
-securedRouter.use('/landscape', authedAsAdmin,
-  routesInternal.routes(), routesInternal.allowedMethods()
-);
 securedRouter.use('/gsc', authedAsGSC,
   routesGSC.routes(), routesGSC.allowedMethods()
 );
 securedRouter.use('/reporting', authedAsReporting,
   routesReporting.routes(), routesReporting.allowedMethods()
+);
+securedRouter.use('/landscapes', authedAsReporting,
+  routesLandscapes.routes(), routesLandscapes.allowedMethods()
+);
+securedRouter.use('/landscape', authedAsReporting,
+  routesExternal.routes(), routesExternal.allowedMethods()
+);
+securedRouter.use('/landscape', authedAsReporting,
+  routesReportingLandscape.routes(), routesReportingLandscape.allowedMethods()
+);
+securedRouter.use('/landscape', authedAsAdmin,
+  routesInternal.routes(), routesInternal.allowedMethods()
+);
+securedRouter.use('/landscape', authedAsAdmin,
+  routesLandscape.routes(), routesLandscape.allowedMethods()
 );
 
 server.use(publicRouter.routes());

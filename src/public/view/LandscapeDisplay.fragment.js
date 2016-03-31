@@ -8,9 +8,10 @@ sap.ui.define([
   'sap/m/Button',
   'sap/m/IconTabBar',
   'sap/m/IconTabFilter',
-  'sap/m/Text'
+  'sap/m/Text',
+  'sap/clr/model/formatter'
 ], function (ObjectHeader, ObjectAttribute, Panel, List, StandardListItem,
-  VerticalLayout, Button, IconTabBar, IconTabFilter, Text) {
+  VerticalLayout, Button, IconTabBar, IconTabFilter, Text, formatter) {
   'use strict';
 
   sap.ui.jsfragment('sap.clr.view.LandscapeDisplay', {
@@ -207,12 +208,32 @@ sap.ui.define([
         path: 'gscaccess>/gscaccess'
       });
 
+      var oGscRequestList = new List(this.createId('gscRequestList'), {
+      });
+
+      var oGscRequestItem = new StandardListItem({
+        title: {
+          parts: [ 'gscrequests>date' ],
+          formatter: jQuery.proxy(formatter.timestampToString, oController)
+        },
+        description: '{gscrequests>reason}',
+        type: 'Inactive',
+        info: '{gscrequests>userName}'
+      });
+
+      oGscRequestList.bindItems({
+        path: 'gscrequests>/gscrequests',
+        template: oGscRequestItem
+      });
+
       var oGSCRequestsPanel = new Panel(this.createId('gscRequestsPanel'), {
         busyIndicatorDelay: 0,
         backgroundDesign: 'Transparent',
         content: [
           new VerticalLayout({
+            width: '100%',
             content: [
+              oGscRequestList
             ]
           })
         ]

@@ -1,0 +1,15 @@
+SAP Business One Cloud
+GSC Access Request
+
+Date: {{date}}
+By: {{name}}
+
+Reason:
+{{reason}}
+
+Project: {{project}}
+Portal: https://portal.{{domain}}/RDWeb/
+Browser Access: https://portal.{{domain}}/BrowserAccess/
+
+Access details:
+{{access}}

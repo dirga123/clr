@@ -70,9 +70,6 @@ sap.ui.define([
           id: sId,
           create: !bExists
         });
-      } else {
-        this.getModel('gsc').setProperty('/reason', '');
-        this._getReguestDialog().open();
       }
 */
       var oItem = oEvent.getSource();
@@ -81,23 +78,44 @@ sap.ui.define([
       if (!bExists) {
         var sProject = oBindingContext.getProperty('project');
         var bCompact = !!this.getView().$().closest('.sapUiSizeCompact').length;
-        MessageBox.error('GSC Access is not set for project ' + sProject, {
+        MessageBox.error(this.getResourceBundle().getText('gscRequestNotSet', [ sProject ]), {
           styleClass: bCompact ? 'sapUiSizeCompact' : ''
         });
         return;
       }
 
       this.getModel('gsc').setProperty('/reason', '');
-      this._getReguestDialog().open();
+      var oDialog = this._getReguestDialog();
+      oDialog.sId = oBindingContext.getProperty('id');
+      oDialog.open();
     },
 
     onPressSubmit: function() {
       jQuery.sap.log.info('GSC.controller:onPressSubmit');
 
-      this._getReguestDialog().close();
+      var oDialog = this._getReguestDialog();
+      var sId = oDialog.sId;
+      oDialog.close();
 
+      this.getView().setBusy(true);
+
+      var oModel = this.getModel('gsc');
+      var oData = oModel.getData();
+
+      jQuery.ajax('/gsc/' + sId, {
+        method: 'POST',
+        cache: false,
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify(oData),
+        error: jQuery.proxy(this.ajaxError, this, 'gscRequestSaveFailed'),
+        success: jQuery.proxy(this.ajaxSuccess, this, this._onSaveGSCARequestSuccess)
+      });
+    },
+
+    _onSaveGSCARequestSuccess: function() {
       var bCompact = !!this.getView().$().closest('.sapUiSizeCompact').length;
-      MessageBox.success('Credentials were sent to your email address', {
+      MessageBox.success(this.getResourceBundle().getText('gscRequestSaveSuccess'), {
         styleClass: bCompact ? 'sapUiSizeCompact' : ''
       });
     },

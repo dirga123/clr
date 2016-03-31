@@ -100,6 +100,25 @@ sap.ui.define([], function () {
       } else {
         return false;
       }
+    },
+
+    padNumber: function(num) {
+      return (num < 10 ? '0' : '') + num;
+    },
+
+    timestampToString: function(timestamp) {
+      if (timestamp === undefined) {
+        return '';
+      }
+
+      var date = new Date();
+      date.setTime(timestamp);
+      return date.getFullYear() + '/' +
+        this.padNumber(date.getMonth() + 1) + '/' +
+        this.padNumber(date.getDate()) + ' ' +
+        this.padNumber(date.getHours()) + ':' +
+        this.padNumber(date.getMinutes()) + ':' +
+        this.padNumber(date.getSeconds());
     }
 
   };
