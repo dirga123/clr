@@ -11,6 +11,9 @@ date to utc date when requesting data (month period bug too)  1d/1d
 delo by sa prihlasovanie spravit tak, ze staci zadat heslo a enter, plz?  1d/1d
 landscape view (reports, actual state, edit, delete)   3d/3d
 
+hash as password in db 1d
+search on long lists (gsc requests, reports) 1d
+
 back-end tuning (automation testing, speed)   5d
 edit mode on landscape - back - choose landscape - should not be in edit mode (stil blinking)
 
