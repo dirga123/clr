@@ -97,6 +97,15 @@ sap.ui.define([
       return this.getModel().getProperty('/route');
     },
 
+    navigateLoginIfNotLogged: function() {
+      var oComponent = this.getComponent();
+      if (!oComponent.isLogged()) {
+        this.getRouter().navTo('login');
+        return true;
+      }
+      return false;
+    },
+
     navigateHomeIfNotLoggedAsAdmin: function() {
       var oComponent = this.getComponent();
       if (!oComponent.isLogged()) {

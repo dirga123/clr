@@ -277,7 +277,7 @@ sap.ui.define([
 
       jQuery.ajax('/user', {
         method: 'POST',
-        cache: false,        
+        cache: false,
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify(oData),

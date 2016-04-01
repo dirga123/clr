@@ -1,5 +1,4 @@
 import 'babel-polyfill';
-import 'babel-polyfill';
 import path from 'path';
 import debug from 'debug';
 
@@ -22,6 +21,7 @@ import passport from './auth';
 import routesHome from './routes/home';
 import routesUsers from './routes/users';
 import routesUser from './routes/user';
+import routesProfile from './routes/profile';
 import routesLandscapes from './routes/landscapes';
 import routesLandscape from './routes/landscape';
 import routesExternal from './routes/external';
@@ -32,7 +32,7 @@ import routesReportingLandscape from './routes/reportingLandscape';
 
 const { NODE_ENV } = process.env;
 if (NODE_ENV === 'development') {
-  debug.enable('dev,koa');
+  debug.enable('dev,koa,auth');
 }
 
 const config = new Config();
@@ -156,6 +156,8 @@ publicFiles.forEach((file) => {
 */
 
 async function authed(ctx, next) {
+  debug('auth')(`authed (${ctx.path})`);
+
   if (ctx.isAuthenticated()) {
     await next();
   } else {
@@ -171,6 +173,7 @@ async function authed(ctx, next) {
 }
 
 async function authedAsAdmin(ctx, next) {
+  debug('auth')(`authedAsAdmin (${ctx.path})`);
   if (ctx.isAuthenticated() &&
     ctx.passport.user &&
     ctx.passport.user.isAdmin === 'true') {
@@ -182,6 +185,7 @@ async function authedAsAdmin(ctx, next) {
 }
 
 async function authedAsGSC(ctx, next) {
+  debug('auth')(`authedAsGSC (${ctx.path})`);
   if (ctx.isAuthenticated() &&
     ctx.passport.user &&
     (ctx.passport.user.isAdmin === 'true' ||
@@ -194,6 +198,7 @@ async function authedAsGSC(ctx, next) {
 }
 
 async function authedAsReporting(ctx, next) {
+  debug('auth')(`authedAsReporting (${ctx.path})`);
   if (ctx.isAuthenticated() &&
     ctx.passport.user &&
     (ctx.passport.user.isAdmin === 'true' ||
@@ -213,6 +218,9 @@ securedRouter.get('/app', authed, (ctx) => {
 */
 securedRouter.use('/home', authed,
   routesHome.routes(), routesHome.allowedMethods()
+);
+securedRouter.use('/profile', authed,
+  routesProfile.routes(), routesProfile.allowedMethods()
 );
 securedRouter.use('/users', authedAsAdmin,
   routesUsers.routes(), routesUsers.allowedMethods()
@@ -242,11 +250,6 @@ securedRouter.use('/landscape', authedAsAdmin,
   routesLandscape.routes(), routesLandscape.allowedMethods()
 );
 
-server.use(publicRouter.routes());
-server.use(securedRouter.routes());
-server.use(publicRouter.allowedMethods());
-server.use(securedRouter.allowedMethods());
-
 /*
 server.use(convert(koaMount('/i18n', koaStatic(path.join(__dirname, 'public/i18n')))));
 */
@@ -260,6 +263,11 @@ server.use(koaMount(
   '/resources',
   koaStatic(path.join(__dirname, 'ui5'))
 ));
+
+server.use(publicRouter.routes());
+server.use(securedRouter.routes());
+server.use(publicRouter.allowedMethods());
+server.use(securedRouter.allowedMethods());
 
 /*
 server.use(async (ctx, next) => {

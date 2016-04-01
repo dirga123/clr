@@ -53,6 +53,10 @@ sap.ui.define([
     _onObjectMatched: function(oEvent) {
       jQuery.sap.log.info('Home.controller:_onObjectMatched');
 
+      if (this.navigateLoginIfNotLogged()) {
+        return;
+      }
+
       this._requestData();
     },
 
@@ -89,7 +93,6 @@ sap.ui.define([
 
       var oModel = this.getModel('homeLandscapes');
       oModel.detachRequestCompleted(this._requestCompletedLandscapes, this);
-
       this.byId('landscapesTile').setBusy(false);
 
       this.checkForErrorWithNavigate(oModel, oEvent);
@@ -100,7 +103,6 @@ sap.ui.define([
 
       var oModel = this.getModel('homeUsers');
       oModel.detachRequestCompleted(this._requestCompletedUsers, this);
-
       this.byId('usersTile').setBusy(false);
 
       this.checkForErrorWithNavigate(oModel, oEvent);

@@ -514,6 +514,45 @@ export default class Redis {
     }
   }
 
+  async updateProfile(userId, profile) {
+    try {
+      debug('redis')(`updateProfile(${userId})`);
+
+      const isInSet = await this.client.sismemberAsync('users', userId);
+      if (isInSet === 0) {
+        return 0;
+      }
+
+      const userMapId = `users:${userId}`;
+      const login = await this.client.hmgetAsync(userMapId, 'login');
+      const name = await this.client.hmgetAsync(userMapId, 'name');
+
+      const passwordId = `users:password:${login}`;
+      const oldPassword = await this.client.getAsync(passwordId);
+      if (oldPassword === null || oldPassword.length === 0) {
+        throw { message: `User record for ${name} is corrupted` };
+      }
+
+      if (oldPassword !== profile.oldPassword) {
+        throw { message: 'Wrong username or password' };
+      }
+
+      await this.client.hmsetAsync(userMapId, 'name', profile.name);
+
+      if (!/^(undefined|null)?$/.test(profile.newPassword) && profile.newPassword.length > 0) {
+        const respPassword = await this.client.setAsync(passwordId, profile.newPassword);
+        if (respPassword !== 'OK') {
+          throw { message: `Updating of user ${name} failed (password).` };
+        }
+      }
+
+      return 1;
+    } catch (e) {
+      debug('redis')(`updateProfile error: ${e.message}`);
+      throw e.message;
+    }
+  }
+
   async existsGSCAccess(lsId) {
     try {
       debug('redis')(`existsGSCAccess(${lsId})`);

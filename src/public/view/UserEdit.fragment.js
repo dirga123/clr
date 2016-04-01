@@ -1,3 +1,4 @@
+
 sap.ui.define([
   'sap/m/Dialog',
   'sap/m/Button',
@@ -11,7 +12,7 @@ sap.ui.define([
   sap.ui.jsfragment('sap.clr.view.UserEdit', {
 
     createContent: function(oController) {
-      var oDialog = new sap.m.Dialog({
+      var oDialog = new Dialog({
         title: '{i18n>userEditTitle}',
         content: new SimpleForm({
           layout: 'ResponsiveGridLayout',

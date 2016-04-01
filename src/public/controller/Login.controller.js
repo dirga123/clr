@@ -10,6 +10,19 @@ sap.ui.define([
     onInit: function() {
       jQuery.sap.log.info('Login.controller:onInit');
 
+      sap.ui.getCore().attachValidationError(function (evt) {
+        var control = evt.getParameter('element');
+        if (control && control.setValueState) {
+          control.setValueState('Error');
+        }
+      });
+      sap.ui.getCore().attachValidationSuccess(function (evt) {
+        var control = evt.getParameter('element');
+        if (control && control.setValueState) {
+          control.setValueState('None');
+        }
+      });
+
       this.setModel(new JSONModel({
         username: '',
         password: ''
@@ -48,10 +61,36 @@ sap.ui.define([
     onPressLogin: function() {
       jQuery.sap.log.info('Login.controller:onPressLogin');
 
-      this._oLoginDialog.setBusy(true);
-      setTimeout(jQuery.proxy(
-        this._login, this)
-      );
+      var inputs = [
+        sap.ui.getCore().byId('loginDialogName'),
+        sap.ui.getCore().byId('loginDialogPasswd')
+      ];
+
+      // check that inputs are not empty
+      // this does not happen during data binding as this is only triggered by changes
+      jQuery.each(inputs, function (i, input) {
+        if (!input.getValue()) {
+          input.setValueState('Error');
+        }
+      });
+
+      // check states of inputs
+      var canContinue = true;
+      jQuery.each(inputs, function (i, input) {
+        if (input.getValueState() === 'Error') {
+          canContinue = false;
+          return false;
+        }
+        return true;
+      });
+
+      if (canContinue) {
+        var oDialog = this._getLoginDialog();
+        oDialog.setBusy(true);
+        setTimeout(jQuery.proxy(
+          this._login, this)
+        );
+      }
     },
 
     _login: function() {
@@ -63,7 +102,7 @@ sap.ui.define([
 
       jQuery.ajax('/login', {
         method: 'POST',
-        cache: false,        
+        cache: false,
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
@@ -120,7 +159,11 @@ sap.ui.define([
       jQuery.sap.log.info(
         'Login.controller:_onNavBackWithoutHash: navigating to home because of no data'
       );
-      oRouter.navTo('home');
+
+      oRouter.navTo('home', {}, true);
+      oRouter.getTargets().display('home', {
+        fromTarget: 'login'
+      });
     },
 
     _getLoginDialog: function() {

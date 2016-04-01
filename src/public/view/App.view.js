@@ -35,8 +35,7 @@ sap.ui.define([
         ],
         user: new ShellHeadUserItem({
           image: 'sap-icon://person-placeholder',
-          visible: '{loginInfo>/logged}',
-          showPopupIndicator: false,
+          showPopupIndicator: '{loginInfo>/logged}',
           username: {
             parts: [ 'loginInfo>/user/name', 'loginInfo>/user/login' ],
             formatter: function(name, login) {
@@ -48,7 +47,8 @@ sap.ui.define([
               }
               return oController.getResourceBundle().getText('userUnknown');
             }
-          }
+          },
+          press: [ oController.onPressUser, oController ]
         }),
         content: new App(this.createId('App'), {
         })

@@ -22,7 +22,7 @@ co(function*() {
 
 passport.use(new LocalStrategy(
   async (username, password, done) => {
-    debug('dev')('LocalStrategy');
+    debug('auth')(`LocalStrategy (${username}, ${password})`);
 
     try {
       const redis = new Redis();
@@ -36,8 +36,11 @@ passport.use(new LocalStrategy(
         await done(null, user);
       }
     } catch (e) {
+      debug('auth')(`LocalStrategy, catched error (${errorString(e)})`);
       await done(null, errorString(e));
     }
+
+    debug('auth')(`LocalStrategy (${username}, ${password})`);
   })
 );
 
@@ -49,16 +52,20 @@ passport.use(new LocalStrategy(
 // serializing, and querying the user record by ID from the database when
 // deserializing.
 passport.serializeUser((user, done) => {
-  debug('dev')(`auth::serializeUser ${user.id}:${user.name}`);
+  debug('auth')(`serializeUser (${user.id}, ${user.name})`);
 
   done(null, user);
+
+  debug('auth')(`serializeUser finished (${user.id}:${user.name})`);
 });
 
 // passport.deserializeUser((user/*id*/, done) => {
 passport.deserializeUser((user, done) => {
-  debug('dev')(`auth::deserializeUser ${user.id}`);
+  debug('auth')(`deserializeUser(${user.id},${user.name})`);
 
   done(null, user);
+
+  debug('auth')(`deserializeUser finished (${user.id},${user.name})`);
   /*
   db.users.findById(id, function (err, user) {
     if (err) { return cb(err); }
