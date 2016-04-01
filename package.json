@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "clr",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "Cloud reporting",
   "main": "server/index.js",
   "scripts": {
